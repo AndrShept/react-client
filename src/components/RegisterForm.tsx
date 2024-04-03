@@ -84,7 +84,7 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Register</Button>
+        <Button className='rounded-full'  type="submit">Register</Button>
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">Login to account</p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>

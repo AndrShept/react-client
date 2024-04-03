@@ -47,12 +47,32 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateUser: builder.mutation<User, { id: string; formData: FormData }>({
-      query: ({ id, formData }) => ({
+    updateUser: builder.mutation<User, { id: string; userData: FormData }>({
+      query: ({ id, userData }) => ({
         url: `/users/${id}`,
         method: 'PUT',
-        body: formData,
+        body: userData,
       }),
     }),
   }),
 });
+
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useCurrentQuery,
+  useLazyCurrentQuery,
+  useGetUserByIdQuery,
+  useLazyGetUserByIdQuery,
+  useUpdateUserMutation,
+} = userApi;
+
+export const {
+  current,
+  getAllUsers,
+  getUserById,
+  getUserByUsername,
+  login,
+  register,
+  updateUser,
+} = userApi.endpoints;

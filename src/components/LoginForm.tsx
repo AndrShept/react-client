@@ -68,7 +68,7 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <Button className='rounded-full' type="submit">Login</Button>
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">
             You not create account?
