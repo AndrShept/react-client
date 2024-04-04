@@ -11,10 +11,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 import { Label } from './ui/label';
-import { Link } from 'react-router-dom';
 
 const formSchema = z.object({
   username: z.string().min(3),
@@ -38,7 +38,7 @@ export function RegisterForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-[400px] md:min-w-[400px] min-w-[320px]  "
+        className="space-y-5 max-w-[400px] md:min-w-[400px] min-w-[320px]  "
       >
         <FormField
           control={form.control}
@@ -77,14 +77,16 @@ export function RegisterForm() {
             <FormItem>
               <Label>Password</Label>
               <FormControl>
-                <Input placeholder="password" {...field} />
+                <Input type="password" placeholder="password" {...field} />
               </FormControl>
 
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button className='rounded-full'  type="submit">Register</Button>
+        <Button className="rounded-full" type="submit">
+          Register
+        </Button>
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">Login to account</p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>

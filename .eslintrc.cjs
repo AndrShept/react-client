@@ -11,6 +11,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
+    "allowEmptyCatch": true,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'react-refresh/only-export-components': [

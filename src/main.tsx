@@ -3,26 +3,33 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import App from './components/App.tsx';
+import MainLayout from './components/MainLayout.tsx';
 import { ThemeProvider } from './components/ThemeProvider.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
 import { FollowingsPage } from './components/pages/FollowingsPage.tsx';
 import { LoginPage } from './components/pages/LoginPage.tsx';
 import { PostsPage } from './components/pages/PostsPage.tsx';
+import { PostsPageById } from './components/pages/PostsPageById.tsx';
 import { RegisterPage } from './components/pages/RegisterPage.tsx';
+import { UserProfile } from './components/pages/UserProfile.tsx';
 import './index.css';
 import { store } from './lib/redux/store.ts';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <MainLayout />,
     // errorElement: <ErrorPage />,
+    
     children: [
       {
         path: '/posts',
         element: <PostsPage />,
+      },
+      {
+        path: '/posts/:postId',
+        element: <PostsPageById />,
       },
       {
         path: '/followers',
@@ -31,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: '/following',
         element: <FollowingsPage />,
+      },
+      {
+        path: '/users/:username',
+        element: <UserProfile />,
       },
     ],
   },
@@ -46,12 +57,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <section className=" h-screen">
           <RouterProvider router={router} />
         </section>
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>,
 );

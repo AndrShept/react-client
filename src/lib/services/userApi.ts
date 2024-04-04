@@ -1,10 +1,10 @@
-import { User } from '../types';
+import { ErrorMessage, User } from '../types';
 import { api } from './api';
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<
-      { token: string },
+      { token: string } | ErrorMessage,
       { email: string; password: string }
     >({
       query: (userData) => ({
