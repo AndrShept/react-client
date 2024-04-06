@@ -9,12 +9,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useAppDispatch } from '@/hooks/store';
 import { useLoginMutation } from '@/lib/services/userApi';
 import { ErrorMessage } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { EyeIconForm } from './EyeIconForm';
@@ -26,9 +27,11 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
+  const navigate = useNavigate();
   const [login, { isLoading }] = useLoginMutation();
   const [isShow, setIsShow] = useState(false);
   const [queryError, setQueryError] = useState('');
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,14 +40,26 @@ export function LoginForm() {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await login(values)
-      .unwrap()
-      .then((data) => console.log(data))
-      .catch((error: ErrorMessage) => setQueryError(error.data.message));
-    setTimeout(() => {
-      setQueryError('');
-    }, 4000);
-
+    // await login(values)
+    //   .unwrap()
+    //   .then((data) => console.log(data))
+    //   .catch((error: ErrorMessage) => setQueryError(error.data.message));
+    // setTimeout(() => {
+    //   setQueryError('');
+    // }, 4000);
+    try {
+      const res = await login(values).unwrap();
+      if (res.token) {
+        navigate('/');
+        localStorage.setItem('token', JSON.stringify(res.token));
+      }
+    } catch (error) {
+      const err = error as ErrorMessage;
+      setQueryError(err.data.message);
+      setTimeout(() => {
+        setQueryError('');
+      }, 4000);
+    }
   }
 
   return (

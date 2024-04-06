@@ -4,7 +4,7 @@ import { api } from './api';
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<
-      { token: string } | ErrorMessage,
+      { token: string } ,
       { email: string; password: string }
     >({
       query: (userData) => ({
@@ -65,6 +65,9 @@ export const {
   useGetUserByIdQuery,
   useLazyGetUserByIdQuery,
   useUpdateUserMutation,
+useGetAllUsersQuery,
+useLazyGetAllUsersQuery
+  
 } = userApi;
 
 export const {

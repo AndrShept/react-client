@@ -1,8 +1,11 @@
-import { useAddPostMutation, useGetAllPostsQuery } from '@/lib/services/postApi';
+import {
+  useAddPostMutation,
+  useGetAllPostsQuery,
+} from '@/lib/services/postApi';
 import React from 'react';
 
 export const PostsPage = () => {
-  const {  isLoading, data } = useGetAllPostsQuery();
+  const { data, isLoading } = useGetAllPostsQuery();
 
   console.log(isLoading);
   console.log(data);

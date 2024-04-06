@@ -9,9 +9,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useRegisterMutation } from '@/lib/services/userApi';
+import { ErrorMessage } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { format } from 'date-fns';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Label } from './ui/label';
@@ -23,6 +28,9 @@ const formSchema = z.object({
 });
 
 export function RegisterForm() {
+  const [register, { isLoading }] = useRegisterMutation();
+  const [queryError, setQueryError] = useState('');
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,8 +39,23 @@ export function RegisterForm() {
       password: '',
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const timestamp = format(new Date(Date.now()), 'dd-MM-yyyy, HH:mm');
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const res = await register(values).unwrap();
+      if (res) {
+        toast.success(`Hello ${res.username} your account success created!`, {
+          description: timestamp,
+        });
+        navigate('/login');
+      }
+    } catch (error) {
+      const err = error as ErrorMessage;
+      setQueryError(err.data.message);
+      setTimeout(() => {
+        setQueryError('');
+      }, 4000);
+    }
   }
   return (
     <Form {...form}>
@@ -84,7 +107,8 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button className="rounded-full" type="submit">
+        {queryError && <p className="text-rose-500 text-sm ">{queryError}</p>}
+        <Button disabled={isLoading} className="rounded-full" type="submit">
           Register
         </Button>
         <div className="flex items-center">

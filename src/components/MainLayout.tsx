@@ -1,11 +1,12 @@
 import { Outlet } from 'react-router-dom';
 
+import { Navbar } from './Navbar';
 import { SidebarList } from './SidebarList';
 
 function App() {
   return (
     <section className="flex flex-col h-full w-full ">
-      <header className="h-14 w-full sticky top-0 bg-secondary/50 border-b "></header>
+      <Navbar />
       <div className=" flex-1 flex">
         <aside className="inset-0 md:w-[200px] w-15 bg-secondary/50 sticky top-0 border-r">
           <SidebarList />

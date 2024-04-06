@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 import MainLayout from './components/MainLayout.tsx';
 import { ThemeProvider } from './components/ThemeProvider.tsx';
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <MainLayout />,
     // errorElement: <ErrorPage />,
-    
+
     children: [
       {
         path: '/posts',
@@ -60,6 +61,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <section className=" h-screen">
+          <Toaster richColors />
           <RouterProvider router={router} />
         </section>
       </ThemeProvider>
