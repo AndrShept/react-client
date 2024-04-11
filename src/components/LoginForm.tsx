@@ -10,12 +10,14 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAppDispatch } from '@/hooks/store';
-import { useLoginMutation } from '@/lib/services/userApi';
+import { useLazyCurrentQuery, useLoginMutation } from '@/lib/services/userApi';
 import { ErrorMessage } from '@/lib/types';
+import { hasErrorField } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { EyeIconForm } from './EyeIconForm';
@@ -31,6 +33,7 @@ export function LoginForm() {
   const [login, { isLoading }] = useLoginMutation();
   const [isShow, setIsShow] = useState(false);
   const [queryError, setQueryError] = useState('');
+  const [triggerCurrentQuery] = useLazyCurrentQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,25 +43,21 @@ export function LoginForm() {
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // await login(values)
-    //   .unwrap()
-    //   .then((data) => console.log(data))
-    //   .catch((error: ErrorMessage) => setQueryError(error.data.message));
-    // setTimeout(() => {
-    //   setQueryError('');
-    // }, 4000);
     try {
       const res = await login(values).unwrap();
       if (res.token) {
         navigate('/');
-        localStorage.setItem('token', JSON.stringify(res.token));
+        await triggerCurrentQuery().unwrap();
       }
     } catch (error) {
-      const err = error as ErrorMessage;
-      setQueryError(err.data.message);
-      setTimeout(() => {
-        setQueryError('');
-      }, 4000);
+      if (hasErrorField(error)) {
+        setQueryError(error.data.message);
+        setTimeout(() => {
+          setQueryError('');
+        }, 4000);
+      } else {
+        toast.error('Something went wrong');
+      }
     }
   }
 

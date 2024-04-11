@@ -25,9 +25,10 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-
     logout: (state) => {
-      state = initialState;
+      state.isAuthenticated = false;
+      state.current = null;
+      state.token = '';
     },
     resetUser: (state) => {
       state.user = null;
@@ -40,7 +41,8 @@ export const userSlice = createSlice({
         state.isAuthenticated = true;
       })
       .addMatcher(userApi.endpoints.current.matchFulfilled, (state, action) => {
-        (state.isAuthenticated = true), (state.current = action.payload);
+        state.isAuthenticated = true;
+        state.current = action.payload;
       })
       .addMatcher(
         userApi.endpoints.getUserById.matchFulfilled,
@@ -63,6 +65,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const { logout, resetUser  } = userSlice.actions;
+export const { logout, resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

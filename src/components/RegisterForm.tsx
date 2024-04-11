@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useRegisterMutation } from '@/lib/services/userApi';
 import { ErrorMessage } from '@/lib/types';
+import { dateNowFns } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { useState } from 'react';
@@ -39,13 +40,12 @@ export function RegisterForm() {
       password: '',
     },
   });
-  const timestamp = format(new Date(Date.now()), 'dd-MM-yyyy, HH:mm');
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const res = await register(values).unwrap();
       if (res) {
         toast.success(`Hello ${res.username} your account success created!`, {
-          description: timestamp,
+          description: dateNowFns(),
         });
         navigate('/login');
       }

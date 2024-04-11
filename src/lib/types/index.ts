@@ -28,6 +28,7 @@ export type Follows = {
 export type Post = {
   id: string;
   content: string;
+  imageUrl: string;
   author: User;
   authorId: string;
   likes: Like[];
@@ -54,9 +55,7 @@ export type Comment = {
   postId: string;
 };
 export type ErrorMessage = {
-
-    data: {
-      message: string;
-    };
-  
+  data: {
+    message: string;
+  };
 };

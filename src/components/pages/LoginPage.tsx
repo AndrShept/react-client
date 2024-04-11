@@ -1,6 +1,18 @@
+import { useAppSelector } from '@/hooks/store';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { LoginForm } from '../LoginForm';
 
 export const LoginPage = () => {
+  const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, []);
   return (
     <section className="flex w-full h-full md:flex-row flex-col">
       <div className=" flex-1 md:border-r border-b md:flex hidden">

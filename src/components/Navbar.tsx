@@ -1,26 +1,19 @@
-import { useGetAllUsersQuery } from '@/lib/services/userApi';
-import { User2Icon } from 'lucide-react';
-import React from 'react';
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from 'react-router-dom';
 
+import { ProfileAvatar } from './ProfileAvatar';
 import { Button } from './ui/button';
 
 export const Navbar = () => {
-  const { data, isLoading } = useGetAllUsersQuery();
-  console.log(data);
+  const { isAuthenticated } = useAuth();
+
   return (
-    <header className="h-14 w-full sticky top-0 bg-secondary/50 border-b ">
-      <Button variant={'ghost'} size={'icon'}>
-        <User2Icon />
-      </Button>
-      <Button variant={'ghost'} size={'icon'}>
-        LOGOUT
-      </Button>
-      <Button asChild variant={'outline'}>
-        <Link to={'/login'}>Login</Link>
+    <header className="h-14 w-full fixed z-50 flex justify-between top-0 bg-secondary/50 border-b  p-2 backdrop-blur-md ">
+      <Button className="font-semibold" asChild variant={'ghost'}>
+        <Link to={'/'}>SOCIAL MEDIA</Link>
       </Button>
 
-      {data?.map((dat) => <p key={dat.id}>{dat.username}</p>)}
+      {isAuthenticated && <ProfileAvatar />}
     </header>
   );
 };

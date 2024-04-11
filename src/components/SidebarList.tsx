@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import {
+  HomeIcon,
   NewspaperIcon,
   UserRoundSearchIcon,
   UsersRoundIcon,
@@ -10,21 +11,27 @@ import { Button } from './ui/button';
 
 const sidebarData = [
   {
+    name: 'Home',
+    to: '/',
+    id: 6,
+    icon: HomeIcon,
+  },
+  {
     name: 'Posts',
     to: '/posts',
     id: 1,
-    icon: <NewspaperIcon className="size-5" />,
+    icon: NewspaperIcon,
   },
   {
     name: 'Followers',
     to: '/followers',
     id: 2,
-    icon: <UsersRoundIcon className="size-5" />,
+    icon: UsersRoundIcon,
   },
   {
     name: 'Following',
     to: '/Following',
-    icon: <UserRoundSearchIcon className="size-5" />,
+    icon: UserRoundSearchIcon,
     id: 3,
   },
 ];
@@ -44,7 +51,7 @@ export const SidebarList = () => {
             )}
           >
             <Link to={data.to}>
-              {data.icon}
+              <data.icon className="size-5" />
               <span className="md:block hidden">{data.name}</span>
             </Link>
           </Button>
