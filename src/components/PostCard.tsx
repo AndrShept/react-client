@@ -1,14 +1,9 @@
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
-import {
-  Edit,
-  EditIcon,
-  HeartIcon,
-  MessageCircleMoreIcon,
-  TrashIcon,
-} from 'lucide-react';
-import React from 'react';
+import { format } from 'date-fns';
+import { EditIcon, MessageCircleMoreIcon, TrashIcon } from 'lucide-react';
 
+import { LikeIcon } from './LikeIcon';
 import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
 
@@ -51,10 +46,15 @@ export const PostCard = ({ post }: PostCardProps) => {
         src={`${BASE_URL}${post.imageUrl}`}
         alt="post_image"
       />
+      <p className="text-muted-foreground text-sm">
+        {format(new Date(post.createdAt), 'dd.MM.yyyy, HH:mm')}
+      </p>
       <section className="flex ">
-        <Button className="size-9" variant={'ghost'} size={'icon'}>
-          <HeartIcon className="size-6" />
-        </Button>
+        <LikeIcon
+          postId={post.id}
+          likedByUser={post.likedByUser}
+          likeCount={post.likes.length}
+        />
         <Button className="size-9" variant={'ghost'} size={'icon'}>
           <MessageCircleMoreIcon className="size-6" />
         </Button>

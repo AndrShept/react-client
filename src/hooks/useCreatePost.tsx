@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+
 export const postFormSchema = z.object({
   content: z.string().min(5),
   imageUrl: z.string(),
@@ -18,6 +19,7 @@ export const useCreatePost = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [addPost, { isLoading }] = useAddPostMutation();
   const [refetch] = useLazyGetAllPostsQuery();
+  const [errorMessage, setErrorMessage] = useState('');
   const form = useForm<z.infer<typeof postFormSchema>>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
@@ -57,6 +59,10 @@ export const useCreatePost = () => {
           setImageUrl(data.imageUrl);
           form.setValue('imageUrl', data.imageUrl);
         }
+        if ('message' in data) {
+          setErrorMessage(data.message as string);
+          setTimeout(() => setErrorMessage(''), 3000);
+        }
       } catch (error) {
         console.log(error);
         toast.error('Something went wrong');
@@ -70,5 +76,6 @@ export const useCreatePost = () => {
     isLoading,
     imageUrl,
     setImageUrl,
+    errorMessage,
   };
 };

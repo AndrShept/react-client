@@ -14,7 +14,7 @@ export type User = {
   followers: Follows[];
   likes: Like[];
   comments: Comment[];
-  isFollowing?: boolean;
+  isFollowing: boolean;
 };
 
 export type Follows = {

@@ -16,8 +16,15 @@ import { ImageIcon, X } from 'lucide-react';
 import { Label } from './ui/label';
 
 export const PostForm = () => {
-  const { form, handleChange, onSubmit, imageUrl, isLoading, setImageUrl } =
-    useCreatePost();
+  const {
+    form,
+    handleChange,
+    onSubmit,
+    imageUrl,
+    isLoading,
+    setImageUrl,
+    errorMessage,
+  } = useCreatePost();
   return (
     <Form {...form}>
       <form
@@ -39,6 +46,9 @@ export const PostForm = () => {
           )}
         />
         <div className="self-end flex items-center gap-2">
+          {errorMessage && (
+            <p className="text-rose-500 text-sm"> {errorMessage}</p>
+          )}
           <label
             className="cursor-pointer p-2 hover:bg-secondary/60 opacity-80 hover:opacity-100 transition rounded-full "
             htmlFor="image"

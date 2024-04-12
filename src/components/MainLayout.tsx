@@ -1,5 +1,4 @@
 import { useAppSelector } from '@/hooks/store';
-import { useGetAllUsersQuery } from '@/lib/services/userApi';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -7,7 +6,6 @@ import { Navbar } from './Navbar';
 import { SidebarList } from './SidebarList';
 import { UsersBar } from './UsersBar';
 import { HomePage } from './pages/HomePage';
-import { ScrollArea } from './ui/scroll-area';
 
 function App() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);

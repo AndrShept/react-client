@@ -2,7 +2,7 @@ import { api } from './api';
 
 export const likePostApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    likePost: builder.mutation<{ message: string }, { postId: string }>({
+    likePost: builder.mutation<{ message: string },  string >({
       query: (postId) => ({
         url: `/like-post/${postId}`,
         method: 'POST',
