@@ -3,10 +3,11 @@ import { api } from './api';
 
 export const commentApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    addComment: builder.mutation<Comment, void>({
-      query: () => ({
+    addComment: builder.mutation<Comment, Partial<Comment>>({
+      query: (commentData) => ({
         url: '/comments',
         method: 'POST',
+        body: commentData,
       }),
     }),
     deleteComment: builder.mutation<void, string>({

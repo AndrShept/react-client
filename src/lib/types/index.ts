@@ -53,6 +53,8 @@ export type Comment = {
   userId: string;
   post: Post;
   postId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 export type ErrorMessage = {
   data: {

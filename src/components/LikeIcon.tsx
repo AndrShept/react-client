@@ -1,5 +1,8 @@
 import { useLikePostMutation } from '@/lib/services/likePostApi';
-import { useLazyGetAllPostsQuery } from '@/lib/services/postApi';
+import {
+  useLazyGetAllPostsQuery,
+  useLazyGetPostByIdQuery,
+} from '@/lib/services/postApi';
 import { cn } from '@/lib/utils';
 import { HeartIcon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -15,11 +18,13 @@ interface LikeIconProps {
 export const LikeIcon = ({ postId, likedByUser, likeCount }: LikeIconProps) => {
   const [likePost, { isLoading }] = useLikePostMutation();
   const [refetchPosts] = useLazyGetAllPostsQuery();
+  const [refetchPostsById] = useLazyGetPostByIdQuery();
 
   const handleLike = async () => {
     try {
       await likePost(postId).unwrap();
       await refetchPosts().unwrap();
+      await refetchPostsById(postId).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }

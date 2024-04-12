@@ -7,8 +7,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const dateNowFns = () => {
-  const timestamp = format(new Date(Date.now() ), 'dd-MM-yyyy, HH:mm');
+  const timestamp = format(new Date(Date.now()), 'dd-MM-yyyy, HH:mm');
   return timestamp;
+};
+
+export const dateFns = (timestamp: Date) => {
+  return format(new Date(timestamp), 'dd.MM.yyyy, HH:mm');
 };
 
 export function hasErrorField(
