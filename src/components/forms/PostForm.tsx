@@ -13,7 +13,7 @@ import { useCreatePost } from '@/hooks/useCreatePost';
 import { BASE_URL } from '@/lib/constants';
 import { ImageIcon, X } from 'lucide-react';
 
-import { Label } from './ui/label';
+import { Label } from '../ui/label';
 
 export const PostForm = () => {
   const {

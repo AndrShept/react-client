@@ -1,10 +1,9 @@
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
-import { dateFns } from '@/lib/utils';
 import { useParams } from 'react-router-dom';
 
+import { CommentsList } from '../CommentsList';
 import { PostCard } from '../PostCard';
-import { PostCommentsForm } from '../PostCommentsForm';
-import { UserAvatar } from '../UserAvatar';
+import { PostCommentsForm } from '../forms/PostCommentsForm';
 
 export const PostsPageById = () => {
   const { postId } = useParams();
@@ -23,26 +22,12 @@ export const PostsPageById = () => {
   return (
     <section className="flex flex-col gap-4">
       <PostCard post={post} />
-      <div className="">
-        <PostCommentsForm postId={post.id} />
-      </div>
-      <ul className="flex flex-col gap-2">
+
+      <PostCommentsForm postId={post.id} />
+
+      <ul className="flex flex-col gap-2 ">
         {post.comments.map((comment) => (
-          <li className="flex flex-col md:p-4 p-2 bg-secondary/40 rounded-md">
-            <div className="flex items-center gap-2">
-              <UserAvatar
-                avatarImg={comment.user.avatarUrl}
-                username={comment.user.username}
-              />
-              <div className="flex flex-col">
-                <p className="text-sm">{comment.user.username}</p>
-                <time className="text-xs text-muted-foreground">
-                  {dateFns(comment.createdAt)}
-                </time>
-              </div>
-            </div>
-            <p className="mt-2 break-words">{comment.content}</p>
-          </li>
+          <CommentsList key={comment.id} comment={comment} />
         ))}
       </ul>
     </section>

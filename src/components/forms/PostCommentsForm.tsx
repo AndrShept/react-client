@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 const formSchema = z.object({
-  content: z.string().min(5).max(140),
+  content: z.string().min(5).max(170),
 });
 
 export const PostCommentsForm = ({ postId }: { postId: string }) => {

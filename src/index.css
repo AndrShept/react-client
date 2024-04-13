@@ -6,6 +6,7 @@ html,
 body {
   height: 100%;
   font-family: 'Inter', sans-serif;
+  /* font-size: 15px; */
 }
 
 @layer base {

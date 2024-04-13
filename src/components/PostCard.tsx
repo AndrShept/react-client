@@ -47,7 +47,8 @@ export const PostCard = ({ post }: PostCardProps) => {
         src={`${BASE_URL}${post.imageUrl}`}
         alt="post_image"
       />
-      <time className="text-muted-foreground text-sm">
+      <time className="text-muted-foreground text-[13px]">
+         
         {format(new Date(post.createdAt), 'dd.MM.yyyy, HH:mm')}
       </time>
       <section className="flex gap-1">

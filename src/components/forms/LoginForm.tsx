@@ -9,54 +9,58 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useRegisterMutation } from '@/lib/services/userApi';
+import { useAppDispatch } from '@/hooks/store';
+import { useLazyCurrentQuery, useLoginMutation } from '@/lib/services/userApi';
 import { ErrorMessage } from '@/lib/types';
-import { dateNowFns } from '@/lib/utils';
+import { hasErrorField } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { format } from 'date-fns';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { Label } from './ui/label';
+import { EyeIconForm } from '../EyeIconForm';
+import { Label } from '../ui/label';
 
 const formSchema = z.object({
-  username: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(5),
 });
 
-export function RegisterForm() {
-  const [register, { isLoading }] = useRegisterMutation();
-  const [queryError, setQueryError] = useState('');
+export function LoginForm() {
   const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
+  const [isShow, setIsShow] = useState(false);
+  const [queryError, setQueryError] = useState('');
+  const [triggerCurrentQuery] = useLazyCurrentQuery();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
       email: '',
       password: '',
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await register(values).unwrap();
-      if (res) {
-        toast.success(`Hello ${res.username} your account success created!`, {
-          description: dateNowFns(),
-        });
-        navigate('/login');
+      const res = await login(values).unwrap();
+      if (res.token) {
+        navigate('/');
+        await triggerCurrentQuery().unwrap();
       }
     } catch (error) {
-      const err = error as ErrorMessage;
-      setQueryError(err.data.message);
-      setTimeout(() => {
-        setQueryError('');
-      }, 4000);
+      if (hasErrorField(error)) {
+        setQueryError(error.data.message);
+        setTimeout(() => {
+          setQueryError('');
+        }, 4000);
+      } else {
+        toast.error('Something went wrong');
+      }
     }
   }
+
   return (
     <Form {...form}>
       <form
@@ -65,28 +69,12 @@ export function RegisterForm() {
       >
         <FormField
           control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <Label>Username</Label>
-              <FormControl>
-                <Input placeholder="username" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
               <Label>Email</Label>
               <FormControl>
-                <Input placeholder="example.com" {...field} />
+                <Input placeholder="example@gmail.com" {...field} />
               </FormControl>
 
               <FormMessage />
@@ -100,7 +88,19 @@ export function RegisterForm() {
             <FormItem>
               <Label>Password</Label>
               <FormControl>
-                <Input type="password" placeholder="password" {...field} />
+                <div className="relative">
+                  <Input
+                    className="pr-8"
+                    type={isShow ? 'text' : 'password'}
+                    placeholder="password"
+                    {...field}
+                  />
+
+                  <EyeIconForm
+                    isShow={isShow}
+                    setIsShow={() => setIsShow((prev) => !prev)}
+                  />
+                </div>
               </FormControl>
 
               <FormMessage />
@@ -109,12 +109,14 @@ export function RegisterForm() {
         />
         {queryError && <p className="text-rose-500 text-sm ">{queryError}</p>}
         <Button disabled={isLoading} className="rounded-full" type="submit">
-          Register
+          Login
         </Button>
         <div className="flex items-center">
-          <p className="text-sm text-muted-foreground">Login to account</p>
+          <p className="text-sm text-muted-foreground">
+            You not create account?
+          </p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>
-            <Link to="/login">login</Link>
+            <Link to="/register">register</Link>
           </Button>
         </div>
       </form>

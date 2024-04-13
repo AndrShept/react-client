@@ -15,7 +15,7 @@ export const HomePage = () => {
     <>
       <ul className="flex flex-col gap-14">
         {posts.map((post) => (
-          <PostCard post={post} />
+          <PostCard key={post.id} post={post} />
         ))}
       </ul>
     </>

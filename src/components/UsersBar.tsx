@@ -1,26 +1,15 @@
+import { useDelay } from '@/hooks/useDelay';
 import { useGetAllUsersQuery } from '@/lib/services/userApi';
-import { useEffect, useState } from 'react';
 
 import { UsersBarList } from './UsersBarList';
+import { UserBarSkeleton } from './skeletons/UserBarSkeleton';
 
 export const UsersBar = () => {
   const { data: users, isLoading } = useGetAllUsersQuery();
-  const [isPending, setIsPending] = useState(true);
-
-  useEffect(() => {
-    const delay = async () => {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('asdasfsa');
-        }, 2000);
-      });
-      setIsPending(false);
-    };
-    delay();
-  }, []);
+  const { isPending } = useDelay();
 
   if (isLoading || isPending) {
-    return <div>Loding....</div>;
+    return <UserBarSkeleton />;
   }
   if (!users?.length) {
     return <div>Users not found</div>;
@@ -28,7 +17,7 @@ export const UsersBar = () => {
   return (
     <ul className="flex flex-col space-y-1 w-full">
       {users.map((user) => (
-        <UsersBarList user={user} />
+        <UsersBarList key={user.id} user={user} />
       ))}
     </ul>
   );
