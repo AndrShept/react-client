@@ -1,11 +1,12 @@
+import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { format } from 'date-fns';
 import { EditIcon, TrashIcon } from 'lucide-react';
 
-import { LikeIcon } from './LikeIcon';
-import { PostMessageIcon } from './PostMessageIcon';
 import { UserAvatar } from './UserAvatar';
+import { PostCommentsIcon } from './icons/PostCommentsIcon';
+import { PostLikeIcon } from './icons/PostLikeIcon';
 import { Button } from './ui/button';
 
 interface PostCardProps {
@@ -13,6 +14,8 @@ interface PostCardProps {
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
+  const { userId } = useAuth();
+  const isAuthor = userId === post.authorId;
   return (
     <article className="flex flex-col gap-2 ">
       <section className="flex justify-between">
@@ -28,8 +31,9 @@ export const PostCard = ({ post }: PostCardProps) => {
             </p>
           </div>
         </div>
-        <div>
-          <div className="flex gap-1">
+
+        {isAuthor && (
+          <div className="flex gap-x-[1px]">
             <Button className="size-8" variant={'ghost'} size={'icon'}>
               <EditIcon className="size-4" />
             </Button>
@@ -37,27 +41,29 @@ export const PostCard = ({ post }: PostCardProps) => {
               <TrashIcon className="size-4" />
             </Button>
           </div>
-        </div>
+        )}
       </section>
-      <section>
-        <p className="md:text-[15px] text-sm">{post.content}</p>
-      </section>
+
+      <p className="md:text-[15px] text-sm">{post.content}</p>
+
       <img
         className="aspect-video object-cover object-center rounded-2xl border"
         src={`${BASE_URL}${post.imageUrl}`}
         alt="post_image"
       />
       <time className="text-muted-foreground text-[13px]">
-         
         {format(new Date(post.createdAt), 'dd.MM.yyyy, HH:mm')}
       </time>
       <section className="flex gap-1">
-        <LikeIcon
+        <PostLikeIcon
           postId={post.id}
           likedByUser={post.likedByUser}
           likeCount={post.likes.length}
         />
-        <PostMessageIcon postId={post.id} commentCount={post.comments.length} />
+        <PostCommentsIcon
+          postId={post.id}
+          commentCount={post.comments.length}
+        />
       </section>
     </article>
   );

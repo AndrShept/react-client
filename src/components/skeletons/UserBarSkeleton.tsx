@@ -6,14 +6,14 @@ export const UserBarSkeleton = () => {
       {[...Array(6)].map((_, idx) => (
         <li className="flex items-center justify-between " key={idx}>
           <section className="flex items-center gap-2">
-            <Skeleton className="h-[40px] w-[40px] rounded-full" />
+            <Skeleton className="h-[42px] w-[42px] rounded-full" />
             <div className="flex flex-col gap-1">
-              <Skeleton className="h-[12px] w-[65px] rounded-full" />
-              <Skeleton className="h-[12px] w-[42px] rounded-full" />
+              <Skeleton className="h-[12px] w-[54px] rounded-full" />
+              <Skeleton className="h-[12px] w-[40px] rounded-full" />
             </div>
           </section>
 
-          <Skeleton className="rounded-full h-[34px] w-[58px]" />
+          <Skeleton className="rounded-full h-[34px] w-[57px]" />
         </li>
       ))}
     </ul>

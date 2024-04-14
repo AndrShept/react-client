@@ -1,4 +1,4 @@
-import { useLikePostMutation } from '@/lib/services/likePostApi';
+import { useLikePostMutation } from '@/lib/services/likeApi';
 import {
   useLazyGetAllPostsQuery,
   useLazyGetPostByIdQuery,
@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { HeartIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 
 interface LikeIconProps {
   postId: string;
@@ -15,7 +15,11 @@ interface LikeIconProps {
   likeCount: number;
 }
 
-export const LikeIcon = ({ postId, likedByUser, likeCount }: LikeIconProps) => {
+export const PostLikeIcon = ({
+  postId,
+  likedByUser,
+  likeCount,
+}: LikeIconProps) => {
   const [likePost, { isLoading }] = useLikePostMutation();
   const [refetchPosts] = useLazyGetAllPostsQuery();
   const [refetchPostsById] = useLazyGetPostByIdQuery();
@@ -30,21 +34,23 @@ export const LikeIcon = ({ postId, likedByUser, likeCount }: LikeIconProps) => {
     }
   };
   return (
-    <Button
-      disabled={isLoading}
-      onClick={handleLike}
-      className={cn('size-10', {})}
-      variant={'ghost'}
-      size={'icon'}
-    >
-      <HeartIcon
-        className={cn('size-6', {
-          'fill-red-500 stroke-none transition-all': likedByUser,
-        })}
-      />
+    <section className='flex items-center'>
+      <Button
+        disabled={isLoading}
+        onClick={handleLike}
+        className={cn('size-9', {})}
+        variant={'ghost'}
+        size={'icon'}
+      >
+        <HeartIcon
+          className={cn('size-6', {
+            'fill-red-500 stroke-none transition-all': likedByUser,
+          })}
+        />
+      </Button>
       {!!likeCount && (
         <p className="text-sm text-muted-foreground ml-1">{likeCount}</p>
       )}
-    </Button>
+    </section>
   );
 };

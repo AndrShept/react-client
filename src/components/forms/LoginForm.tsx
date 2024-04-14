@@ -20,7 +20,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { EyeIconForm } from '../EyeIconForm';
+import { EyeIconForm } from '../icons/EyeIconForm';
 import { Label } from '../ui/label';
 
 const formSchema = z.object({

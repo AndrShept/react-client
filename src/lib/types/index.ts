@@ -55,6 +55,7 @@ export type Comment = {
   postId: string;
   createdAt: Date;
   updatedAt: Date;
+  likes: Like[];
 };
 export type ErrorMessage = {
   data: {
