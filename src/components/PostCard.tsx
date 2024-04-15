@@ -2,10 +2,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { format } from 'date-fns';
-import { EditIcon, TrashIcon } from 'lucide-react';
+import { EditIcon } from 'lucide-react';
 
 import { UserAvatar } from './UserAvatar';
 import { PostCommentsIcon } from './icons/PostCommentsIcon';
+import { PostDeleteIcon } from './icons/PostDeleteIcon';
 import { PostLikeIcon } from './icons/PostLikeIcon';
 import { Button } from './ui/button';
 
@@ -37,9 +38,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             <Button className="size-8" variant={'ghost'} size={'icon'}>
               <EditIcon className="size-4" />
             </Button>
-            <Button className="size-8" variant={'ghost'} size={'icon'}>
-              <TrashIcon className="size-4" />
-            </Button>
+            <PostDeleteIcon postId={post.id} />
           </div>
         )}
       </section>

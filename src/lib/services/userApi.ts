@@ -43,7 +43,7 @@ export const userApi = api.injectEndpoints({
     }),
     getUserByUsername: builder.query<User, string>({
       query: (username) => ({
-        url: `/users/${username}`,
+        url: `/users-username/${username}`,
         method: 'GET',
       }),
     }),
@@ -67,6 +67,7 @@ export const {
   useUpdateUserMutation,
   useGetAllUsersQuery,
   useLazyGetAllUsersQuery,
+  useGetUserByUsernameQuery,
 } = userApi;
 
 export const {

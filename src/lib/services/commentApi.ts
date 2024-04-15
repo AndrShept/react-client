@@ -18,12 +18,12 @@ export const commentApi = api.injectEndpoints({
     }),
     editComment: builder.mutation<
       Comment,
-      { id: string; commentData: Partial<Comment> }
+      { id: string; content: Partial<Comment> }
     >({
-      query: ({ id, commentData }) => ({
-        url: `/comment/${id}`,
+      query: ({ id, content }) => ({
+        url: `/comments/${id}`,
         method: 'PUT',
-        body: commentData,
+        body: content,
       }),
     }),
   }),

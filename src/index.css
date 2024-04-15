@@ -8,7 +8,17 @@ body {
   font-family: 'Inter', sans-serif;
   /* font-size: 15px; */
 }
+.rdp [aria-hidden="true"] {
+  @apply hidden;
+}
 
+.rdp-vhidden {
+  @apply hidden;
+}
+
+select::-webkit-scrollbar {
+  display: none;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
