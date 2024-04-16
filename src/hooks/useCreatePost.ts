@@ -4,11 +4,12 @@ import {
 } from '@/lib/services/postApi';
 import { dateNowFns } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { useImageUpload } from './useImageUpload';
 
 export const postFormSchema = z.object({
   content: z.string().min(5),
@@ -16,10 +17,11 @@ export const postFormSchema = z.object({
 });
 
 export const useCreatePost = () => {
-  const [imageUrl, setImageUrl] = useState('');
+  const { errorMessage, handleUpload, imageUrl, setImageUrl } =
+    useImageUpload();
+
   const [addPost, { isLoading }] = useAddPostMutation();
   const [refetch] = useLazyGetAllPostsQuery();
-  const [errorMessage, setErrorMessage] = useState('');
   const form = useForm<z.infer<typeof postFormSchema>>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
@@ -27,7 +29,9 @@ export const useCreatePost = () => {
       imageUrl: '',
     },
   });
-
+  useEffect(() => {
+    form.setValue('imageUrl', imageUrl);
+  }, [imageUrl]);
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
     try {
       await addPost(values).unwrap();
@@ -44,38 +48,13 @@ export const useCreatePost = () => {
     }
   }
 
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData();
-    if (e.target.files) {
-      formData.append('file', e.target.files[0]);
-
-      try {
-        const res = await fetch('http://localhost:3000/api/upload', {
-          method: 'POST',
-          body: formData,
-        });
-        const data = await res.json();
-        if (res.ok) {
-          setImageUrl(data.imageUrl);
-          form.setValue('imageUrl', data.imageUrl);
-        }
-        if ('message' in data) {
-          setErrorMessage(data.message as string);
-          setTimeout(() => setErrorMessage(''), 3000);
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error('Something went wrong');
-      }
-    }
-  };
   return {
     form,
-    handleChange,
     onSubmit,
     isLoading,
+    errorMessage,
+    handleUpload,
     imageUrl,
     setImageUrl,
-    errorMessage,
   };
 };

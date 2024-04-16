@@ -14,6 +14,7 @@ export const HomePage = () => {
   if (!posts?.length) {
     return <div>Post not found</div>;
   }
+  console.log(posts)
   return (
     <ul className="flex flex-col gap-14">
       {posts.map((post) => (

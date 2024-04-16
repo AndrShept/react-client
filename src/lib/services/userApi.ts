@@ -47,13 +47,15 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateUser: builder.mutation<User, { id: string; userData: FormData }>({
-      query: ({ id, userData }) => ({
-        url: `/users/${id}`,
-        method: 'PUT',
-        body: userData,
-      }),
-    }),
+    updateUser: builder.mutation<User, { id: string; userData: Partial<User> }>(
+      {
+        query: ({ id, userData }) => ({
+          url: `/users/${id}`,
+          method: 'PUT',
+          body: userData,
+        }),
+      },
+    ),
   }),
 });
 

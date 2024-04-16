@@ -18,7 +18,7 @@ import { Label } from '../ui/label';
 export const PostForm = () => {
   const {
     form,
-    handleChange,
+    handleUpload,
     onSubmit,
     imageUrl,
     isLoading,
@@ -74,7 +74,7 @@ export const PostForm = () => {
           </div>
         )}
       </form>
-      <input onChange={handleChange} hidden id="image" type="file" />
+      <input onChange={handleUpload} hidden id="image" type="file" />
     </Form>
   );
 };

@@ -45,6 +45,13 @@ export const userSlice = createSlice({
         state.current = action.payload;
       })
       .addMatcher(
+        userApi.endpoints.updateUser.matchFulfilled,
+        (state, action) => {
+          state.isAuthenticated = true;
+          state.current = action.payload;
+        },
+      )
+      .addMatcher(
         userApi.endpoints.getUserById.matchFulfilled,
         (state, action) => {
           state.user = action.payload;

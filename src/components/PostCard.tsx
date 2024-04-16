@@ -45,11 +45,13 @@ export const PostCard = ({ post }: PostCardProps) => {
 
       <p className="md:text-[15px] text-sm">{post.content}</p>
 
-      <img
-        className="aspect-video object-cover object-center rounded-2xl border"
-        src={`${BASE_URL}${post.imageUrl}`}
-        alt="post_image"
-      />
+      {post.imageUrl && (
+        <img
+          className="aspect-video object-cover object-center rounded-2xl border"
+          src={`${BASE_URL}${post.imageUrl}`}
+          alt="post_image"
+        />
+      )}
       <time className="text-muted-foreground text-[13px]">
         {format(new Date(post.createdAt), 'dd.MM.yyyy, HH:mm')}
       </time>
