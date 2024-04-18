@@ -5,19 +5,42 @@ import { Link } from 'react-router-dom';
 import { Button } from './ui/button';
 
 interface UserAvatarProps {
-  avatarImg: string | undefined;
+  avatarUrl: string | undefined;
   username: string | undefined;
+  link?: boolean;
 }
 
-export const UserAvatar = ({ avatarImg, username }: UserAvatarProps) => {
+export const UserAvatar = ({
+  avatarUrl,
+  username,
+  link = true,
+}: UserAvatarProps) => {
   return (
-    <Button variant={'ghost'} size={'icon'} className="rounded-full">
-      <Link to={`/users/${username}`}>
-        <Avatar>
-          <AvatarImage src={`${BASE_URL}${avatarImg}`} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      </Link>
-    </Button>
+    <>
+      {link && (
+        <Button variant={'ghost'} size={'icon'} className="rounded-full">
+          <Link to={`/users/${username}`}>
+            <Avatar>
+              <AvatarImage
+                className="object-cover"
+                src={`${BASE_URL}${avatarUrl}`}
+              />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </Link>
+        </Button>
+      )}
+      {!link && (
+        <Button variant={'ghost'} size={'icon'} className="rounded-full">
+          <Avatar>
+            <AvatarImage
+              className="object-cover"
+              src={`${BASE_URL}${avatarUrl}`}
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Button>
+      )}
+    </>
   );
 };

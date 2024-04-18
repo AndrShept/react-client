@@ -14,7 +14,7 @@ import { LoginPage } from './components/pages/LoginPage.tsx';
 import { PostsPage } from './components/pages/PostsPage.tsx';
 import { PostsPageById } from './components/pages/PostsPageById.tsx';
 import { RegisterPage } from './components/pages/RegisterPage.tsx';
-import { UserProfile } from './components/pages/UserProfile.tsx';
+import { UserProfile } from './components/pages/UserProfilePage.tsx';
 import './index.css';
 import { store } from './lib/redux/store.ts';
 

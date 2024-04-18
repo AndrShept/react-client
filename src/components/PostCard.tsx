@@ -22,7 +22,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       <section className="flex justify-between">
         <div className="flex items-center gap-2">
           <UserAvatar
-            avatarImg={post.author.avatarUrl}
+            avatarUrl={post.author.avatarUrl}
             username={post.author.username}
           />
           <div>

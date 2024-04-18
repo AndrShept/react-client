@@ -2,7 +2,7 @@ import { useAppSelector } from '@/hooks/store';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { Navbar } from './Navbar';
+import { Navbar } from './Header';
 import { SidebarList } from './SidebarList';
 import { UsersBar } from './UsersBar';
 import { HomePage } from './pages/HomePage';

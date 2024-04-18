@@ -88,7 +88,7 @@ export function LoginForm() {
             <FormItem>
               <Label>Password</Label>
               <FormControl>
-                <div className="relative">
+                <div className="relative ">
                   <Input
                     className="pr-8"
                     type={isShow ? 'text' : 'password'}
@@ -108,7 +108,7 @@ export function LoginForm() {
           )}
         />
         {queryError && <p className="text-rose-500 text-sm ">{queryError}</p>}
-        <Button disabled={isLoading} className="rounded-full" type="submit">
+        <Button disabled={isLoading} className="rounded-full   " type="submit">
           Login
         </Button>
         <div className="flex items-center">

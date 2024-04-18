@@ -70,6 +70,7 @@ export const {
   useGetAllUsersQuery,
   useLazyGetAllUsersQuery,
   useGetUserByUsernameQuery,
+  useLazyGetUserByUsernameQuery
 } = userApi;
 
 export const {

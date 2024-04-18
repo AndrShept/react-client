@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { FollowButton } from './FollowButton';
+import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
 
@@ -23,12 +24,17 @@ export const UsersBarList = ({ user }: UsersBarList) => {
         variant={pathname === `/users/${user.username}` ? 'secondary' : 'ghost'}
       >
         <div className="flex items-center ">
-          <img
+          {/* <img
             className={cn('size-10 rounded-full', {})}
             src={`${BASE_URL}${user.avatarUrl}`}
             alt="user-avatar"
+          /> */}
+          <UserAvatar
+            username={user.username}
+            avatarUrl={user.avatarUrl}
+            link={false}
           />
-          <p className="ml-2 capitalize break-words line-clamp-1">
+          <p className="ml-2 text-wrap  break-all line-clamp-1">
             {user.username}
           </p>
         </div>

@@ -14,20 +14,15 @@ export const LoginPage = () => {
     }
   }, []);
   return (
-    <section className="flex w-full h-full md:flex-row flex-col">
-      <div className=" flex-1 md:border-r border-b md:flex hidden">
-        <img
-          className="h-full w-full object-cover"
-          src="/back2.jpg"
-          alt="login_img"
-        />
-      </div>
+    <section className="flex w-full h-full ">
+      <div className="bg-[url(/back-3.svg)] bg-cover flex-1 gap-6 flex  flex-col items-center justify-center bg-no-repeat ">
+        {/* <div className="text-center">
+          <h1 className='text-4xl  font-bold text-transparent bg-clip-text  bg-gradient-to-r from-purple-800 via-violet-900 to-purple-800'> Social Media</h1>
+        </div> */}
 
-      <div className=" flex-1 flex flex-col gap-14 items-center justify-center  p-4">
-        <h1 className="text-4xl font-semibold bg-gradient-to-r from-blue-700 via-blue-800 to-gray-900">
-          SOCIAL MEDIA
-        </h1>
-        <LoginForm />
+        <div className="px-8 py-10 bg-secondary/70 backdrop-blur-md rounded-3xl border">
+          <LoginForm />
+        </div>
       </div>
     </section>
   );

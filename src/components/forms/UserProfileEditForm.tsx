@@ -18,6 +18,7 @@ import { useImageUpload } from '@/hooks/useImageUpload';
 import { BASE_URL } from '@/lib/constants';
 import {
   useLazyGetUserByIdQuery,
+  useLazyGetUserByUsernameQuery,
   useUpdateUserMutation,
 } from '@/lib/services/userApi';
 import { User } from '@/lib/types';
@@ -27,10 +28,12 @@ import { format } from 'date-fns';
 import { CalendarIcon, ImageIcon, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Calendar } from '../ui/calendar';
+import { DialogClose } from '../ui/dialog';
 import { Textarea } from '../ui/textarea';
 
 const formSchema = z.object({
@@ -45,23 +48,15 @@ interface UserProfileFormProps {
   user: User;
 }
 
-export const UserProfileForm = ({ user }: UserProfileFormProps) => {
+export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
   console.log(user);
+  const navigate = useNavigate();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
-  const [refetchUser] = useLazyGetUserByIdQuery();
+  const [refetchUser] = useLazyGetUserByUsernameQuery();
   const { errorMessage, handleUpload, imageUrl, setImageUrl } =
     useImageUpload();
-  const [isDisabled, setIsDisabled] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      avatarUrl: '',
-      username: '',
-      // email: '',
-      dateOfBirth: user.dateOfBirth,
-      bio: '',
-      location: '',
-    },
   });
 
   useEffect(() => {
@@ -69,33 +64,31 @@ export const UserProfileForm = ({ user }: UserProfileFormProps) => {
 
     // form.setValue('email', user.email);
     form.setValue('username', user.username as string);
+    form.setValue('bio', user.bio as string);
+    form.setValue('location', user.location as string);
     form.setValue(
       'dateOfBirth',
       user.dateOfBirth ? new Date(user.dateOfBirth) : null,
     );
-
-    if (user.bio || user.location || user.dateOfBirth) {
-      form.setValue('bio', user.bio);
-      form.setValue('location', user.location);
-    }
     if (imageUrl) {
       form.setValue('avatarUrl', imageUrl);
     }
     if (errorMessage) {
       form.setError('avatarUrl', { message: errorMessage });
     }
-
-  }, [user, imageUrl, errorMessage, isDisabled]);
+  }, [user, imageUrl, errorMessage]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const isUsername = values.username === user.username;
 
     try {
-      await updateUser({
+      const updatedUser = await updateUser({
         id: user.id,
         userData: isUsername ? { ...values, username: undefined } : values,
       }).unwrap();
-      await refetchUser(user.id).unwrap();
+      await refetchUser(updatedUser.username as string).unwrap();
+
       toast.success('profile success updated');
+      navigate(`/users/${updatedUser.username}`);
     } catch (error) {
       toast.error('Something went wrong');
 
@@ -303,17 +296,22 @@ export const UserProfileForm = ({ user }: UserProfileFormProps) => {
           />
         </section>
 
-        <section className="flex justify-end   md:p-6 p-3 gap-3 border-t w-full">
-          <Button
-            disabled={isLoading}
-            className="rounded-full"
-            variant={'outline'}
-          >
-            Cancel
-          </Button>
-          <Button disabled={isLoading} className="rounded-full">
-            Save
-          </Button>
+        <section className="flex justify-end   md:p-6 p-3 gap-3  w-full">
+          <DialogClose>
+            <Button
+              type="button"
+              disabled={isLoading}
+              className="rounded-full"
+              variant={'outline'}
+            >
+              Cancel
+            </Button>
+          </DialogClose>
+          <DialogClose>
+            <Button disabled={isLoading} className="rounded-full">
+              Save
+            </Button>
+          </DialogClose>
         </section>
       </form>
     </Form>
