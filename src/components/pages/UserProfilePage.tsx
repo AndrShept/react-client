@@ -46,7 +46,7 @@ export const UserProfilePage = () => {
               avatarUrl={user.avatarUrl}
               link={false}
               username={user.username}
-              className="h-40 w-40"
+              className="h-40 w-40 border shadow-lg shadow-primary/10"
             />
           </div>
           {!isSelf && (
@@ -57,7 +57,7 @@ export const UserProfilePage = () => {
           )}
         </div>
 
-        <section className="flex flex-col mx-auto text-center max-w-xs gap-10 text-muted-foreground">
+        <section className="flex flex-col mx-auto text-center max-w-xs gap-10 mt-2 text-muted-foreground">
           <div className="flex flex-col gap-3">
             <h1 className="md:text-2xl text-xl font-semibold text-primary">
               {user.username}
@@ -78,6 +78,10 @@ export const UserProfilePage = () => {
             <p className="flex flex-col items-center">
               {user._count.following}
               <span>Friends</span>
+            </p>
+            <p className="flex flex-col items-center">
+              {user._count.likes}
+              <span>Likes</span>
             </p>
           </div>
           {isSelf && (
