@@ -18,6 +18,7 @@ export const UserAvatar = ({
   link = true,
   className,
 }: UserAvatarProps) => {
+  console.log(`${BASE_URL}${avatarUrl}`)
   return (
     <>
       {link && (

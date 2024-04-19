@@ -65,8 +65,8 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
 
     // form.setValue('email', user.email);
     form.setValue('username', user.username as string);
-    form.setValue('bio', user.bio as string);
-    form.setValue('location', user.location as string);
+    // form.setValue('bio', user.bio as string);
+    // form.setValue('location', user.location as string);
     form.setValue(
       'dateOfBirth',
       user.dateOfBirth ? new Date(user.dateOfBirth) : null,
@@ -74,6 +74,11 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
     if (imageUrl) {
       form.setValue('avatarUrl', imageUrl);
     }
+    if (user.bio || user.location) {
+      form.setValue('bio', user.bio);
+      form.setValue('location', user.location);
+    }
+
     if (errorMessage) {
       form.setError('avatarUrl', { message: errorMessage });
     }

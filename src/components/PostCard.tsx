@@ -16,14 +16,18 @@ interface PostCardProps {
 
 export const PostCard = ({ post }: PostCardProps) => {
   const { userId } = useAuth();
+  console.log(post)
   const isAuthor = userId === post.authorId;
+  console.log(post.author)
   return (
     <article className="flex flex-col gap-2 ">
       <section className="flex justify-between">
         <div className="flex items-center gap-2">
           <UserAvatar
-            avatarUrl={post.author.avatarUrl}
+            avatarUrl={'/uploads/images/1713526009314-Gotham.jpg'}
             username={post.author.username}
+            
+
           />
           <div>
             <p>{post.author.username}</p>

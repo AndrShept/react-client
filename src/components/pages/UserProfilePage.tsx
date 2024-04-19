@@ -38,7 +38,7 @@ export const UserProfilePage = () => {
       <article className="flex flex-col    rounded-3xl  gap-4 bg-secondary/40 backdrop-blur-md md:p-12 p-6">
         <div className="flex justify-between items-center relative">
           {!isSelf && (
-            <FollowButton userId={user.id} isFollowing={user.isFollowing} />
+            <FollowButton username={user.username } userId={user.id} isFollowing={user.isFollowing} />
           )}
 
           <div className="absolute z-[-1] inset-0 flex  items-center justify-center -top-[135px]   ">

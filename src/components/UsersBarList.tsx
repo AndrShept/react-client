@@ -38,7 +38,11 @@ export const UsersBarList = ({ user }: UsersBarList) => {
             {user.username}
           </p>
         </div>
-        <FollowButton userId={user.id} isFollowing={user.isFollowing} />
+        <FollowButton
+          username={user.username}
+          userId={user.id}
+          isFollowing={user.isFollowing}
+        />
       </Button>
     </ScrollArea>
   );

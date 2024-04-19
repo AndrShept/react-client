@@ -13,10 +13,11 @@ import { Button } from './ui/button';
 interface FollowButtonProps {
   isFollowing: boolean;
   userId: string;
+  username:string
 }
 
-export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
-  const { username } = useParams();
+export const FollowButton = ({ isFollowing, userId, username }: FollowButtonProps) => {
+
   const [follow, { isLoading }] = useFollowUserMutation();
   const [refetchUsers] = useLazyGetAllUsersQuery();
   const [refetchUserByUsername] = useLazyGetUserByUsernameQuery();
@@ -29,7 +30,7 @@ export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
       const res = await follow(userId).unwrap();
       toast.success(res.message);
       await refetchUsers().unwrap();
-      await refetchUserByUsername(username!).unwrap();
+      await refetchUserByUsername(username).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }
