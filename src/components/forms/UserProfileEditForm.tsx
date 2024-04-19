@@ -26,11 +26,11 @@ import { cn, hasErrorField } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, ImageIcon, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { nullable, z } from 'zod';
 
 import { Calendar } from '../ui/calendar';
 import { DialogClose } from '../ui/dialog';
@@ -41,14 +41,15 @@ const formSchema = z.object({
   username: z.string().min(4).max(20),
   // email: z.string().email().max(30),
   dateOfBirth: z.date().optional().or(z.literal(null)),
-  bio: z.string().min(4).max(40).optional().or(z.literal('')),
-  location: z.string().min(4).max(40).optional().or(z.literal('')),
+  bio: z.string().min(4).max(120).optional().or(z.literal('')),
+  location: z.string().min(4).max(20).optional().or(z.literal('')),
 });
 interface UserProfileFormProps {
   user: User;
 }
 
 export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
+  const ref = useRef<HTMLButtonElement | null>(null);
   console.log(user);
   const navigate = useNavigate();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
@@ -89,6 +90,8 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
 
       toast.success('profile success updated');
       navigate(`/users/${updatedUser.username}`);
+
+      ref.current?.click();
     } catch (error) {
       toast.error('Something went wrong');
 
@@ -297,7 +300,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
         </section>
 
         <section className="flex justify-end   md:p-6 p-3 gap-3  w-full">
-          <DialogClose>
+          <DialogClose ref={ref}>
             <Button
               type="button"
               disabled={isLoading}
@@ -307,11 +310,10 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
               Cancel
             </Button>
           </DialogClose>
-          <DialogClose>
-            <Button disabled={isLoading} className="rounded-full">
-              Save
-            </Button>
-          </DialogClose>
+
+          <Button disabled={isLoading} className="rounded-full">
+            Save
+          </Button>
         </section>
       </form>
     </Form>

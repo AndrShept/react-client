@@ -1,7 +1,11 @@
 import { useFollowUserMutation } from '@/lib/services/followUserApi';
-import { useLazyGetAllUsersQuery } from '@/lib/services/userApi';
+import {
+  useLazyGetAllUsersQuery,
+  useLazyGetUserByUsernameQuery,
+} from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { Button } from './ui/button';
@@ -12,8 +16,10 @@ interface FollowButtonProps {
 }
 
 export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
+  const { username } = useParams();
   const [follow, { isLoading }] = useFollowUserMutation();
   const [refetchUsers] = useLazyGetAllUsersQuery();
+  const [refetchUserByUsername] = useLazyGetUserByUsernameQuery();
 
   const handleFollow = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -23,6 +29,7 @@ export const FollowButton = ({ isFollowing, userId }: FollowButtonProps) => {
       const res = await follow(userId).unwrap();
       toast.success(res.message);
       await refetchUsers().unwrap();
+      await refetchUserByUsername(username!).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }

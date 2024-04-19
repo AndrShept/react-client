@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BASE_URL } from '@/lib/constants';
+import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
 import { Button } from './ui/button';
@@ -8,12 +9,14 @@ interface UserAvatarProps {
   avatarUrl: string | undefined;
   username: string | undefined;
   link?: boolean;
+  className?: string;
 }
 
 export const UserAvatar = ({
   avatarUrl,
   username,
   link = true,
+  className,
 }: UserAvatarProps) => {
   return (
     <>
@@ -31,15 +34,13 @@ export const UserAvatar = ({
         </Button>
       )}
       {!link && (
-        <Button variant={'ghost'} size={'icon'} className="rounded-full">
-          <Avatar>
-            <AvatarImage
-              className="object-cover"
-              src={`${BASE_URL}${avatarUrl}`}
-            />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </Button>
+        <Avatar className={cn('', className)}>
+          <AvatarImage
+            className="object-cover"
+            src={`${BASE_URL}${avatarUrl}`}
+          />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
       )}
     </>
   );

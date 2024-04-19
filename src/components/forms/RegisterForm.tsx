@@ -112,7 +112,9 @@ export function RegisterForm() {
           Register
         </Button>
         <div className="flex items-center">
-          <p className="text-sm text-muted-foreground">Login to account</p>
+          <p className="text-sm text-muted-foreground">
+            Already have an account?
+          </p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>
             <Link to="/login">login</Link>
           </Button>

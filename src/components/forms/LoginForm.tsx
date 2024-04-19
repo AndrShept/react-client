@@ -113,7 +113,7 @@ export function LoginForm() {
         </Button>
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">
-            You not create account?
+          Don't have an account?
           </p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>
             <Link to="/register">register</Link>

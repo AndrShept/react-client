@@ -1,4 +1,4 @@
-import { ErrorMessage, User } from '../types';
+import { ErrorMessage, User, UserWithCount } from '../types';
 import { api } from './api';
 
 export const userApi = api.injectEndpoints({
@@ -41,7 +41,7 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getUserByUsername: builder.query<User, string>({
+    getUserByUsername: builder.query<UserWithCount, string>({
       query: (username) => ({
         url: `/users-username/${username}`,
         method: 'GET',
@@ -70,7 +70,7 @@ export const {
   useGetAllUsersQuery,
   useLazyGetAllUsersQuery,
   useGetUserByUsernameQuery,
-  useLazyGetUserByUsernameQuery
+  useLazyGetUserByUsernameQuery,
 } = userApi;
 
 export const {

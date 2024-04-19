@@ -17,6 +17,16 @@ export type User = {
   isFollowing: boolean;
 };
 
+export interface UserWithCount extends User {
+  _count: {
+    comments: number;
+    followers: number;
+    following: number;
+    posts: number;
+    likes: number;
+  };
+}
+
 export type Follows = {
   id: string;
   follower: User;
