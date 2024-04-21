@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Comment } from '@/lib/types';
-import { cn, dateFns } from '@/lib/utils';
+import { cn, dateFns, dateFnsLessTime } from '@/lib/utils';
 import { useState } from 'react';
 
 import { UserAvatar } from './UserAvatar';
@@ -38,7 +38,7 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
             {comment.user.username}
           </p>
           <time className="text-xs text-muted-foreground">
-            {dateFns(comment.createdAt)}
+            {dateFnsLessTime(comment.createdAt)}
           </time>
         </div>
       </section>
@@ -68,7 +68,6 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
             isCommentLikeExist={isCommentLikeExist}
             commentId={comment.id}
             postId={comment.postId}
-
           />
           <Button
             size={'sm'}

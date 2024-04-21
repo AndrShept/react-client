@@ -6,9 +6,8 @@ import { UserBarSkeleton } from './skeletons/UserBarSkeleton';
 
 export const UsersBar = () => {
   const { data: users, isLoading } = useGetAllUsersQuery();
-  const { isPending } = useDelay();
 
-  if (isLoading || isPending) {
+  if (isLoading) {
     return <UserBarSkeleton />;
   }
   if (!users?.length) {

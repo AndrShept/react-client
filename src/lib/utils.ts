@@ -1,5 +1,5 @@
 import { type ClassValue, clsx } from 'clsx';
-import { format } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -13,6 +13,12 @@ export const dateNowFns = () => {
 
 export const dateFns = (timestamp: Date) => {
   return format(new Date(timestamp), 'dd.MM.yyyy, HH:mm');
+};
+
+export const dateFnsLessTime = (timestamp: Date) => {
+  return formatDistanceToNow(new Date(timestamp), {
+    addSuffix: true,
+  });
 };
 
 export function hasErrorField(

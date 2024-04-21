@@ -6,15 +6,14 @@ import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
 
 export const HomePage = () => {
   const { data: posts, isLoading } = useGetAllPostsQuery();
-  const { isPending } = useDelay(1);
 
-  if (isLoading || isPending) {
+  if (isLoading ) {
     return <PostPageSkeleton />;
   }
   if (!posts?.length) {
     return <div>Post not found</div>;
   }
-  console.log(posts)
+  console.log(posts);
   return (
     <ul className="flex flex-col gap-14">
       {posts.map((post) => (

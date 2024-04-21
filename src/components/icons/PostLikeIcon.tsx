@@ -4,7 +4,7 @@ import {
   useLazyGetPostByIdQuery,
 } from '@/lib/services/postApi';
 import { cn } from '@/lib/utils';
-import { HeartIcon } from 'lucide-react';
+import { HeartIcon, ThumbsUpIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';
@@ -34,22 +34,33 @@ export const PostLikeIcon = ({
     }
   };
   return (
-    <section className='flex items-center'>
+    <section className="flex items-center">
       <Button
         disabled={isLoading}
         onClick={handleLike}
-        className={cn('size-9', {})}
-        variant={'ghost'}
+        className={cn('size-9 rounded-full', {})}
+        variant={likedByUser ? 'indigo' : 'ghost'}
         size={'icon'}
       >
-        <HeartIcon
+        <ThumbsUpIcon
+          className={cn('size-5 text-700', {
+            ' text-primary transition-all': likedByUser,
+          })}
+        />
+        {/* <HeartIcon
           className={cn('size-6', {
             'fill-red-500 stroke-none transition-all': likedByUser,
           })}
-        />
+        /> */}
       </Button>
       {!!likeCount && (
-        <p className="text-sm text-muted-foreground ml-1">{likeCount}</p>
+        <p
+          className={cn('text-xs  ml-2', {
+            ' text-indigo-500': likedByUser,
+          })}
+        >
+          {likeCount}
+        </p>
       )}
     </section>
   );

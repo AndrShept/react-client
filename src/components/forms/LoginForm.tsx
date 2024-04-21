@@ -9,7 +9,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/store';
 import { useLazyCurrentQuery, useLoginMutation } from '@/lib/services/userApi';
 import { ErrorMessage } from '@/lib/types';
 import { hasErrorField } from '@/lib/utils';
@@ -113,7 +112,7 @@ export function LoginForm() {
         </Button>
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">
-          Don't have an account?
+            Don't have an account?
           </p>
           <Button className="text-blue-400 p-2" asChild variant={'link'}>
             <Link to="/register">register</Link>

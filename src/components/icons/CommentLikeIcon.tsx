@@ -40,8 +40,8 @@ export const CommentLikeIcon = ({
         className="size-[26px]"
       >
         <ThumbsUpIcon
-          className={cn('size-[18px]', {
-            'fill-primary stroke-none': isCommentLikeExist,
+          className={cn('size-[18px] text-indigo-500', {
+            'fill-indigo-500 stroke-none': isCommentLikeExist,
           })}
         />
       </Button>

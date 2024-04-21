@@ -9,13 +9,12 @@ import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
 
 export const PostsPageById = () => {
   const { postId } = useParams();
-  const { isPending } = useDelay(1);
   if (!postId) {
     throw new Error('postId not found');
   }
   const { data: post, isLoading } = useGetPostByIdQuery(postId);
 
-  if (isLoading || isPending) {
+  if (isLoading ) {
     return <PostPageSkeleton />;
   }
   if (!post) {
@@ -23,7 +22,7 @@ export const PostsPageById = () => {
   }
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex  flex-col gap-4">
       <PostCard post={post} />
 
       <PostCommentsForm postId={post.id} />

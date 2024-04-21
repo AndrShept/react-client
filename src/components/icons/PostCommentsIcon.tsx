@@ -19,14 +19,14 @@ export const PostCommentsIcon = ({
     <section className='flex items-center'>
       <Button
         onClick={() => navigate(`/posts/${postId}`)}
-        className="size-9"
+        className="size-10 rounded-full"
         variant={pathname !== `/posts/${postId}` ? 'ghost' : 'secondary'}
         size={'icon'}
       >
-        <MessageCircleMoreIcon className="size-6" />
+        <MessageCircleMoreIcon className="size-5" />
       </Button>
       {!!commentCount && (
-        <p className="text-sm text-muted-foreground ml-1">{commentCount}</p>
+        <p className="text-sm text-muted-foreground ml-2">{commentCount}</p>
       )}
     </section>
   );

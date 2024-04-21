@@ -1,10 +1,12 @@
 import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
-import { format } from 'date-fns';
+import { dateFnsLessTime } from '@/lib/utils';
+import { format, formatDistanceToNow } from 'date-fns';
 import { EditIcon } from 'lucide-react';
 
 import { UserAvatar } from './UserAvatar';
+import { UsersLikeList } from './UsersLikeList';
 import { PostCommentsIcon } from './icons/PostCommentsIcon';
 import { PostDeleteIcon } from './icons/PostDeleteIcon';
 import { PostLikeIcon } from './icons/PostLikeIcon';
@@ -16,29 +18,27 @@ interface PostCardProps {
 
 export const PostCard = ({ post }: PostCardProps) => {
   const { userId } = useAuth();
-  console.log(post)
   const isAuthor = userId === post.authorId;
-  console.log(post.author)
   return (
-    <article className="flex flex-col gap-2 ">
-      <section className="flex justify-between">
-        <div className="flex items-center gap-2">
+    <article className="flex flex-col gap-4 bg-secondary/50 backdrop-blur-md  rounded-3xl ">
+      <section className="flex justify-between p-6">
+        <div className="flex items-center gap-2 ">
           <UserAvatar
-            avatarUrl={'/uploads/images/1713526009314-Gotham.jpg'}
+            avatarUrl={post.author.avatarUrl}
             username={post.author.username}
-            
-
           />
           <div>
             <p>{post.author.username}</p>
             <p className="text-muted-foreground text-sm break-words line-clamp-1">
-              {post.author.email}
+              <time className="text-muted-foreground text-[13px]">
+                {dateFnsLessTime(post.createdAt)}
+              </time>
             </p>
           </div>
         </div>
 
         {isAuthor && (
-          <div className="flex gap-x-[1px]">
+          <div className="flex gap-x-[1px] ">
             <Button className="size-8" variant={'ghost'} size={'icon'}>
               <EditIcon className="size-4" />
             </Button>
@@ -47,19 +47,25 @@ export const PostCard = ({ post }: PostCardProps) => {
         )}
       </section>
 
-      <p className="md:text-[15px] text-sm">{post.content}</p>
+      <p className="md:text-[15px] text-sm px-6  ">{post.content}</p>
 
       {post.imageUrl && (
         <img
-          className="aspect-video object-cover object-center rounded-2xl border"
+          className="aspect-video object-cover object-center border-t   "
           src={`${BASE_URL}${post.imageUrl}`}
           alt="post_image"
         />
       )}
-      <time className="text-muted-foreground text-[13px]">
-        {format(new Date(post.createdAt), 'dd.MM.yyyy, HH:mm')}
-      </time>
-      <section className="flex gap-1">
+      {!!post.likes && (
+        <ul className=" px-6 py-2  flex border-b -space-x-3 items-center relative      min-h-[50px]  ">
+    
+          {post.likes
+            .map((like, idx) => <UsersLikeList like={like} idx={idx} />)
+            .slice(-4)}
+        </ul>
+      )}
+
+      <section className="flex gap-2 px-6 pb-6 ">
         <PostLikeIcon
           postId={post.id}
           likedByUser={post.likedByUser}

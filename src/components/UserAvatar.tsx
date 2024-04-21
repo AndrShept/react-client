@@ -18,13 +18,12 @@ export const UserAvatar = ({
   link = true,
   className,
 }: UserAvatarProps) => {
-  console.log(`${BASE_URL}${avatarUrl}`)
   return (
     <>
       {link && (
         <Button variant={'ghost'} size={'icon'} className="rounded-full">
           <Link to={`/users/${username}`}>
-            <Avatar>
+            <Avatar className={cn(className)}>
               <AvatarImage
                 className="object-cover"
                 src={`${BASE_URL}${avatarUrl}`}

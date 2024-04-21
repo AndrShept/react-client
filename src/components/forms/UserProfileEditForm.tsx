@@ -65,8 +65,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
 
     // form.setValue('email', user.email);
     form.setValue('username', user.username as string);
-    // form.setValue('bio', user.bio as string);
-    // form.setValue('location', user.location as string);
+
     form.setValue(
       'dateOfBirth',
       user.dateOfBirth ? new Date(user.dateOfBirth) : null,
