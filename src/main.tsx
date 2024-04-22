@@ -7,6 +7,8 @@ import { Toaster } from 'sonner';
 import { AuthGuard } from './components/AuthGuard.tsx';
 import MainLayout from './components/MainLayout.tsx';
 import { ThemeProvider } from './components/ThemeProvider.tsx';
+import { ConversationsPage } from './components/pages/ConversationsPage.tsx';
+import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
 import { FollowingsPage } from './components/pages/FollowingsPage.tsx';
@@ -36,6 +38,16 @@ const router = createBrowserRouter([
       {
         path: '/posts/:postId',
         element: <PostsPageById />,
+      },
+      {
+        path: '/conversations',
+        element: <ConversationsPage />,
+        children: [
+          {
+            path: '/conversations/:conversationId',
+            element: <ConversationsPageById />,
+          },
+        ],
       },
       {
         path: '/followers',

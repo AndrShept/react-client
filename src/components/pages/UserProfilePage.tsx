@@ -3,9 +3,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDelay } from '@/hooks/useDelay';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
-import { MessageCircleMore } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
+import { ConversationButton } from '../ConversationButton';
 import { FollowButton } from '../FollowButton';
 import { UserAvatar } from '../UserAvatar';
 import { UserProfileEditForm } from '../forms/UserProfileEditForm';
@@ -41,6 +41,7 @@ export const UserProfilePage = () => {
             )}
           >
             <UserAvatar
+              isOnline={user.isOnline}
               avatarUrl={user.avatarUrl}
               link={false}
               username={user.username}
@@ -109,13 +110,7 @@ export const UserProfilePage = () => {
                 isFollowing={user.isFollowing}
               />
 
-              <Button
-                variant={'secondary'}
-                size={'sm'}
-                className="rounded-full"
-              >
-                <MessageCircleMore />
-              </Button>
+              <ConversationButton receiverId={user.id} />
             </section>
           )}
         </section>

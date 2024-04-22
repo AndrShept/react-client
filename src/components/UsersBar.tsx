@@ -1,6 +1,7 @@
 import { useDelay } from '@/hooks/useDelay';
 import { useGetAllUsersQuery } from '@/lib/services/userApi';
 
+import { Search } from './Search';
 import { UsersBarList } from './UsersBarList';
 import { UserBarSkeleton } from './skeletons/UserBarSkeleton';
 
@@ -14,10 +15,13 @@ export const UsersBar = () => {
     return <div>Users not found</div>;
   }
   return (
-    <ul className="flex flex-col space-y-1 w-full">
-      {users.map((user) => (
-        <UsersBarList key={user.id} user={user} />
-      ))}
-    </ul>
+    <section className="flex flex-col flex-1 gap-2 mt-1">
+      <Search placeholder="search users..." />
+      <ul className="flex flex-col space-y-1 mt-4 ">
+        {users.map((user) => (
+          <UsersBarList key={user.id} user={user} />
+        ))}
+      </ul>
+    </section>
   );
 };

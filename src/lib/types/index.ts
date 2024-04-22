@@ -9,13 +9,36 @@ export type User = {
   updatedAt: Date;
   bio?: string;
   location?: string;
+  isOnline: boolean;
+  isFollowing: boolean;
   posts: Post[];
   following: Follows[];
   followers: Follows[];
   likes: Like[];
   comments: Comment[];
-  isFollowing: boolean;
+  conversationsSent: Conversation[];
+  conversationsReceived: Conversation[];
 };
+
+export interface Conversation {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  senderUser: User;
+  receiverUser: User;
+  senderId: string;
+  receiverId: string;
+  messages: Message[];
+}
+
+export interface Message {
+  id: string;
+  content: string;
+  conversation: Conversation;
+  conversationId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface UserWithCount extends User {
   _count: {

@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { format, formatDistanceToNow } from 'date-fns';
+import { io } from 'socket.io-client';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -33,3 +34,5 @@ export function hasErrorField(
     'message' in err.data
   );
 }
+
+export const socket = io('http://localhost:3000');

@@ -27,6 +27,6 @@
     }
     // ...
   },
-  "include": ["src"],
+  "include": ["src", "src/components/ConversationButton.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

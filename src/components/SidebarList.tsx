@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import {
   HomeIcon,
+  MessageCircleIcon,
   NewspaperIcon,
   UserRoundSearchIcon,
   UsersRoundIcon,
@@ -23,6 +24,12 @@ const sidebarData = [
     icon: NewspaperIcon,
   },
   {
+    name: 'Messages',
+    to: '/conversations',
+    id: 10,
+    icon: MessageCircleIcon,
+  },
+  {
     name: 'Followers',
     to: '/followers',
     id: 2,
@@ -37,6 +44,7 @@ const sidebarData = [
 ];
 
 export const SidebarList = () => {
+  
   const { pathname } = useLocation();
   return (
     <ul className="flex flex-col p-2 gap-1">
@@ -47,7 +55,10 @@ export const SidebarList = () => {
             asChild
             className={cn(
               'flex md:justify-start  gap-2 text-muted-foreground md:h-14 h-12',
-              { 'text-primary': pathname === data.to },
+              {
+                'text-primary': pathname === data.to,
+
+              },
             )}
           >
             <Link to={data.to}>

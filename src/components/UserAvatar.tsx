@@ -3,6 +3,7 @@ import { BASE_URL } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
+import { OnlineBadge } from './OnlineBadge';
 import { Button } from './ui/button';
 
 interface UserAvatarProps {
@@ -10,6 +11,8 @@ interface UserAvatarProps {
   username: string | undefined;
   link?: boolean;
   className?: string;
+  isOnline: boolean;
+  badge?: boolean;
 }
 
 export const UserAvatar = ({
@@ -17,13 +20,19 @@ export const UserAvatar = ({
   username,
   link = true,
   className,
+  badge = false,
+  isOnline,
 }: UserAvatarProps) => {
   return (
     <>
       {link && (
-        <Button variant={'ghost'} size={'icon'} className="rounded-full">
+        <Button
+          variant={'ghost'}
+          size={'icon'}
+          className="rounded-full relative"
+        >
           <Link to={`/users/${username}`}>
-            <Avatar className={cn(className)}>
+            <Avatar className={cn('', className)}>
               <AvatarImage
                 className="object-cover"
                 src={`${BASE_URL}${avatarUrl}`}
@@ -31,16 +40,20 @@ export const UserAvatar = ({
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </Link>
+          {badge && <OnlineBadge isOnline={isOnline} />}
         </Button>
       )}
       {!link && (
-        <Avatar className={cn('', className)}>
-          <AvatarImage
-            className="object-cover"
-            src={`${BASE_URL}${avatarUrl}`}
-          />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <div className="relative">
+          <Avatar className={cn('', className)}>
+            <AvatarImage
+              className="object-cover"
+              src={`${BASE_URL}${avatarUrl}`}
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          {badge && <OnlineBadge isOnline={isOnline} />}
+        </div>
       )}
     </>
   );
