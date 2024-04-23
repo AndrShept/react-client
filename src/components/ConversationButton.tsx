@@ -1,6 +1,6 @@
 import { useAddConversationMutation } from '@/lib/services/conversationApi';
 import { MessageCircleMoreIcon } from 'lucide-react';
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { Button } from './ui/button';
@@ -11,11 +11,11 @@ interface ConversationButtonProps {
 
 export const ConversationButton = ({ receiverId }: ConversationButtonProps) => {
   const [createConversation, { isLoading }] = useAddConversationMutation();
-  console.log(receiverId);
+  const navigate = useNavigate();
   const onCreate = async () => {
     try {
       const res = await createConversation({ receiverId }).unwrap();
-      console.log(res);
+      navigate(`/conversations/${res.id}`);
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');

@@ -15,6 +15,11 @@ export const conversationApi = api.injectEndpoints({
         url: '/conversations',
       }),
     }),
+    getConversationById: builder.query<Conversation, string>({
+      query: (conversationId) => ({
+        url: `/conversations/${conversationId}`,
+      }),
+    }),
     deleteConversation: builder.mutation<string, void>({
       query: () => ({
         url: '/conversations',
@@ -29,6 +34,8 @@ export const {
   useGetAllConversationQuery,
   useLazyGetAllConversationQuery,
   useDeleteConversationMutation,
+  useGetConversationByIdQuery,
+  useLazyGetConversationByIdQuery,
 } = conversationApi;
 export const { addConversation, getAllConversation, deleteConversation } =
   conversationApi.endpoints;

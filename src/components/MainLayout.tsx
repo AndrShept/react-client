@@ -7,7 +7,6 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Navbar } from './Header';
 import { SidebarList } from './SidebarList';
 import { UsersBar } from './UsersBar';
-import { ConversationsPage } from './pages/ConversationsPage';
 import { HomePage } from './pages/HomePage';
 
 function App() {
@@ -35,12 +34,10 @@ function App() {
           <SidebarList />
         </aside>
         <div
-          className={cn(
-            'flex-1 flex flex-col mt-[56px]    ',
-            {
-              'max-w-[900px] md:p-4 p-2 mx-auto  ': !pathname.includes('/conversations'),
-            },
-          )}
+          className={cn('flex-1 flex flex-col mt-[56px]    ', {
+            'max-w-[900px] md:p-4 p-2 mx-auto  ':
+              !pathname.includes('/conversations'),
+          })}
         >
           {pathname === '/' && <HomePage />}
           {pathname !== '/' && <Outlet />}

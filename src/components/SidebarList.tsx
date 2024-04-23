@@ -44,7 +44,6 @@ const sidebarData = [
 ];
 
 export const SidebarList = () => {
-  
   const { pathname } = useLocation();
   return (
     <ul className="flex flex-col p-2 gap-1">
@@ -57,7 +56,8 @@ export const SidebarList = () => {
               'flex md:justify-start  gap-2 text-muted-foreground md:h-14 h-12',
               {
                 'text-primary': pathname === data.to,
-
+                'bg-secondary text-primary':
+                  pathname.includes('/conversations') && data.id === 10,
               },
             )}
           >

@@ -5,9 +5,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
 import { AuthGuard } from './components/AuthGuard.tsx';
+import { ConversationsSidebar } from './components/ConversationsSidebar.tsx';
 import MainLayout from './components/MainLayout.tsx';
 import { ThemeProvider } from './components/ThemeProvider.tsx';
-import { ConversationsPage } from './components/pages/ConversationsPage.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/conversations',
-        element: <ConversationsPage />,
+        element: <ConversationsSidebar />,
         children: [
           {
             path: '/conversations/:conversationId',
