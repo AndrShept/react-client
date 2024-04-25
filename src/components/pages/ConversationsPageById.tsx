@@ -2,6 +2,7 @@ import { useGetConversationByIdQuery } from '@/lib/services/conversationApi';
 import { useParams } from 'react-router-dom';
 
 import { MessageCard } from '../MessageCard';
+import { MessageInput } from '../MessageInput';
 import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
 import { Textarea } from '../ui/textarea';
@@ -30,16 +31,13 @@ export const ConversationsPageById = () => {
           {!isLoading &&
             !isError &&
             conversation?.messages.map((message) => (
-              <MessageCard message={message} />
+              <MessageCard key={message.id} message={message} />
             ))}
         </ul>
       </ScrollArea>
 
       <div className="h-[150px] bg-secondary/40 md:p-4 p-3 border flex flex-col gap-2 ">
-        <Textarea className=" resize-none" />
-        <Button variant={'indigo'} size={'sm'} className="w-fit ml-auto">
-          Send
-        </Button>
+        <MessageInput conversationId={conversationId} />
       </div>
     </section>
   );

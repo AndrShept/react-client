@@ -4,6 +4,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAuth } from '@/hooks/useAuth';
+import { useSocket } from '@/hooks/useSocket';
 import { BASE_URL } from '@/lib/constants';
 import { logout } from '@/lib/redux/userSlice';
 import { LogOutIcon, UserCog2Icon } from 'lucide-react';
@@ -16,6 +17,7 @@ import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
 
 export const ProfileAvatar = () => {
+  const { socket } = useSocket();
   const { userData } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ export const ProfileAvatar = () => {
     dispatch(logout());
     localStorage.removeItem('token');
     navigate('/login');
+    socket?.disconnect();
   };
   if (!userData) {
     return null;
@@ -48,7 +51,11 @@ export const ProfileAvatar = () => {
     //   </PopoverContent>
     // </Popover>
     <div className="flex items-center md:gap-2 gap-1 scale-95 ">
-      <UserAvatar avatarUrl={userData.avatarUrl} username={userData.username} />
+      <UserAvatar
+        isOnline={userData.isOnline}
+        avatarUrl={userData.avatarUrl}
+        username={userData.username}
+      />
       <div className="md:flex flex-col hidden">
         <p>{userData.username}</p>
         {/* <p className="text-xs text-muted-foreground text-wrap line-clamp-1 break-all">

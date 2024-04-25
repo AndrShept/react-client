@@ -1,8 +1,10 @@
 import { useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { cn, socket } from '@/lib/utils';
+import { useSocket } from '@/hooks/useSocket';
+import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
 
 import { Navbar } from './Header';
 import { SidebarList } from './SidebarList';
@@ -11,21 +13,15 @@ import { HomePage } from './pages/HomePage';
 
 function App() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
-  const { userId } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  useEffect(() => {
-    // socket.on('connection', () => {
+  // const { socket } = useSocket();
 
-    // });
-    setTimeout(() => {
-      socket.emit('userId', userId);
-    }, 200);
+  useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
     }
-  }, [userId]);
-
+  }, []);
   return (
     <section className="flex flex-col h-full w-full  ">
       <Navbar />

@@ -2,11 +2,13 @@ import { listenerMiddleware } from '@/middleware/auth';
 import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '../services/api';
+import messagesSlice from './messagesSlice';
 import userSlice from './userSlice';
 
 export const store = configureStore({
   reducer: {
     user: userSlice,
+    messages: messagesSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

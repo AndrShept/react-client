@@ -28,6 +28,7 @@ const router = createBrowserRouter([
         <MainLayout />
       </AuthGuard>
     ),
+
     // errorElement: <ErrorPage />,
 
     children: [

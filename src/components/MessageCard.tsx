@@ -6,6 +6,7 @@ interface MessageCardProps {
 
 export const MessageCard = ({ message }: MessageCardProps) => {
   console.log(message);
+  console.log(message.conversation);
 
-  return <div>MessageCard</div>;
+  return <div>{message.content}</div>;
 };

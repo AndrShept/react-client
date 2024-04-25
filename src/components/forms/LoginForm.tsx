@@ -45,8 +45,8 @@ export function LoginForm() {
     try {
       const res = await login(values).unwrap();
       if (res.token) {
-        navigate('/');
         await triggerCurrentQuery().unwrap();
+        navigate('/');
       }
     } catch (error) {
       if (hasErrorField(error)) {

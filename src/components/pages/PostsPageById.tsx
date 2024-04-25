@@ -1,6 +1,6 @@
 import { useDelay } from '@/hooks/useDelay';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { CommentsList } from '../CommentsList';
 import { PostCard } from '../PostCard';
@@ -8,17 +8,21 @@ import { PostCommentsForm } from '../forms/PostCommentsForm';
 import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
 
 export const PostsPageById = () => {
+  const navigate = useNavigate();
   const { postId } = useParams();
   if (!postId) {
     throw new Error('postId not found');
   }
   const { data: post, isLoading } = useGetPostByIdQuery(postId);
 
-  if (isLoading ) {
+  if (isLoading) {
     return <PostPageSkeleton />;
   }
   if (!post) {
-    throw new Error('Post not found');
+    return <div>post not found</div>;
+  }
+  if (!post) {
+     navigate('/');
   }
 
   return (

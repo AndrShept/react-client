@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 
 export const AuthGuard = ({ children }: { children: ReactNode }) => {
   const { isLoading } = useCurrentQuery();
+
   if (isLoading) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
