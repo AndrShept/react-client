@@ -38,7 +38,7 @@ export const PostLikeIcon = ({
       <Button
         disabled={isLoading}
         onClick={handleLike}
-        className={cn('size-9 rounded-full', {})}
+        className={cn('size-9 rounded-full focus:scale-110 transition-all', {})}
         variant={likedByUser ? 'indigo' : 'ghost'}
         size={'icon'}
       >

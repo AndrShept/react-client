@@ -1,5 +1,8 @@
 import { useAuth } from '@/hooks/useAuth';
-import { useLazyGetConversationByIdQuery } from '@/lib/services/conversationApi';
+import {
+  useLazyGetAllConversationQuery,
+  useLazyGetConversationByIdQuery,
+} from '@/lib/services/conversationApi';
 import { useAddMessageMutation } from '@/lib/services/messageApi';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -15,6 +18,7 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
   const { userId } = useAuth();
   const [createMessage, { isLoading }] = useAddMessageMutation();
   const [refetchConversation] = useLazyGetConversationByIdQuery();
+  const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const [content, setContent] = useState('');
 
   const onCreate = async () => {
@@ -29,7 +33,9 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
           content,
           authorId: userId!,
         }).unwrap();
-        await refetchConversation(conversationId);
+        await refetchConversation(conversationId).unwrap();
+        await refetchAllConversations().unwrap();
+
         setContent('');
         toast.success(`Send new message `);
       }

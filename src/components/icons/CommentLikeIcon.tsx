@@ -35,13 +35,13 @@ export const CommentLikeIcon = ({
       <Button
         disabled={isLoading}
         onClick={handleCommentLike}
-        variant={'ghost'}
+        variant={isCommentLikeExist ? 'indigo' : 'ghost'}
         size={'icon'}
-        className="size-[26px]"
+        className={cn('size-[26px] rounded-full focus:scale-110 transition-all' , {})}
       >
         <ThumbsUpIcon
-          className={cn('size-[18px] text-indigo-500', {
-            'fill-indigo-500 stroke-none': isCommentLikeExist,
+          className={cn('size-[18px] ', {
+            '': isCommentLikeExist,
           })}
         />
       </Button>

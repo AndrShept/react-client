@@ -2,7 +2,6 @@ import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { dateFnsLessTime } from '@/lib/utils';
-import { format, formatDistanceToNow } from 'date-fns';
 import { EditIcon } from 'lucide-react';
 
 import { UserAvatar } from './UserAvatar';
@@ -20,10 +19,11 @@ export const PostCard = ({ post }: PostCardProps) => {
   const { userId } = useAuth();
   const isAuthor = userId === post.authorId;
   return (
-    <article className="flex flex-col gap-4 bg-secondary/50 backdrop-blur-md  rounded-3xl ">
-      <section className="flex justify-between p-6">
+    <article className="flex flex-col gap-2 bg-secondary/50 backdrop-blur-md  rounded-3xl ">
+      <section className="flex justify-between px-6 pt-5 pb-1 ">
         <div className="flex items-center gap-2 ">
           <UserAvatar
+            isOnline={post.author.isOnline}
             avatarUrl={post.author.avatarUrl}
             username={post.author.username}
           />
@@ -58,14 +58,11 @@ export const PostCard = ({ post }: PostCardProps) => {
       )}
       {!!post.likes && (
         <ul className=" px-6 py-2  flex border-b -space-x-3 items-center relative      min-h-[50px]  ">
-    
-          {post.likes
-            .map((like, idx) => <UsersLikeList like={like} idx={idx} />)
-            .slice(-4)}
+          {post.likes.map((like) => <UsersLikeList like={like} />).slice(-4)}
         </ul>
       )}
 
-      <section className="flex gap-2 px-6 pb-6 ">
+      <section className="flex gap-2 px-6 pb-3 ">
         <PostLikeIcon
           postId={post.id}
           likedByUser={post.likedByUser}
