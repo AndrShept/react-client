@@ -38,6 +38,8 @@ export interface Message {
   conversationId: string;
   createdAt: Date;
   updatedAt: Date;
+  author: User;
+  authorId: string;
 }
 
 export interface UserWithCount extends User {
@@ -65,10 +67,12 @@ export type Post = {
   author: User;
   authorId: string;
   likes: Like[];
-  comments: Comment[];
+  // comments: Comment[];
   likedByUser: boolean;
+  _count: {comments: number}
   createdAt: Date;
   updatedAt: Date;
+
 };
 
 export type Like = {

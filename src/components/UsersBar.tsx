@@ -16,7 +16,7 @@ export const UsersBar = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       await refetchUsers();
-    }, 20000);
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 

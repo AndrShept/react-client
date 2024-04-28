@@ -12,7 +12,8 @@ interface ConversationButtonProps {
 export const ConversationButton = ({ receiverId }: ConversationButtonProps) => {
   const [createConversation, { isLoading }] = useAddConversationMutation();
   const navigate = useNavigate();
-  const onCreate = async () => {
+  const onCreate = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation()
     try {
       const res = await createConversation({ receiverId }).unwrap();
       navigate(`/conversations/${res.id}`);

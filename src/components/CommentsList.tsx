@@ -26,6 +26,7 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
     <li className=" md:pt-4 pt-3   w-fit  bg-secondary/40 rounded-xl">
       <section className="flex items-center gap-2 md:px-4 px-3">
         <UserAvatar
+          isOnline={comment.user.isOnline}
           avatarUrl={comment.user.avatarUrl}
           username={comment.user.username}
         />

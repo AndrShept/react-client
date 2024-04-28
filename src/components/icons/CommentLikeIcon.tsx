@@ -1,3 +1,4 @@
+import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useLikeCommentMutation } from '@/lib/services/likeApi';
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { cn } from '@/lib/utils';
@@ -20,12 +21,12 @@ export const CommentLikeIcon = ({
   likeCount,
 }: CommentLikeIconProps) => {
   const [addCommentLike, { isLoading }] = useLikeCommentMutation();
-  const [refetchPostById] = useLazyGetPostByIdQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
 
   const handleCommentLike = async () => {
     try {
       await addCommentLike(commentId).unwrap();
-      await refetchPostById(postId);
+      await refetchComments(postId);
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -37,7 +38,10 @@ export const CommentLikeIcon = ({
         onClick={handleCommentLike}
         variant={isCommentLikeExist ? 'indigo' : 'ghost'}
         size={'icon'}
-        className={cn('size-[26px] rounded-full focus:scale-110 transition-all' , {})}
+        className={cn(
+          'size-[26px] rounded-full focus:scale-110 transition-all',
+          {},
+        )}
       >
         <ThumbsUpIcon
           className={cn('size-[18px] ', {

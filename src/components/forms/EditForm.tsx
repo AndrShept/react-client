@@ -7,7 +7,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useEditCommentMutation } from '@/lib/services/commentApi';
+import {
+  useEditCommentMutation,
+  useLazyGetCommentsQuery,
+} from '@/lib/services/commentApi';
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -32,7 +35,7 @@ export const EditForm = ({
   setIsEdit,
 }: EditFormProps) => {
   const [editComment, { isLoading }] = useEditCommentMutation();
-  const [refetchPostById] = useLazyGetPostByIdQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,7 +50,7 @@ export const EditForm = ({
         id: commentId,
       }).unwrap();
       setIsEdit(false);
-      await refetchPostById(postId);
+      await refetchComments(postId);
     } catch (error) {
       toast.error('Something went wrong');
     }

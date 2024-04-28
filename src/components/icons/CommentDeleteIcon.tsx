@@ -1,4 +1,7 @@
-import { useDeleteCommentMutation } from '@/lib/services/commentApi';
+import {
+  useDeleteCommentMutation,
+  useLazyGetCommentsQuery,
+} from '@/lib/services/commentApi';
 import {
   useGetPostByIdQuery,
   useLazyGetPostByIdQuery,
@@ -19,11 +22,11 @@ export const CommentDeleteIcon = ({
   postId,
 }: CommentDeleteIconProps) => {
   const [deleteComment, { isLoading }] = useDeleteCommentMutation();
-  const [refetchPostById] = useLazyGetPostByIdQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
   const handleDelete = async () => {
     try {
       await deleteComment(commentId).unwrap();
-      await refetchPostById(postId).unwrap();
+      await refetchComments(postId).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }

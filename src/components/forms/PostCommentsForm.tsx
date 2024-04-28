@@ -9,7 +9,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useAddCommentMutation } from '@/lib/services/commentApi';
+import {
+  useAddCommentMutation,
+  useLazyGetCommentsQuery,
+} from '@/lib/services/commentApi';
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LucideSendHorizontal } from 'lucide-react';
@@ -23,7 +26,7 @@ const formSchema = z.object({
 
 export const PostCommentsForm = ({ postId }: { postId: string }) => {
   const [addComment, { isLoading }] = useAddCommentMutation();
-  const [refetchPostById] = useLazyGetPostByIdQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,7 +36,7 @@ export const PostCommentsForm = ({ postId }: { postId: string }) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await addComment({ ...values, postId }).unwrap();
-      refetchPostById(postId).unwrap();
+      refetchComments(postId).unwrap();
       toast.success('Add new comment');
       form.reset();
     } catch (error) {

@@ -2,6 +2,7 @@ import { User } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { ConversationButton } from './ConversationButton';
 import { FollowButton } from './FollowButton';
 import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
@@ -35,11 +36,14 @@ export const UsersBarList = ({ user }: UsersBarList) => {
             {user.username}
           </p>
         </div>
-        <FollowButton
-          username={user.username}
-          userId={user.id}
-          isFollowing={user.isFollowing}
-        />
+        <div className="flex items-center">
+          {/* <ConversationButton receiverId={user.id} /> */}
+          <FollowButton
+            username={user.username}
+            userId={user.id}
+            isFollowing={user.isFollowing}
+          />
+        </div>
       </Button>
     </ScrollArea>
   );

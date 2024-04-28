@@ -1,33 +1,38 @@
 import { useGetConversationByIdQuery } from '@/lib/services/conversationApi';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { MessageCard } from '../MessageCard';
 import { MessageInput } from '../MessageInput';
-import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
-import { Textarea } from '../ui/textarea';
 
 export const ConversationsPageById = () => {
   const { conversationId } = useParams();
   if (!conversationId) {
     throw new Error('conversationId not found');
   }
+  const ref = useRef<HTMLUListElement | null>(null);
   const {
     data: conversation,
     isLoading,
     isError,
   } = useGetConversationByIdQuery(conversationId);
   console.log(conversation);
+  useEffect(() => {
+    ref.current?.lastElementChild?.scrollIntoView({ behavior: 'instant' });
+  }, [conversation?.messages]);
+
   return (
     <section className="flex flex-col h-full justify-between ">
       <ScrollArea className="pr-1">
-        <ul className="flex flex-col items-center ">
+        {!conversation?.messages.length && !isLoading && (
+          <p className="text-muted-foreground text-sm mt-6 text-center">
+            messages not found
+          </p>
+        )}
+        <ul ref={ref} className="flex flex-col justify-end gap-4 p-4  ">
           {isLoading && <p>LOADING</p>}
-          {!conversation?.messages.length && !isLoading && (
-            <p className="text-muted-foreground text-sm mt-6">
-              messages not found
-            </p>
-          )}
+
           {!isLoading &&
             !isError &&
             conversation?.messages.map((message) => (

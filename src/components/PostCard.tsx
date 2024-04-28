@@ -16,6 +16,7 @@ interface PostCardProps {
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
+  console.log(post);
   const { userId } = useAuth();
   const isAuthor = userId === post.authorId;
   return (
@@ -70,7 +71,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         />
         <PostCommentsIcon
           postId={post.id}
-          commentCount={post.comments.length}
+          commentCount={post._count.comments}
         />
       </section>
     </article>
