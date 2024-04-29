@@ -11,7 +11,8 @@ export const PostDeleteIcon = ({ postId }: { postId: string }) => {
   const [deletePost, { isLoading }] = useDeletePostMutation();
   const [refetchAllPosts] = useLazyGetAllPostsQuery();
 
-  const handleDelete = async () => {
+  const handleDelete = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation()
     if (confirm()) {
       try {
         await deletePost(postId).unwrap();

@@ -3,9 +3,10 @@ import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { CommentsList } from '../CommentsList';
+import { CommentsCard } from '../CommentsCard';
 import { PostCard } from '../PostCard';
 import { PostCommentsForm } from '../forms/PostCommentsForm';
+import { PostCommentsSkeleton } from '../skeletons/PostCommentsSkeleton';
 import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
 
 export const PostsPageById = () => {
@@ -16,22 +17,20 @@ export const PostsPageById = () => {
     throw new Error('postId not found');
   }
   const { data: post, isLoading } = useGetPostByIdQuery(postId);
+
   const { data: comments, isLoading: isLoadingComments } =
     useGetCommentsQuery(postId);
-    console.log(comments)
+  // console.log(comments)
+  // console.log(post)
 
   if (isLoading) {
     return <PostPageSkeleton />;
   }
-  if (isLoadingComments) {
-    return <p>LOADING COMMENTS</p>;
-  }
+
   if (!post) {
     return <div>post not found</div>;
   }
-  if (!comments) {
-    return <div>comments not found</div>;
-  }
+
   if (!post) {
     navigate('/');
   }
@@ -40,11 +39,17 @@ export const PostsPageById = () => {
     <section className="flex  flex-col gap-4">
       <PostCard post={post} />
 
-      <PostCommentsForm postId={post.id} />
+      <PostCommentsForm  postId={post.id} />
 
-      <ul className="flex flex-col gap-4 ">
-        {comments.map((comment) => (
-          <CommentsList key={comment.id} comment={comment} />
+      <ul className="flex flex-col gap-4 mt-3 ">
+        {!comments?.length && (
+          <p className="text-muted-foreground text-sm text-center ">
+            Comments not found
+          </p>
+        )}
+        {isLoadingComments  && <PostCommentsSkeleton />}
+        {!isLoadingComments && comments?.map((comment) => (
+          <CommentsCard key={comment.id} comment={comment} />
         ))}
       </ul>
     </section>

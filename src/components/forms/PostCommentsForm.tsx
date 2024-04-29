@@ -16,6 +16,7 @@ import {
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LucideSendHorizontal } from 'lucide-react';
+import { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -24,25 +25,33 @@ const formSchema = z.object({
   content: z.string().min(5).max(170),
 });
 
-export const PostCommentsForm = ({ postId }: { postId: string }) => {
+interface PostCommentsFormProps {
+  postId: string;
+}
+
+export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
   const [addComment, { isLoading }] = useAddCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: '',
     },
   });
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await addComment({ ...values, postId }).unwrap();
       refetchComments(postId).unwrap();
       toast.success('Add new comment');
       form.reset();
+      form.setFocus('content');
     } catch (error) {
       toast.error('Something went wrong');
     }
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="">

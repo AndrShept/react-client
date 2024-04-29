@@ -12,9 +12,17 @@ import { Button } from './ui/button';
 
 interface CommentsListProps {
   comment: Comment;
+  avatarClassname?: string;
+  cardSize?: 'fit' | 'full';
+  textSize?: 'base' | 'sm' | 'xs';
 }
 
-export const CommentsList = ({ comment }: CommentsListProps) => {
+export const CommentsCard = ({
+  comment,
+  avatarClassname,
+  cardSize = 'fit',
+  textSize = 'base',
+}: CommentsListProps) => {
   const { userId } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
   const isOwner = comment.post.authorId === comment.userId;
@@ -23,9 +31,15 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
     (like) => like.userId === userId,
   );
   return (
-    <li className=" md:pt-4 pt-3   w-fit  bg-secondary/40 rounded-xl">
+    <article
+      className={cn(' md:pt-4 pt-3    bg-secondary/40 rounded-xl', {
+        ' w-fit': cardSize === 'fit',
+        ' w-full': cardSize === 'full',
+      })}
+    >
       <section className="flex items-center gap-2 md:px-4 px-3">
         <UserAvatar
+          className={avatarClassname}
           isOnline={comment.user.isOnline}
           avatarUrl={comment.user.avatarUrl}
           username={comment.user.username}
@@ -47,6 +61,9 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
         <p
           className={cn('mt-2 break-word  p-1  text-[15px] md:px-4 px-3 ', {
             'break-all': !comment.content.includes(' '),
+            'text-base': textSize === 'base',
+            'text-sm': textSize === 'sm',
+            'text-xs': textSize === 'xs',
           })}
         >
           {comment.content}
@@ -86,6 +103,6 @@ export const CommentsList = ({ comment }: CommentsListProps) => {
           </div>
         )}
       </section>
-    </li>
+    </article>
   );
 };

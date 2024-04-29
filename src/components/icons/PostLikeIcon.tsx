@@ -24,7 +24,10 @@ export const PostLikeIcon = ({
   const [refetchPosts] = useLazyGetAllPostsQuery();
   const [refetchPostsById] = useLazyGetPostByIdQuery();
 
-  const handleLike = async () => {
+  const handleLike = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
     try {
       await likePost(postId).unwrap();
       await refetchPosts().unwrap();
