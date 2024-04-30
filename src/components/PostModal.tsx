@@ -29,10 +29,12 @@ export const PostModal = ({ children, post }: PostModalProps) => {
       <DialogContent className="h-[95%] max-w-[95%] flex ">
         <section className="size-full  relative sm:block hidden ">
           {post.imageUrl && (
-            <img
-              className="object-cover  "
-              src={`${BASE_URL}${post.imageUrl}`}
-            />
+            <div className="size-full ">
+              <img
+                className="object-contain size-full"
+                src={`${BASE_URL}${post.imageUrl}`}
+              />
+            </div>
           )}
 
           {!post.imageUrl && (
@@ -43,7 +45,9 @@ export const PostModal = ({ children, post }: PostModalProps) => {
           )}
         </section>
         <section
-          className={'w-[450px] h-full flex flex-col gap-4   p-2 rounded-xl'}
+          className={
+            'w-[450px] h-full flex flex-col gap-4   p-2 rounded-xl mx-auto'
+          }
         >
           <div className="flex gap-2">
             <UserAvatar
@@ -57,13 +61,15 @@ export const PostModal = ({ children, post }: PostModalProps) => {
             </p>
           </div>
           <Separator />
-          <ScrollArea className="pr-3">
-            <ul className="flex flex-col h-screen gap-4">
-              {!comments?.length && (
-                <p className="text-muted-foreground text-sm text-center ">
-                  comment not found
+          <ScrollArea className="pr-3 flex-1 ">
+            {!comments?.length && (
+              <div className="translate-y-1/2">
+                <p className="text-muted-foreground text-sm text-center   ">
+                  Comment not found
                 </p>
-              )}
+              </div>
+            )}
+            <ul className="flex flex-col   gap-4 ">
               {isLoading && <PostCommentsSkeleton />}
               {!isLoading &&
                 comments?.map((comment) => (
@@ -83,17 +89,12 @@ export const PostModal = ({ children, post }: PostModalProps) => {
               likeCount={post.likes.length}
               likedByUser={post.likedByUser}
             />
-            <Button
-             
-              className="rounded-full"
-              variant={'ghost'}
-              size={'icon'}
-            >
+            <Button className="rounded-full" variant={'ghost'} size={'icon'}>
               <MessageCircle />
             </Button>
           </div>
           <div>
-            <PostCommentsForm  postId={post.id} />
+            <PostCommentsForm postId={post.id} />
           </div>
         </section>
       </DialogContent>

@@ -2,7 +2,7 @@ import { Skeleton } from '../ui/skeleton';
 
 export const PostPageSkeleton = () => {
   return (
-    <ul className="flex flex-col gap-4 w-full ">
+    <ul className="flex flex-col gap-4 w-full max-w-[600px] mx-auto mt-4 ">
       {[...Array(1)].map((_, idx) => (
         <li key={idx} className="flex flex-col gap-2">
           <section className="flex items-center justify-between ">

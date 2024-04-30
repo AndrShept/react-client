@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Comment } from '@/lib/types';
-import { cn, dateFns, dateFnsLessTime } from '@/lib/utils';
+import { cn, dateFnsLessTime } from '@/lib/utils';
 import { useState } from 'react';
 
 import { UserAvatar } from './UserAvatar';

@@ -9,11 +9,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/useAuth';
 import { useCreatePost } from '@/hooks/useCreatePost';
 import { BASE_URL } from '@/lib/constants';
 import { ImageIcon, X } from 'lucide-react';
 
+import { UserAvatar } from '../UserAvatar';
 import { Label } from '../ui/label';
+import { Textarea } from '../ui/textarea';
 
 export const PostForm = () => {
   const {
@@ -25,20 +28,35 @@ export const PostForm = () => {
     setImageUrl,
     errorMessage,
   } = useCreatePost();
+  const { userData } = useAuth();
+  if (!userData) {
+    throw new Error('user Data not found');
+  }
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 flex  flex-col max-w-[800px]  min-w-[300px bg-secondary/50 p-8 rounded-lg "
+        className="space-y-8 flex flex-col bg-secondary/50 p-7 rounded-lg text-center  "
       >
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
             <FormItem>
-              <Label>Create post</Label>
+              <Label className="">Create post</Label>
               <FormControl>
-                <Input placeholder="content..." {...field} />
+                <div className="flex gap-2  ">
+                  <UserAvatar
+                    avatarUrl={userData.avatarUrl}
+                    isOnline={userData.isOnline}
+                    username={userData.username}
+                  />
+                  <Textarea
+                    className="resize-none"
+                    placeholder="content..."
+                    {...field}
+                  />
+                </div>
               </FormControl>
 
               <FormMessage />
@@ -62,7 +80,10 @@ export const PostForm = () => {
         </div>
         {imageUrl && (
           <div className="relative">
-            <img src={`${BASE_URL}${imageUrl}`} className="h-full w-full" />
+            <img
+              src={`${BASE_URL}${imageUrl}`}
+              className="h-full w-full aspect-video object-cover"
+            />
             <Button
               onClick={() => setImageUrl('')}
               variant={'secondary'}
@@ -74,7 +95,13 @@ export const PostForm = () => {
           </div>
         )}
       </form>
-      <input onChange={handleUpload} hidden id="image" type="file" />
+      <input
+        onChange={handleUpload}
+        hidden
+        id="image"
+        accept="image/*"
+        type="file"
+      />
     </Form>
   );
 };

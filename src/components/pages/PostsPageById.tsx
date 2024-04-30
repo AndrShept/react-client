@@ -36,7 +36,7 @@ export const PostsPageById = () => {
   }
 
   return (
-    <section className="flex  flex-col gap-4">
+    <section className="flex  flex-col gap-4 mx-auto">
       <PostCard post={post} />
 
       <PostCommentsForm  postId={post.id} />
