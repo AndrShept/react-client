@@ -36,7 +36,7 @@ export const PostForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 flex flex-col bg-secondary/50 p-7 rounded-lg text-center  "
+        className="space-y-8 flex flex-col  p-7 rounded-lg text-center  "
       >
         <FormField
           control={form.control}
@@ -52,7 +52,7 @@ export const PostForm = () => {
                     username={userData.username}
                   />
                   <Textarea
-                    className="resize-none"
+                    className="resize-none bg-secondary/30"
                     placeholder="content..."
                     {...field}
                   />

@@ -4,6 +4,12 @@ import {
   useLazyGetUserByUsernameQuery,
 } from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
+import {
+  UserMinus,
+  UserMinus2Icon,
+  UserPlus,
+  UserPlus2Icon,
+} from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -13,12 +19,14 @@ interface FollowButtonProps {
   isFollowing: boolean;
   userId: string;
   username: string;
+  label?: boolean;
 }
 
 export const FollowButton = ({
   isFollowing,
   userId,
   username,
+  label = false,
 }: FollowButtonProps) => {
   const [follow, { isLoading }] = useFollowUserMutation();
   const [refetchUsers] = useLazyGetAllUsersQuery();
@@ -41,13 +49,15 @@ export const FollowButton = ({
     <Button
       disabled={isLoading}
       variant={!isFollowing ? 'indigo' : 'outline'}
-      className={cn('rounded-full text-xs ', {
-        '': !isFollowing,
+      className={cn('rounded-full text-xs gap-1 ', {
+        'size-9': !label,
       })}
       onClick={handleFollow}
-      size={'sm'}
+      size={label ? 'sm' : 'icon'}
     >
-      {!isFollowing ? 'Follow' : 'Unfollow'}
+      {!isFollowing && <UserPlus2Icon className="size-[17px]" />}
+      {isFollowing && <UserMinus2Icon className="size-[17px]" />}
+      {label && (!isFollowing ? 'Follow' : 'Unfollow')}
     </Button>
   );
 };

@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDelay } from '@/hooks/useDelay';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
+import { PencilIcon } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
 import { ConversationButton } from '../ConversationButton';
@@ -28,9 +29,9 @@ export const UserProfilePage = () => {
   }
   console.log(user);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-8">
       <div className="h-[100px] "></div>
-      <article className="flex flex-col    rounded-3xl  gap-4 bg-secondary/40 backdrop-blur-md md:p-12 p-6">
+      <article className="flex flex-col border border-indigo-400   rounded-3xl  gap-4  backdrop-blur-md md:p-12 p-6">
         <div className="flex justify-between items-center relative">
           <div
             className={cn(
@@ -59,7 +60,7 @@ export const UserProfilePage = () => {
           )}
         >
           <div className="flex flex-col gap-3">
-            <h1 className="md:text-2xl text-xl font-semibold text-primary">
+            <h1 className="md:text-2xl text-xl font-semibold text-indigo-500">
               {user.username}
             </h1>
             <p className="">{user.location}</p>
@@ -88,7 +89,10 @@ export const UserProfilePage = () => {
           {isSelf && (
             <Dialog>
               <DialogTrigger>
-                <Button className="rounded-full">Update prfofile</Button>
+                <Button className="rounded-full gap-1 ">
+                  <PencilIcon className='size-4' />
+                  Update profile
+                </Button>
               </DialogTrigger>
               <DialogContent className="max-w-xl">
                 <section className=" border-b p-4">
@@ -105,12 +109,13 @@ export const UserProfilePage = () => {
           {!isSelf && (
             <section className="flex items-center gap-4 mx-auto">
               <FollowButton
+                label={true}
                 username={user.username}
                 userId={user.id}
                 isFollowing={user.isFollowing}
               />
 
-              <ConversationButton receiverId={user.id} />
+              <ConversationButton label receiverId={user.id} />
             </section>
           )}
         </section>

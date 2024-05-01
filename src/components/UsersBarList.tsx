@@ -36,13 +36,14 @@ export const UsersBarList = ({ user }: UsersBarList) => {
             {user.username}
           </p>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center gap-1">
           {/* <ConversationButton receiverId={user.id} /> */}
           <FollowButton
             username={user.username}
             userId={user.id}
             isFollowing={user.isFollowing}
           />
+          <ConversationButton receiverId={user.id} />
         </div>
       </Button>
     </ScrollArea>

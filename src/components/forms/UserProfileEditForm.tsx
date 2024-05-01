@@ -25,7 +25,7 @@ import { User } from '@/lib/types';
 import { cn, hasErrorField } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon, ImageIcon, X } from 'lucide-react';
+import { CalendarIcon, ImageIcon, SaveIcon, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -315,7 +315,8 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
             </Button>
           </DialogClose>
 
-          <Button disabled={isLoading} className="rounded-full">
+          <Button disabled={isLoading} className="rounded-full gap-1">
+            <SaveIcon className='size-4' />
             Save
           </Button>
         </section>
