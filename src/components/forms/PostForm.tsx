@@ -13,12 +13,19 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCreatePost } from '@/hooks/useCreatePost';
 import { BASE_URL } from '@/lib/constants';
 import { ImageIcon, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { UserAvatar } from '../UserAvatar';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 
 export const PostForm = () => {
+  const { userData } = useAuth();
+
+  if (!userData) {
+    throw new Error('UserData not found');
+  }
   const {
     form,
     handleUpload,
@@ -28,24 +35,21 @@ export const PostForm = () => {
     setImageUrl,
     errorMessage,
   } = useCreatePost();
-  const { userData } = useAuth();
-  if (!userData) {
-    throw new Error('user Data not found');
-  }
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 flex flex-col  p-7 rounded-lg text-center  "
+        className="space-y-6 flex flex-col  p-7 rounded-lg text-center  "
       >
         <FormField
           control={form.control}
           name="content"
           render={({ field }) => (
             <FormItem>
-              <Label className="">Create post</Label>
+              <Label className="text-indigo-500 ">Create post</Label>
               <FormControl>
-                <div className="flex gap-2  ">
+                <div className="flex gap-2   ">
                   <UserAvatar
                     avatarUrl={userData.avatarUrl}
                     isOnline={userData.isOnline}

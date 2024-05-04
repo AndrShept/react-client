@@ -1,4 +1,7 @@
-import { useAddConversationMutation } from '@/lib/services/conversationApi';
+import {
+  useAddConversationMutation,
+  useLazyGetAllConversationQuery,
+} from '@/lib/services/conversationApi';
 import { cn } from '@/lib/utils';
 import { MessageCircleMoreIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +19,7 @@ export const ConversationButton = ({
   label = false,
 }: ConversationButtonProps) => {
   const [createConversation, { isLoading }] = useAddConversationMutation();
+  const [refetchConversations] = useLazyGetAllConversationQuery();
   const navigate = useNavigate();
   const onCreate = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -23,6 +27,7 @@ export const ConversationButton = ({
     e.stopPropagation();
     try {
       const res = await createConversation({ receiverId }).unwrap();
+      await refetchConversations().unwrap();
       navigate(`/conversations/${res.id}`);
     } catch (error) {
       console.log(error);

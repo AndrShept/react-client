@@ -1,9 +1,11 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useSocket } from '@/hooks/useSocket';
 import {
   useLazyGetAllConversationQuery,
   useLazyGetConversationByIdQuery,
 } from '@/lib/services/conversationApi';
 import { useAddMessageMutation } from '@/lib/services/messageApi';
+import { SendHorizontalIcon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -20,6 +22,7 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
   const [refetchConversation] = useLazyGetConversationByIdQuery();
   const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const [content, setContent] = useState('');
+  const {  sendMessage } = useSocket();
 
   const onCreate = async () => {
     if (!conversationId) {
@@ -28,15 +31,15 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
     }
     try {
       if (content.trimStart()) {
-        await createMessage({
+       const res =  await createMessage({
           conversationId,
           content,
           authorId: userId!,
         }).unwrap();
-        await refetchConversation(conversationId).unwrap();
+        // await refetchConversation(conversationId).unwrap();
         await refetchAllConversations().unwrap();
-
         setContent('');
+        sendMessage(res);
         toast.success(`Send new message `);
       }
     } catch (error) {
@@ -50,7 +53,7 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className=" resize-none"
+          className=" resize-none bg-secondary/20"
         />
       </form>
       <Button
@@ -58,9 +61,10 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
         onClick={onCreate}
         variant={'indigo'}
         size={'sm'}
-        className="w-fit ml-auto"
+        className="w-fit ml-auto mt-2 gap-1"
       >
         Send
+        <SendHorizontalIcon className="size-5" />
       </Button>
     </>
   );

@@ -1,5 +1,4 @@
 import { useGetAllConversationQuery } from '@/lib/services/conversationApi';
-import React from 'react';
 
 import { ConversationCard } from './ConversationCard';
 import { Search } from './Search';
@@ -9,7 +8,6 @@ import { Separator } from './ui/separator';
 export const ConversationList = () => {
   const { data: conversations, isLoading } = useGetAllConversationQuery();
 
-  console.log(conversations);
 
   if (isLoading) {
     return <div>LAODING....</div>;

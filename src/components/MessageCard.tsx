@@ -14,7 +14,7 @@ export const MessageCard = ({ message }: MessageCardProps) => {
 
   return (
     <article
-      className={cn('flex items-start gap-2 max-w-[80%] ', {
+      className={cn('flex  items-start gap-2 max-w-[80%] ', {
         'ml-auto flex-row-reverse  ': !isSelf,
         'break-all': !message.content.includes(' '),
       })}

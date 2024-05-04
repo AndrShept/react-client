@@ -75,7 +75,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+ 
     <Provider store={store}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
         <section className=" h-screen">
@@ -85,5 +85,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </section>
       </ThemeProvider>
     </Provider>
-  </React.StrictMode>,
+ 
 );
