@@ -2,10 +2,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { dateFnsLessTime } from '@/lib/utils';
-import { EditIcon } from 'lucide-react';
+import { BookmarkIcon, EditIcon } from 'lucide-react';
 
 import { UserAvatar } from './UserAvatar';
 import { UsersLikeList } from './UsersLikeList';
+import { FavoritePostIcon } from './icons/FavoritePostIcon';
 import { PostCommentsIcon } from './icons/PostCommentsIcon';
 import { PostDeleteIcon } from './icons/PostDeleteIcon';
 import { PostLikeIcon } from './icons/PostLikeIcon';
@@ -57,22 +58,26 @@ export const PostCard = ({ post }: PostCardProps) => {
           alt="post_image"
         />
       )}
-      {!!post.likes && (
+      {!!post.likes.length && (
         <ul className=" px-6 py-2  flex border-b -space-x-3 items-center relative      min-h-[50px]  ">
           {post.likes.map((like) => <UsersLikeList like={like} />).slice(-4)}
         </ul>
       )}
 
-      <section className="flex gap-2 px-6 pb-3 ">
-        <PostLikeIcon
-          postId={post.id}
-          likedByUser={post.likedByUser}
-          likeCount={post.likes.length}
-        />
-        <PostCommentsIcon
-          postId={post.id}
-          commentCount={post._count.comments}
-        />
+      <section className="flex items-center px-6 pb-3 justify-between ">
+        <div className='flex gap-2 '>
+          <PostLikeIcon
+            postId={post.id}
+            likedByUser={post.likedByUser}
+            likeCount={post.likes.length}
+          />
+          <PostCommentsIcon
+            postId={post.id}
+            commentCount={post._count.comments}
+          />
+        </div>
+
+        <FavoritePostIcon postId={post.id} isFavoritePost={post.isFavoritePost} />
       </section>
     </article>
   );

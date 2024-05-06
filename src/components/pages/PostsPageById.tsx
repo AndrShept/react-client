@@ -17,11 +17,8 @@ export const PostsPageById = () => {
     throw new Error('postId not found');
   }
   const { data: post, isLoading } = useGetPostByIdQuery(postId);
-
   const { data: comments, isLoading: isLoadingComments } =
     useGetCommentsQuery(postId);
-  // console.log(comments)
-  // console.log(post)
 
   if (isLoading) {
     return <PostPageSkeleton />;
@@ -39,7 +36,7 @@ export const PostsPageById = () => {
     <section className="flex  flex-col gap-4 mx-auto">
       <PostCard post={post} />
 
-      <PostCommentsForm  postId={post.id} />
+      <PostCommentsForm postId={post.id} />
 
       <ul className="flex flex-col gap-4 mt-3 ">
         {!comments?.length && (
@@ -47,10 +44,11 @@ export const PostsPageById = () => {
             Comments not found
           </p>
         )}
-        {isLoadingComments  && <PostCommentsSkeleton />}
-        {!isLoadingComments && comments?.map((comment) => (
-          <CommentsCard key={comment.id} comment={comment} />
-        ))}
+        {isLoadingComments && <PostCommentsSkeleton />}
+        {!isLoadingComments &&
+          comments?.map((comment) => (
+            <CommentsCard key={comment.id} comment={comment} />
+          ))}
       </ul>
     </section>
   );

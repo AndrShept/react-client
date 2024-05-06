@@ -8,6 +8,7 @@ import { ReactNode, useRef } from 'react';
 import { CommentsCard } from './CommentsCard';
 import { UserAvatar } from './UserAvatar';
 import { PostCommentsForm } from './forms/PostCommentsForm';
+import { FavoritePostIcon } from './icons/FavoritePostIcon';
 import { PostLikeIcon } from './icons/PostLikeIcon';
 import { PostCommentsSkeleton } from './skeletons/PostCommentsSkeleton';
 import { Button } from './ui/button';
@@ -61,37 +62,45 @@ export const PostModal = ({ children, post }: PostModalProps) => {
             </p>
           </div>
           <Separator />
-          <ScrollArea className="pr-3 flex-1 ">
-            {!comments?.length && (
-              <div className="translate-y-1/2">
-                <p className="text-muted-foreground text-sm text-center   ">
-                  Comment not found
-                </p>
-              </div>
-            )}
-            <ul className="flex flex-col   gap-4 ">
-              {isLoading && <PostCommentsSkeleton />}
-              {!isLoading &&
-                comments?.map((comment) => (
-                  <CommentsCard
-                    cardSize="full"
-                    textSize="sm"
-                    avatarClassname="size-9"
-                    comment={comment}
-                  />
-                ))}
-            </ul>
-          </ScrollArea>
+          {!comments?.length && (
+            <div className="flex-1 flex">
+              <p className="text-muted-foreground text-sm m-auto   ">
+                Comment not found
+              </p>
+            </div>
+          )}
+          {!!comments?.length && (
+            <ScrollArea className="pr-3 flex-1 ">
+              <ul className="flex flex-col   gap-4 ">
+                {isLoading && <PostCommentsSkeleton />}
+                {!isLoading &&
+                  comments?.map((comment) => (
+                    <CommentsCard
+                      cardSize="full"
+                      textSize="sm"
+                      avatarClassname="size-9"
+                      comment={comment}
+                    />
+                  ))}
+              </ul>
+            </ScrollArea>
+          )}
           <Separator />
-          <div className="flex gap-1">
-            <PostLikeIcon
+          <div className="flex justify-between">
+            <div className="flex gap-1">
+              <PostLikeIcon
+                postId={post.id}
+                likeCount={post.likes.length}
+                likedByUser={post.likedByUser}
+              />
+              <Button className="rounded-full" variant={'ghost'} size={'icon'}>
+                <MessageCircle />
+              </Button>
+            </div>
+            <FavoritePostIcon
               postId={post.id}
-              likeCount={post.likes.length}
-              likedByUser={post.likedByUser}
+              isFavoritePost={post.isFavoritePost}
             />
-            <Button className="rounded-full" variant={'ghost'} size={'icon'}>
-              <MessageCircle />
-            </Button>
           </div>
           <div>
             <PostCommentsForm postId={post.id} />

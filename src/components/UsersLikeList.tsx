@@ -14,7 +14,7 @@ export const UsersLikeList = ({ like }: UsersLikeListProps) => {
     <li className={cn('')}>
       <UserAvatar
         isOnline={like.user.isOnline}
-        className={cn('size-8  ring-1 ring-white  border-muted-foreground ')}
+        className={cn('size-8  ring-1 ring-white ')}
         avatarUrl={like.user.avatarUrl}
         username={like.user.username}
       />

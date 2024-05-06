@@ -18,7 +18,18 @@ export type User = {
   comments: Comment[];
   conversationsSent: Conversation[];
   conversationsReceived: Conversation[];
+  favoritePosts : FavoritePost[]
 };
+
+export interface FavoritePost {
+  id: string;
+  user: User;
+  userId: string
+  post: Post;
+  postId: string
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface Conversation {
   id: string;
@@ -67,8 +78,10 @@ export type Post = {
   author: User;
   authorId: string;
   likes: Like[];
+  favoritePosts : FavoritePost[]
   // comments: Comment[];
   likedByUser: boolean;
+  isFavoritePost: boolean
   _count: {comments: number}
   createdAt: Date;
   updatedAt: Date;
