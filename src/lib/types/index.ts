@@ -39,6 +39,7 @@ export interface Conversation {
   receiverUser: User;
   senderId: string;
   receiverId: string;
+  newMessagesCount: number
   messages: Message[];
 }
 

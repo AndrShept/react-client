@@ -62,7 +62,11 @@ export const ConversationsPageById = () => {
             className="flex flex-col flex-1   justify-end gap-4 p-4  "
           >
             {conversationState.messages.map((message) => (
-              <MessageCard key={message.id} message={message} />
+              <MessageCard
+              
+                key={message.id}
+                message={message}
+              />
             ))}
           </ul>
         </ScrollArea>

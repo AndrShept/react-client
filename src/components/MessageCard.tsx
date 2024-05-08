@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
 import { Message } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
@@ -6,6 +7,7 @@ import { UserAvatar } from './UserAvatar';
 
 interface MessageCardProps {
   message: Message;
+ 
 }
 
 export const MessageCard = ({ message }: MessageCardProps) => {
@@ -20,7 +22,7 @@ export const MessageCard = ({ message }: MessageCardProps) => {
       })}
     >
       <UserAvatar
-      className='size-9'
+        className="size-9"
         isOnline={message.author.isOnline}
         avatarUrl={message.author.avatarUrl}
         username={message.author.username}
@@ -53,6 +55,7 @@ export const MessageCard = ({ message }: MessageCardProps) => {
           {message.content}
         </p>
       </div>
+      
     </article>
   );
 };

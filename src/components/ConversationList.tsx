@@ -30,6 +30,7 @@ export const ConversationList = () => {
           {!isLoading &&
             conversations?.map((conversation) => (
               <ConversationCard
+              newMessagesCount={conversation.newMessagesCount}
                 key={conversation.id}
                 conversation={conversation}
               />

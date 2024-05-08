@@ -13,8 +13,25 @@ export const messageApi = api.injectEndpoints({
         body: messageData,
       }),
     }),
+    editMessage: builder.mutation<Message, Partial<Message>>({
+      query: (messageData) => ({
+        url: '/messages',
+        method: 'PUT',
+        body: messageData,
+      }),
+    }),
+    deleteMessage: builder.mutation<{ message: string }, string>({
+      query: (messageId) => ({
+        url: `/messages/${messageId}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useAddMessageMutation } = messageApi;
-export const { addMessage } = messageApi.endpoints;
+export const {
+  useAddMessageMutation,
+  useDeleteMessageMutation,
+  useEditMessageMutation,
+} = messageApi;
+export const { addMessage, deleteMessage, editMessage } = messageApi.endpoints;

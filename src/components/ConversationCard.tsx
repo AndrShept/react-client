@@ -7,14 +7,17 @@ import { UserAvatar } from './UserAvatar';
 
 interface ConversationListProps {
   conversation: Conversation;
+  newMessagesCount: number;
 }
 
-export const ConversationCard = ({ conversation }: ConversationListProps) => {
+export const ConversationCard = ({
+  conversation,
+  newMessagesCount,
+}: ConversationListProps) => {
   const { pathname } = useLocation();
   const { userId } = useAuth();
   const messagesLastElement =
     conversation.messages[conversation.messages.length - 1];
-  console.log(conversation);
   const conversationPartner =
     userId === conversation.receiverId
       ? conversation.senderUser
@@ -47,6 +50,11 @@ export const ConversationCard = ({ conversation }: ConversationListProps) => {
                 : dateFnsLessTime(conversationPartner.updatedAt)}
             </time>
           </div>
+          {!!newMessagesCount && (
+            <div className="ml-auto mb-auto size-5 text flex items-center justify-center bg-indigo-500 rounded-full ">
+              <p className="text-[11px]">{newMessagesCount}</p>
+            </div>
+          )}
         </div>
         <p className="text-wrap line-clamp-2 break-all text-muted-foreground mt-1">
           {!!conversation.messages.length && messagesLastElement.content}
