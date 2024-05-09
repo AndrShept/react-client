@@ -51,6 +51,7 @@ export interface Message {
   createdAt: Date;
   updatedAt: Date;
   author: User;
+  isRead: boolean
   authorId: string;
 }
 

@@ -20,6 +20,13 @@ export const messageApi = api.injectEndpoints({
         body: messageData,
       }),
     }),
+    // isAllMessagesRead: builder.mutation<Message[], { id: string }[]>({
+    //   query: (messageIds) => ({
+    //     url: '/messages-isRead',
+    //     method: 'PUT',
+    //     body: messageIds,
+    //   }),
+    // }),
     deleteMessage: builder.mutation<{ message: string }, string>({
       query: (messageId) => ({
         url: `/messages/${messageId}`,

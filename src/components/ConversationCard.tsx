@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
 import { Conversation } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
@@ -14,6 +15,7 @@ export const ConversationCard = ({
   conversation,
   newMessagesCount,
 }: ConversationListProps) => {
+
   const { pathname } = useLocation();
   const { userId } = useAuth();
   const messagesLastElement =
@@ -55,6 +57,7 @@ export const ConversationCard = ({
               <p className="text-[11px]">{newMessagesCount}</p>
             </div>
           )}
+
         </div>
         <p className="text-wrap line-clamp-2 break-all text-muted-foreground mt-1">
           {!!conversation.messages.length && messagesLastElement.content}
