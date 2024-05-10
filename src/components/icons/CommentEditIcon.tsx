@@ -26,9 +26,9 @@ export const CommentEditIcon = ({
       onClick={() => setIsEdit(true)}
       variant={'ghost'}
       size={'icon'}
-      className="size-[26px]"
+      className="size-[23px]"
     >
-      <Edit3Icon className="size-[18px]" />
+      <Edit3Icon className="size-[16px]" />
     </Button>
   );
 };

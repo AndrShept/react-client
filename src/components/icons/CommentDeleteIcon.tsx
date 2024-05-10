@@ -2,12 +2,7 @@ import {
   useDeleteCommentMutation,
   useLazyGetCommentsQuery,
 } from '@/lib/services/commentApi';
-import {
-  useGetPostByIdQuery,
-  useLazyGetPostByIdQuery,
-} from '@/lib/services/postApi';
 import { Trash2Icon } from 'lucide-react';
-import React from 'react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';

@@ -19,12 +19,25 @@ export const conversationSlice = createSlice({
     getConversation: (state, action) => {
       state.conversation = action.payload;
     },
-    addConversationState: (state, action) => {
+    addConversationMessage: (state, action) => {
       if (!state.conversation) return;
       state.conversation.messages = [
         ...state.conversation.messages,
         action.payload,
       ];
+    },
+    editConversationMessage: (state, action) => {
+      if (!state.conversation) return;
+      state.conversation.messages = state.conversation?.messages.map(
+        (message) =>
+          message.id === action.payload.id ? action.payload : message,
+      );
+    },
+    deleteConversationMessage: (state, action) => {
+      if (!state.conversation) return;
+      state.conversation.messages = state.conversation?.messages.filter(
+        (message) => message.id !== action.payload,
+      );
     },
   },
   extraReducers: (builder) => {
@@ -37,7 +50,11 @@ export const conversationSlice = createSlice({
   },
 });
 
-export const { getConversation, addConversationState } =
-  conversationSlice.actions;
+export const {
+  getConversation,
+  addConversationMessage,
+  editConversationMessage,
+  deleteConversationMessage,
+} = conversationSlice.actions;
 
 export default conversationSlice.reducer;

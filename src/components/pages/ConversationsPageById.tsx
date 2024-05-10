@@ -1,24 +1,25 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { useAuth } from '@/hooks/useAuth';
 import { useSocket } from '@/hooks/useSocket';
-import { addConversationState } from '@/lib/redux/conversationSlice';
+import {
+  addConversationMessage,
+  deleteConversationMessage,
+  editConversationMessage,
+} from '@/lib/redux/conversationSlice';
 import {
   useGetConversationByIdQuery,
   useIsReadMessagesMutation,
   useLazyGetAllConversationQuery,
 } from '@/lib/services/conversationApi';
+import { Message } from '@/lib/types';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { MessageCard } from '../MessageCard';
 import { MessageInput } from '../MessageInput';
 import { Spinner } from '../Spinner';
-import { Button } from '../ui/button';
 import { ScrollArea } from '../ui/scroll-area';
-import { Message } from '@/lib/types';
 
 export const ConversationsPageById = () => {
-  const { userId } = useAuth();
   const { conversationId } = useParams();
   const conversationState = useAppSelector(
     (state) => state.conversation.conversation,
@@ -40,12 +41,21 @@ export const ConversationsPageById = () => {
   useEffect(() => {
     isReadMessages(conversationId);
     refetchAllConversations();
-
   }, [conversationId]);
 
   useEffect(() => {
-    const socketListener = (data: Message) => {
-      dispatch(addConversationState(data));
+    const socketListener = (
+      message: Message & { type: 'create' | 'delete' | 'update' },
+    ) => {
+      if (message.type === 'create') {
+        dispatch(addConversationMessage(message));
+      }
+      if (message.type === 'delete') {
+        dispatch(deleteConversationMessage(message.id));
+      }
+      if (message.type === 'update') {
+        dispatch(editConversationMessage(message));
+      }
     };
 
     socket?.on(conversationId, socketListener);
@@ -84,7 +94,6 @@ export const ConversationsPageById = () => {
 
       <div className="h-[150px] bg-secondary/40 md:p-4 p-3 border flex flex-col gap-2 ">
         <MessageInput conversationId={conversationId} />
-        <Button onClick={() => isReadMessages(conversationId)}>asdsa</Button>
       </div>
     </section>
   );

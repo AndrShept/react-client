@@ -13,21 +13,18 @@ export const messageApi = api.injectEndpoints({
         body: messageData,
       }),
     }),
-    editMessage: builder.mutation<Message, Partial<Message>>({
-      query: (messageData) => ({
-        url: '/messages',
+    editMessage: builder.mutation<
+      Message,
+      { messageId: string; messageData: Partial<Message> }
+    >({
+      query: ({ messageId, messageData }) => ({
+        url: `/messages/${messageId}`,
         method: 'PUT',
         body: messageData,
       }),
     }),
-    // isAllMessagesRead: builder.mutation<Message[], { id: string }[]>({
-    //   query: (messageIds) => ({
-    //     url: '/messages-isRead',
-    //     method: 'PUT',
-    //     body: messageIds,
-    //   }),
-    // }),
-    deleteMessage: builder.mutation<{ message: string }, string>({
+
+    deleteMessage: builder.mutation<Message, string>({
       query: (messageId) => ({
         url: `/messages/${messageId}`,
         method: 'DELETE',

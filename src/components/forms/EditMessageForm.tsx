@@ -7,10 +7,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  useEditCommentMutation,
-  useLazyGetCommentsQuery,
-} from '@/lib/services/commentApi';
+import { useAppDispatch } from '@/hooks/store';
+import { useSocket } from '@/hooks/useSocket';
+import { editConversationMessage } from '@/lib/redux/conversationSlice';
+import { useEditMessageMutation } from '@/lib/services/messageApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -23,36 +23,39 @@ const formSchema = z.object({
   content: z.string().min(5).max(200),
 });
 
-interface EditFormProps {
+interface EditMessageFormProps {
   content: string;
-  commentId: string;
-  postId: string;
+  messageId: string;
+  conversationId: string;
+
   setIsEdit: (bool: boolean) => void;
 }
 
-export const EditForm = ({
+export const EditMessageForm = ({
   content,
-  commentId,
-  postId,
+  messageId,
   setIsEdit,
-}: EditFormProps) => {
-  const [editComment, { isLoading }] = useEditCommentMutation();
-  const [refetchComments] = useLazyGetCommentsQuery();
+}: EditMessageFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: '' || content,
     },
   });
+  const [editMessage, { isLoading }] = useEditMessageMutation();
+  const { sendMessage } = useSocket();
+  const dispatch = useAppDispatch();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await editComment({
-        content: { ...values },
-        id: commentId,
+      const updatedMessage = await editMessage({
+        messageId,
+        messageData: values,
       }).unwrap();
+      // dispatch(editConversationMessage(updatedMessage));
+      sendMessage(updatedMessage);
+
       setIsEdit(false);
-      await refetchComments(postId);
     } catch (error) {
       toast.error('Something went wrong');
     }
