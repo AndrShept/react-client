@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAppDispatch } from '@/hooks/store';
-import { useSocket } from '@/hooks/useSocket';
+import { useSocket } from '@/components/providers/SocketProvider';
 import { editConversationMessage } from '@/lib/redux/conversationSlice';
 import { useEditMessageMutation } from '@/lib/services/messageApi';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -28,13 +28,13 @@ interface EditMessageFormProps {
   messageId: string;
   conversationId: string;
 
-  setIsEdit: (bool: boolean) => void;
+  onCancel: () => void;
 }
 
 export const EditMessageForm = ({
   content,
   messageId,
-  setIsEdit,
+  onCancel,
 }: EditMessageFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,7 +44,6 @@ export const EditMessageForm = ({
   });
   const [editMessage, { isLoading }] = useEditMessageMutation();
   const { sendMessage } = useSocket();
-  const dispatch = useAppDispatch();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -52,10 +51,9 @@ export const EditMessageForm = ({
         messageId,
         messageData: values,
       }).unwrap();
-      // dispatch(editConversationMessage(updatedMessage));
       sendMessage(updatedMessage);
 
-      setIsEdit(false);
+      onCancel();
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -79,7 +77,7 @@ export const EditMessageForm = ({
                   />
 
                   <Button
-                    disabled={isLoading}
+                    disabled={isLoading || content ===form.getValues().content }
                     type="submit"
                     className="size-7 ml-1"
                     variant={'ghost'}
@@ -88,7 +86,7 @@ export const EditMessageForm = ({
                     <CheckIcon className="size-5 hover:text-green-500" />
                   </Button>
                   <Button
-                    onClick={() => setIsEdit(false)}
+                    onClick={onCancel}
                     disabled={isLoading}
                     type="button"
                     className="size-7 hover:text-rose-500"

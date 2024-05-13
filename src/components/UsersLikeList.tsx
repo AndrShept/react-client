@@ -9,7 +9,6 @@ interface UsersLikeListProps {
 }
 
 export const UsersLikeList = ({ like }: UsersLikeListProps) => {
-  console.log(like.user.avatarUrl);
   return (
     <li className={cn('')}>
       <UserAvatar

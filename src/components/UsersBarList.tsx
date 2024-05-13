@@ -15,7 +15,6 @@ interface UsersBarList {
 export const UsersBarList = ({ user }: UsersBarList) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  console.log(user);
 
   return (
     <ScrollArea>

@@ -1,4 +1,4 @@
-import { useSocket } from '@/hooks/useSocket';
+import { useSocket } from '@/components/providers/SocketProvider';
 import { useDeleteMessageMutation } from '@/lib/services/messageApi';
 import { Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';

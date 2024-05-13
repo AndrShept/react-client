@@ -1,3 +1,4 @@
+import { match } from 'assert';
 import { type ClassValue, clsx } from 'clsx';
 import { format, formatDistanceToNow } from 'date-fns';
 import { io } from 'socket.io-client';
@@ -35,4 +36,9 @@ export function hasErrorField(
   );
 }
 
-
+export const convertToMb = (bit: number) => {
+  if (bit > 1000000) {
+    return `${Math.round(bit / (1024 * 1024))}mb`;
+  }
+  return `${(bit / (1024 * 1024)).toFixed(2)}mb`;
+};

@@ -1,7 +1,9 @@
 import { useAuth } from '@/hooks/useAuth';
+import { BASE_URL } from '@/lib/constants';
 import { Message } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { UserAvatar } from './UserAvatar';
@@ -49,8 +51,22 @@ export const MessageCard = ({ message }: MessageCardProps) => {
               : dateFnsLessTime(message.createdAt)}
           </time>
         </div>
-
-        {!isEdit && (
+        {message.imageUrl && (
+          <div className="mb-2 max-w-md">
+            <Link
+              target="_blank"
+              className=""
+              to={`${BASE_URL}${message.imageUrl}`}
+            >
+              <img
+                className="rounded-lg border"
+                src={`${BASE_URL}${message.imageUrl}`}
+                alt="imageUrl"
+              />
+            </Link>
+          </div>
+        )}
+        {!isEdit && message.content && (
           <p
             className={cn(
               'bg-secondary/70 p-3 text-wrap   text-sm   ',
@@ -70,7 +86,7 @@ export const MessageCard = ({ message }: MessageCardProps) => {
             conversationId={message.conversationId}
             content={message.content}
             messageId={message.id}
-            setIsEdit={setIsEdit}
+            onCancel={() => setIsEdit(false)}
           />
         )}
 

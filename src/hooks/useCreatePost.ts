@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { useImageUpload } from './useImageUpload';
+import { useFileUpload } from './useFileUpload';
 
 export const postFormSchema = z.object({
   content: z.string().min(5),
@@ -18,7 +18,7 @@ export const postFormSchema = z.object({
 
 export const useCreatePost = () => {
   const { errorMessage, handleUpload, imageUrl, setImageUrl } =
-    useImageUpload();
+  useFileUpload();
 
   const [addPost, { isLoading }] = useAddPostMutation();
   const [refetch] = useLazyGetAllPostsQuery();

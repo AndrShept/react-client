@@ -7,7 +7,6 @@ import { Toaster } from 'sonner';
 import { AuthGuard } from './components/AuthGuard.tsx';
 import { ConversationsSidebar } from './components/ConversationsSidebar.tsx';
 import MainLayout from './components/MainLayout.tsx';
-import { ThemeProvider } from './components/ThemeProvider.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
@@ -17,6 +16,8 @@ import { PostsPage } from './components/pages/PostsPage.tsx';
 import { PostsPageById } from './components/pages/PostsPageById.tsx';
 import { RegisterPage } from './components/pages/RegisterPage.tsx';
 import { UserProfilePage } from './components/pages/UserProfilePage.tsx';
+import { SocketProvider } from './components/providers/SocketProvider.tsx';
+import { ThemeProvider } from './components/providers/ThemeProvider.tsx';
 import './index.css';
 import { store } from './lib/redux/store.ts';
 
@@ -25,7 +26,9 @@ const router = createBrowserRouter([
     path: '/',
     element: (
       <AuthGuard>
-        <MainLayout />
+        <SocketProvider>
+          <MainLayout />
+        </SocketProvider>
       </AuthGuard>
     ),
 
@@ -75,15 +78,13 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
- 
-    <Provider store={store}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <section className=" h-screen">
-          <Toaster richColors />
+  <Provider store={store}>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <section className=" h-screen">
+        <Toaster richColors />
 
-          <RouterProvider router={router} />
-        </section>
-      </ThemeProvider>
-    </Provider>
- 
+        <RouterProvider router={router} />
+      </section>
+    </ThemeProvider>
+  </Provider>,
 );

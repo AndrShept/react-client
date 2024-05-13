@@ -18,15 +18,15 @@ export type User = {
   comments: Comment[];
   conversationsSent: Conversation[];
   conversationsReceived: Conversation[];
-  favoritePosts : FavoritePost[]
+  favoritePosts: FavoritePost[];
 };
 
 export interface FavoritePost {
   id: string;
   user: User;
-  userId: string
+  userId: string;
   post: Post;
-  postId: string
+  postId: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -39,19 +39,20 @@ export interface Conversation {
   receiverUser: User;
   senderId: string;
   receiverId: string;
-  newMessagesCount: number
+  newMessagesCount: number;
   messages: Message[];
 }
 
 export interface Message {
   id: string;
   content: string;
+  imageUrl: string;
   conversation: Conversation;
   conversationId: string;
   createdAt: Date;
   updatedAt: Date;
   author: User;
-  isRead: boolean
+  isRead: boolean;
   authorId: string;
 }
 
@@ -80,14 +81,13 @@ export type Post = {
   author: User;
   authorId: string;
   likes: Like[];
-  favoritePosts : FavoritePost[]
+  favoritePosts: FavoritePost[];
   // comments: Comment[];
   likedByUser: boolean;
-  isFavoritePost: boolean
-  _count: {comments: number}
+  isFavoritePost: boolean;
+  _count: { comments: number };
   createdAt: Date;
   updatedAt: Date;
-
 };
 
 export type Like = {

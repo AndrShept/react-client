@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { useSocket } from '@/hooks/useSocket';
+import { useSocket } from '@/components/providers/SocketProvider';
 import {
   addConversationMessage,
   deleteConversationMessage,
@@ -29,19 +29,19 @@ export const ConversationsPageById = () => {
     throw new Error('conversationId not found');
   }
   const [isReadMessages] = useIsReadMessagesMutation();
-
-  const { isLoading, isError } = useGetConversationByIdQuery(conversationId);
   const [refetchAllConversations] = useLazyGetAllConversationQuery();
-  const { socket } = useSocket();
+  const { isLoading, isError } = useGetConversationByIdQuery(conversationId);
+  const { socket, isConnected } = useSocket();
+  console.log(isConnected)
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLUListElement | null>(null);
   useEffect(() => {
     ref.current?.lastElementChild?.scrollIntoView({ behavior: 'instant' });
   }, [conversationState?.messages]);
-  useEffect(() => {
-    isReadMessages(conversationId);
-    refetchAllConversations();
-  }, [conversationId]);
+  // useEffect(() => {
+  //   isReadMessages(conversationId);
+  //   refetchAllConversations();
+  // }, [conversationId]);
 
   useEffect(() => {
     const socketListener = (
@@ -57,13 +57,12 @@ export const ConversationsPageById = () => {
         dispatch(editConversationMessage(message));
       }
     };
-
     socket?.on(conversationId, socketListener);
 
     return () => {
       socket?.off(conversationId, socketListener);
     };
-  }, [conversationId, socket]);
+  }, [socket, conversationId]);
 
   if (isLoading) {
     return <Spinner />;
@@ -92,7 +91,7 @@ export const ConversationsPageById = () => {
         </ScrollArea>
       )}
 
-      <div className="h-[150px] bg-secondary/40 md:p-4 p-3 border flex flex-col gap-2 ">
+      <div className="xl:p-6 p-4 flex flex-col gap-2 ">
         <MessageInput conversationId={conversationId} />
       </div>
     </section>

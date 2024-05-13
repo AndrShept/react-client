@@ -4,7 +4,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAuth } from '@/hooks/useAuth';
-import { useSocket } from '@/hooks/useSocket';
+import { useSocket } from '@/components/providers/SocketProvider';
 import { BASE_URL } from '@/lib/constants';
 import { logout } from '@/lib/redux/userSlice';
 import { LogOutIcon, UserCog2Icon } from 'lucide-react';
@@ -17,7 +17,9 @@ import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
 
 export const ProfileAvatar = () => {
-  const { socket } = useSocket();
+  const { socket,isConnected } = useSocket();
+  console.log(socket)
+  console.log(isConnected)
   const { userData } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();

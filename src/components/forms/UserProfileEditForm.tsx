@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useImageUpload } from '@/hooks/useImageUpload';
+import { useFileUpload } from '@/hooks/useFileUpload';
 import { BASE_URL } from '@/lib/constants';
 import {
   useLazyGetUserByIdQuery,
@@ -55,7 +55,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
   const [updateUser, { isLoading }] = useUpdateUserMutation();
   const [refetchUser] = useLazyGetUserByUsernameQuery();
   const { errorMessage, handleUpload, imageUrl, setImageUrl } =
-    useImageUpload();
+  useFileUpload();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -316,7 +316,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
           </DialogClose>
 
           <Button disabled={isLoading} className="rounded-full gap-1">
-            <SaveIcon className='size-4' />
+            <SaveIcon className="size-4" />
             Save
           </Button>
         </section>

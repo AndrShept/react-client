@@ -1,15 +1,11 @@
 import { useAppSelector } from '@/hooks/store';
-import { useAuth } from '@/hooks/useAuth';
-import { useSocket } from '@/hooks/useSocket';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { io } from 'socket.io-client';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { Navbar } from './Header';
 import { Sidebar } from './Sidebar';
-import { SidebarList } from './SidebarList';
 import { UsersBar } from './UsersBar';
 import { HomePage } from './pages/HomePage';
 
@@ -17,7 +13,6 @@ function App() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  // const { socket } = useSocket();
   const isMobile = useMediaQuery('(max-width: 768px)');
   useEffect(() => {
     if (!isAuthenticated) {
@@ -28,7 +23,7 @@ function App() {
     <section className="flex flex-col h-full w-full  ">
       <Navbar />
       <div className=" flex-1 flex">
-      {!isMobile  && <Sidebar />}
+        {!isMobile && <Sidebar />}
         <div
           className={cn('flex-1 flex flex-col mt-[56px]    ', {
             'max-w-[900px] md:p-4 p-2 mx-auto  ':

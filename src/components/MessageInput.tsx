@@ -1,16 +1,17 @@
 import { useAuth } from '@/hooks/useAuth';
-import { useSocket } from '@/hooks/useSocket';
-import {
-  useLazyGetAllConversationQuery,
-  useLazyGetConversationByIdQuery,
-} from '@/lib/services/conversationApi';
+import { useFileUpload } from '@/hooks/useFileUpload';
+import { useSocket } from '@/components/providers/SocketProvider';
+import { useLazyGetAllConversationQuery } from '@/lib/services/conversationApi';
 import { useAddMessageMutation } from '@/lib/services/messageApi';
-import { SendHorizontalIcon } from 'lucide-react';
+import { convertToMb } from '@/lib/utils';
+import { Loader2, Navigation2Icon, PaperclipIcon, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { AddFileInput } from './AddFileInput';
+import { EmojiButton } from './EmojiButton';
 import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
+import { Input } from './ui/input';
 
 interface MessageInputProps {
   conversationId: string;
@@ -19,10 +20,18 @@ interface MessageInputProps {
 export const MessageInput = ({ conversationId }: MessageInputProps) => {
   const { userId } = useAuth();
   const [createMessage, { isLoading }] = useAddMessageMutation();
-  const [refetchConversation] = useLazyGetConversationByIdQuery();
   const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const [content, setContent] = useState('');
-  const {  sendMessage } = useSocket();
+  const { sendMessage, } = useSocket();
+  const {
+    errorMessage,
+    handleUpload,
+    imageUrl,
+    setImageUrl,
+    fileInfo,
+    setFileInfo,
+    isLoading: isLoadingFile,
+  } = useFileUpload();
 
   const onCreate = async () => {
     if (!conversationId) {
@@ -30,42 +39,79 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
       toast.error('Something went wrong conversationId');
     }
     try {
-      if (content.trimStart()) {
-       const res =  await createMessage({
+      if (content.trimStart() || imageUrl) {
+        const res = await createMessage({
           conversationId,
           content,
           authorId: userId!,
+          imageUrl,
         }).unwrap();
-        // await refetchConversation(conversationId).unwrap();
         await refetchAllConversations().unwrap();
         setContent('');
         sendMessage(res);
-        toast.success(`Send new message `);
+        onClear();
       }
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
     }
   };
+  const onClear = () => {
+    setImageUrl('');
+    setFileInfo({ name: '', size: 0 });
+  };
   return (
     <>
-      <form>
-        <Textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className=" resize-none bg-secondary/20"
-        />
-      </form>
-      <Button
-        disabled={isLoading || !content.trimStart()}
-        onClick={onCreate}
-        variant={'indigo'}
-        size={'sm'}
-        className="w-fit ml-auto mt-2 gap-1"
-      >
-        Send
-        <SendHorizontalIcon className="size-5" />
-      </Button>
+      {fileInfo && imageUrl && !isLoadingFile && (
+        <div className="flex border items-center p-2 rounded-md text-sm gap-2  break-all">
+          <PaperclipIcon className="shrink-0 size-5" />
+          <p className="text-rose-500 whitespace-nowrap">
+            {convertToMb(fileInfo.size)}
+          </p>
+          <p className="line-clamp-1 text-muted-foreground">{fileInfo.name} </p>
+          <Button
+            onClick={onClear}
+            className="ml-auto size-7"
+            variant={'ghost'}
+            size={'icon'}
+          >
+            <X className="size-5" />
+          </Button>
+        </div>
+      )}
+      {isLoadingFile && (
+        <div className="w-full flex items-center justify-center">
+          <Loader2 className="animate-spin" />
+        </div>
+      )}
+      {errorMessage && <p className="text-rose-500 text-sm">{errorMessage}</p>}
+      <div className="flex ">
+        <AddFileInput isLoading={isLoadingFile} handleUpload={handleUpload} />
+        <form className="flex relative items-center w-full">
+          <Input
+            placeholder="Message..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className=" resize-none bg-secondary/50 rounded-r-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 pr-10 "
+          />
+
+          <EmojiButton
+            sideOffset={60}
+            isLoading={isLoading}
+            onChange={(emoji: string) => setContent(`${content}${emoji}`)}
+          />
+
+          <Button
+            disabled={isLoading || (!content.trimStart() && !imageUrl)}
+            onClick={onCreate}
+            variant={'indigo'}
+            size={'sm'}
+            className=" rounded-l-none"
+          >
+            <Navigation2Icon className="size-5 rotate-90" />
+          </Button>
+        </form>
+      </div>
     </>
   );
 };
