@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/store';
 import { cn } from '@/lib/utils';
 import {
   HomeIcon,
@@ -8,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { NotReadCountBadge } from './NotReadCountBadge';
 import { Button } from './ui/button';
 
 const sidebarData = [
@@ -44,16 +46,19 @@ const sidebarData = [
 ];
 
 export const SidebarList = () => {
+  const sumNotReadMessageCount = useAppSelector(
+    (state) => state.conversation.sumNotReadMessageCount,
+  );
   const { pathname } = useLocation();
   return (
     <ul className="flex flex-col p-2 gap-1">
       {sidebarData.map((data) => (
-        <li key={data.id}>
+        <li className="relative" key={data.id}>
           <Button
             variant={pathname === data.to ? 'secondary' : 'ghost'}
             asChild
             className={cn(
-              'flex md:justify-start  gap-2 text-muted-foreground md:h-14 h-12',
+              'flex md:justify-start  gap-2 text-muted-foreground xl:h-14 h-12',
               {
                 'text-primary': pathname === data.to,
                 'bg-secondary text-primary':
@@ -63,9 +68,15 @@ export const SidebarList = () => {
           >
             <Link to={data.to}>
               <data.icon className="size-5" />
-              <span className="md:block hidden">{data.name}</span>
+              <span className="xl:block hidden">{data.name}</span>
             </Link>
           </Button>
+          {!!sumNotReadMessageCount && data.name === 'Messages' && (
+            <NotReadCountBadge
+              classname="absolute -right-[7px] -top-[7px] scale-[85%] ring-[2px] ring-background/60"
+              notReadMessageCount={sumNotReadMessageCount}
+            />
+          )}
         </li>
       ))}
     </ul>

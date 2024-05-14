@@ -1,5 +1,6 @@
-import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useSocket } from '@/components/providers/SocketProvider';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { useAuth } from '@/hooks/useAuth';
 import {
   addConversationMessage,
   deleteConversationMessage,
@@ -21,6 +22,7 @@ import { ScrollArea } from '../ui/scroll-area';
 
 export const ConversationsPageById = () => {
   const { conversationId } = useParams();
+  const { userId } = useAuth();
   const conversationState = useAppSelector(
     (state) => state.conversation.conversation,
   );
@@ -31,8 +33,7 @@ export const ConversationsPageById = () => {
   const [isReadMessages] = useIsReadMessagesMutation();
   const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const { isLoading, isError } = useGetConversationByIdQuery(conversationId);
-  const { socket, isConnected } = useSocket();
-  console.log(isConnected)
+  const { socket } = useSocket();
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLUListElement | null>(null);
   useEffect(() => {

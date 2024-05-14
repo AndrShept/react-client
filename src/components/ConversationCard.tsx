@@ -1,21 +1,20 @@
-import { useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
 import { Conversation } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
 import { Link, useLocation } from 'react-router-dom';
 
+import { NotReadCountBadge } from './NotReadCountBadge';
 import { UserAvatar } from './UserAvatar';
 
 interface ConversationListProps {
   conversation: Conversation;
-  newMessagesCount: number;
+  notReadMessageCount: number;
 }
 
 export const ConversationCard = ({
   conversation,
-  newMessagesCount,
+  notReadMessageCount,
 }: ConversationListProps) => {
-
   const { pathname } = useLocation();
   const { userId } = useAuth();
   const messagesLastElement =
@@ -46,18 +45,15 @@ export const ConversationCard = ({
           />
           <div className="space-y-[1px] flex flex-col">
             <p>{conversationPartner.username}</p>
-            <time className="text-muted-foreground text-xs">
+            <time className="text-muted-foreground text-xs break-all line-clamp-1">
               {conversationPartner.isOnline
                 ? 'online'
                 : dateFnsLessTime(conversationPartner.updatedAt)}
             </time>
           </div>
-          {!!newMessagesCount && (
-            <div className="ml-auto mb-auto size-5 text flex items-center justify-center bg-indigo-500 rounded-full ">
-              <p className="text-[11px]">{newMessagesCount}</p>
-            </div>
+          {!!notReadMessageCount && (
+            <NotReadCountBadge notReadMessageCount={notReadMessageCount} />
           )}
-
         </div>
         <p className="text-wrap line-clamp-2 break-all text-muted-foreground mt-1">
           {!!conversation.messages.length && messagesLastElement.content}

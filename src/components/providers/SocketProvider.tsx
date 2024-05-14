@@ -27,7 +27,6 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<null | Socket>(null);
   const { username, userId } = useAuth();
-  console.log(isConnected);
 
   const sendMessage = (dataMsg: Message) => {
     socket?.emit('msg', dataMsg);

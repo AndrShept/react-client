@@ -20,7 +20,7 @@ interface MessageInputProps {
 export const MessageInput = ({ conversationId }: MessageInputProps) => {
   const { userId } = useAuth();
   const [createMessage, { isLoading }] = useAddMessageMutation();
-  const [refetchAllConversations] = useLazyGetAllConversationQuery();
+  // const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const [content, setContent] = useState('');
   const { sendMessage, } = useSocket();
   const {
@@ -46,7 +46,7 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
           authorId: userId!,
           imageUrl,
         }).unwrap();
-        await refetchAllConversations().unwrap();
+        // await refetchAllConversations().unwrap();
         setContent('');
         sendMessage(res);
         onClear();
