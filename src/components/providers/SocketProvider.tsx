@@ -1,3 +1,7 @@
+import {
+  useUserOfflineMutation,
+  useUserOnlineMutation,
+} from '@/lib/services/userApi';
 import { Message } from '@/lib/types';
 import {
   ReactNode,
@@ -6,7 +10,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { io , Socket } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 
 import { useAuth } from '../../hooks/useAuth';
 
@@ -27,25 +31,29 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<null | Socket>(null);
   const { username, userId } = useAuth();
+  const [userOnline] = useUserOnlineMutation();
 
   const sendMessage = (dataMsg: Message) => {
     socket?.emit('msg', dataMsg);
   };
   useEffect(() => {
+    if (!userId) return;
     const socketInstance = io('http://localhost:3000', {
       extraHeaders: {
-        userId: userId!,
+        userId: userId,
         username: username!,
+      },
+      auth: {
+        userId: userId!,
       },
     });
 
-
-    const onConnect = () => {
+    const onConnect = async () => {
       setIsConnected(true);
       setSocket(socketInstance);
+      await userOnline();
     };
-    const onDisconnect = () => {
-
+    const onDisconnect = async () => {
       setIsConnected(false);
     };
     socketInstance.on('connect', onConnect);

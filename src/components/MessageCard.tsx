@@ -2,6 +2,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Message } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
+import { CheckCheckIcon, CheckIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
@@ -29,28 +30,44 @@ export const MessageCard = ({ message }: MessageCardProps) => {
         'break-all': !message.content.includes(' '),
       })}
     >
-      <UserAvatar
-        className="size-9"
-        isOnline={message.author.isOnline}
-        avatarUrl={message.author.avatarUrl}
-        username={message.author.username}
-      />
+      {isSelf && (
+        <UserAvatar
+          className="size-9"
+          isOnline={message.author.isOnline}
+          avatarUrl={message.author.avatarUrl}
+          username={message.author.username}
+        />
+      )}
 
       <div className="flex flex-col">
-        <div className="flex items-center">
-          <p>{isSelf && message.author.username}</p>
-          <time
-            className={cn('text-muted-foreground text-xs flex gap-x-1  ', {
-              'ml-2  ': isSelf,
-              'ml-auto  ': !isSelf,
-            })}
-          >
-            {isEditedMessage && <p>(edited)</p>}
-            {isEditedMessage
-              ? dateFnsLessTime(message.updatedAt)
-              : dateFnsLessTime(message.createdAt)}
-          </time>
-        </div>
+        {!isEdit && (
+          <div className="flex items-center ">
+            <p>{isSelf && message.author.username}</p>
+            <div className='flex ml-auto'>
+            <time
+              className={cn(
+                'text-muted-foreground text-xs flex gap-x-1 mr-2   ',
+                {
+                  'ml-2  ': isSelf,
+                  'ml-auto  ': !isSelf,
+                },
+              )}
+            >
+              {isEditedMessage && <p>(edited)</p>}
+              {isEditedMessage
+                ? dateFnsLessTime(message.updatedAt)
+                : dateFnsLessTime(message.createdAt)}
+            </time>
+            {!isSelf && !message.isRead && (
+              <CheckIcon className="size-4 ml-auto" />
+            )}
+            {!isSelf && message.isRead && (
+              <CheckCheckIcon className="size-4 text-indigo-500 ml-auto" />
+            )}
+            </div>
+           
+          </div>
+        )}
         {message.imageUrl && (
           <div className="mb-2 max-w-md">
             <Link

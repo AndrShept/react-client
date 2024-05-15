@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/hooks/store';
+import { useGetAllConversationQuery } from '@/lib/services/conversationApi';
 import { cn } from '@/lib/utils';
 import {
   HomeIcon,
@@ -46,6 +47,7 @@ const sidebarData = [
 ];
 
 export const SidebarList = () => {
+  const { isLoading } = useGetAllConversationQuery();
   const sumNotReadMessageCount = useAppSelector(
     (state) => state.conversation.sumNotReadMessageCount,
   );
@@ -71,12 +73,14 @@ export const SidebarList = () => {
               <span className="xl:block hidden">{data.name}</span>
             </Link>
           </Button>
-          {!!sumNotReadMessageCount && data.name === 'Messages' && (
-            <NotReadCountBadge
-              classname="absolute -right-[7px] -top-[7px] scale-[85%] ring-[2px] ring-background/60"
-              notReadMessageCount={sumNotReadMessageCount}
-            />
-          )}
+          {!!sumNotReadMessageCount &&
+            data.name === 'Messages' &&
+            !isLoading && (
+              <NotReadCountBadge
+                classname="absolute -right-[7px] -top-[7px] scale-[85%] ring-[2px] ring-background/60"
+                notReadMessageCount={sumNotReadMessageCount}
+              />
+            )}
         </li>
       ))}
     </ul>

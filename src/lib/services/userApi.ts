@@ -33,10 +33,7 @@ export const userApi = api.injectEndpoints({
       query: () => ({
         url: '/users',
         method: 'GET',
-
       }),
-      
-
     }),
     getUserById: builder.query<User, string>({
       query: (id) => ({
@@ -59,6 +56,18 @@ export const userApi = api.injectEndpoints({
         }),
       },
     ),
+    userOnline: builder.mutation<void, void>({
+      query: () => ({
+        url: '/users-online',
+        method: 'PUT',
+      }),
+    }),
+    userOffline: builder.mutation<User, string>({
+      query: (userId) => ({
+        url: `/users-offline/${userId}`,
+        method: 'PUT',
+      }),
+    }),
   }),
 });
 
@@ -74,6 +83,8 @@ export const {
   useLazyGetAllUsersQuery,
   useGetUserByUsernameQuery,
   useLazyGetUserByUsernameQuery,
+  useUserOfflineMutation,
+  useUserOnlineMutation,
 } = userApi;
 
 export const {
