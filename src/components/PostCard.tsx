@@ -1,8 +1,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
-import { dateFnsLessTime } from '@/lib/utils';
-import { BookmarkIcon, EditIcon } from 'lucide-react';
+import { compactNumberFormatter, dateFnsLessTime } from '@/lib/utils';
+import { BookmarkIcon, EditIcon, EyeIcon } from 'lucide-react';
 
 import { UserAvatar } from './UserAvatar';
 import { UsersLikeList } from './UsersLikeList';
@@ -17,9 +17,9 @@ interface PostCardProps {
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
-  console.log(post);
   const { userId } = useAuth();
   const isAuthor = userId === post.authorId;
+
   return (
     <article className="flex flex-col max-w-[600px]  text-start gap-2 bg-secondary/50 backdrop-blur-md  rounded-3xl border hover:border-primary transition ">
       <section className="flex justify-between px-6 pt-5 pb-1 ">
@@ -65,7 +65,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       )}
 
       <section className="flex items-center px-6 pb-3 justify-between ">
-        <div className='flex gap-2 '>
+        <div className="flex gap-2 ">
           <PostLikeIcon
             postId={post.id}
             likedByUser={post.likedByUser}
@@ -76,8 +76,19 @@ export const PostCard = ({ post }: PostCardProps) => {
             commentCount={post._count.comments}
           />
         </div>
+        <div className="flex gap-1 items-center">
+          <div className="flex items-center gap-x-[5px]">
+            <EyeIcon className='size-5' />
 
-        <FavoritePostIcon postId={post.id} isFavoritePost={post.isFavoritePost} />
+            <span className="text-xs text-muted-foreground">
+              {compactNumberFormatter(post._count.view)}
+            </span>
+          </div>
+          <FavoritePostIcon
+            postId={post.id}
+            isFavoritePost={post.isFavoritePost}
+          />
+        </div>
       </section>
     </article>
   );

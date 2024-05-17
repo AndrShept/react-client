@@ -12,14 +12,18 @@ import { Button } from './ui/button';
 interface EmojiPickerProps {
   onChange: (emoji: string) => void;
   isLoading: boolean;
-  sideOffset: number;
+  sideOffset?: number;
+  alignOffset?: number;
+  align: 'end' | 'start' | 'center';
   classname?: string;
 }
 
 export const EmojiButton = ({
   onChange,
   isLoading,
-  sideOffset,
+  sideOffset = 10,
+  alignOffset = 10,
+  align = 'start',
   classname,
 }: EmojiPickerProps) => {
   return (
@@ -40,7 +44,9 @@ export const EmojiButton = ({
       <PopoverContent
         className="bg-transparent border-none shadow-none drop-shadow-none mb-10"
         side="right"
+        align={align}
         sideOffset={sideOffset}
+        alignOffset={alignOffset}
       >
         <Picker
           data={data}

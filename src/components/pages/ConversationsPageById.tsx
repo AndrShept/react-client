@@ -1,16 +1,12 @@
 import { useSocket } from '@/components/providers/SocketProvider';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { useAuth } from '@/hooks/useAuth';
 import {
   addConversationMessage,
+  addLastMessageToConversation,
   deleteConversationMessage,
   editConversationMessage,
 } from '@/lib/redux/conversationSlice';
-import {
-  useGetConversationByIdQuery,
-  useIsReadMessagesMutation,
-  useLazyGetAllConversationQuery,
-} from '@/lib/services/conversationApi';
+import { useGetConversationByIdQuery } from '@/lib/services/conversationApi';
 import { Message } from '@/lib/types';
 import { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
@@ -22,7 +18,6 @@ import { ScrollArea } from '../ui/scroll-area';
 
 export const ConversationsPageById = () => {
   const { conversationId } = useParams();
-  const { userId } = useAuth();
   const conversationState = useAppSelector(
     (state) => state.conversation.conversation,
   );
@@ -30,8 +25,6 @@ export const ConversationsPageById = () => {
   if (!conversationId) {
     throw new Error('conversationId not found');
   }
-  const [isReadMessages] = useIsReadMessagesMutation();
-  const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const { isLoading, isError } = useGetConversationByIdQuery(conversationId);
   const { socket } = useSocket();
   const dispatch = useAppDispatch();
@@ -39,10 +32,6 @@ export const ConversationsPageById = () => {
   useEffect(() => {
     ref.current?.lastElementChild?.scrollIntoView({ behavior: 'instant' });
   }, [conversationState?.messages]);
-  // useEffect(() => {
-  //   isReadMessages(conversationId);
-  //   refetchAllConversations();
-  // }, [conversationId]);
 
   useEffect(() => {
     const socketListener = (
@@ -50,6 +39,7 @@ export const ConversationsPageById = () => {
     ) => {
       if (message.type === 'create') {
         dispatch(addConversationMessage(message));
+        dispatch(addLastMessageToConversation(message));
       }
       if (message.type === 'delete') {
         dispatch(deleteConversationMessage(message.id));
@@ -63,7 +53,7 @@ export const ConversationsPageById = () => {
     return () => {
       socket?.off(conversationId, socketListener);
     };
-  }, [socket, conversationId]);
+  }, [conversationId, socket]);
 
   if (isLoading) {
     return <Spinner />;

@@ -24,6 +24,8 @@ function App() {
   const { socket } = useSocket();
   const dispatch = useAppDispatch();
   const { userId } = useAuth();
+  const lastItem = pathname.split('/').at(-1);
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
@@ -41,7 +43,7 @@ function App() {
           }),
         );
       }
-      if (message.type === 'delete') {
+      if (message.type === 'delete' && !message.isRead) {
         dispatch(
           decrementNotReadCount({
             conversationId: message.conversationId,
@@ -54,7 +56,7 @@ function App() {
     return () => {
       socket?.off(userId as string, socketListener);
     };
-  }, [socket, userId]);
+  }, [userId, socket]);
   return (
     <section className="flex flex-col h-full w-full  ">
       <Navbar />

@@ -15,11 +15,13 @@ import {
 } from '@/lib/services/commentApi';
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LucideSendHorizontal } from 'lucide-react';
+import { LucideSendHorizontal, Navigation, Navigation2 } from 'lucide-react';
 import { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+
+import { EmojiButton } from '../EmojiButton';
 
 const formSchema = z.object({
   content: z.string().min(5).max(170),
@@ -62,13 +64,26 @@ export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
             <FormItem>
               {/* <FormLabel>Username</FormLabel> */}
               <FormControl>
-                <div className="flex">
-                  <Input
-                    className=" focus-visible:ring-0 focus-visible:ring-offset-0 rounded-r-none"
-                    disabled={isLoading}
-                    placeholder="comment..."
-                    {...field}
-                  />
+                <div className="flex ">
+                  <div className="relative  w-full">
+                    <Input
+                      className="pr-9 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-r-none"
+                      disabled={isLoading}
+                      placeholder="comment..."
+                      {...field}
+                    />
+                    <EmojiButton
+                      align="end"
+                      alignOffset={-20}
+                      sideOffset={60}
+                      isLoading={isLoading}
+                      onChange={(emoji) =>
+                        field.onChange(`${field.value}${emoji}`)
+                      }
+                      classname="right-2 top-[10px]"
+                    />
+                  </div>
+
                   <Button
                     variant={'secondary'}
                     size={'icon'}
@@ -76,7 +91,7 @@ export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
                     type="submit"
                     className="rounded-l-none"
                   >
-                    <LucideSendHorizontal />
+                    <Navigation2 className="rotate-90" />
                   </Button>
                 </div>
               </FormControl>

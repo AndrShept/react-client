@@ -80,12 +80,13 @@ export type Post = {
   imageUrl: string;
   author: User;
   authorId: string;
+
   likes: Like[];
   favoritePosts: FavoritePost[];
   // comments: Comment[];
   likedByUser: boolean;
   isFavoritePost: boolean;
-  _count: { comments: number };
+  _count: { comments: number; view: number };
   createdAt: Date;
   updatedAt: Date;
 };

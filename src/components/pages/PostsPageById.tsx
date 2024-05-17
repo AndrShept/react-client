@@ -34,11 +34,13 @@ export const PostsPageById = () => {
 
   return (
     <section className="flex  flex-col gap-4 mx-auto">
-      <PostCard post={post} />
+      <div className='mx-auto'>
+        <PostCard post={post} />
+      </div>
 
       <PostCommentsForm postId={post.id} />
 
-      <ul className="flex flex-col gap-4 mt-3 ">
+      <ul className="flex flex-col gap-4 mt-3  ">
         {!comments?.length && (
           <p className="text-muted-foreground text-sm text-center ">
             Comments not found

@@ -21,7 +21,7 @@ export const CommentsCard = ({
   comment,
   avatarClassname,
   cardSize = 'fit',
-  textSize = 'base',
+  textSize = 'sm',
 }: CommentsListProps) => {
   const { userId } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
@@ -59,7 +59,7 @@ export const CommentsCard = ({
       </section>
       {!isEdit && (
         <p
-          className={cn('mt-2 break-word  p-1  text-[15px] md:px-4 px-3 ', {
+          className={cn('mt-2 break-word p-1  text-[15px] md:px-4 px-3 ', {
             'break-all': !comment.content.includes(' '),
             'text-base': textSize === 'base',
             'text-sm': textSize === 'sm',

@@ -42,3 +42,9 @@ export const convertToMb = (bit: number) => {
   }
   return `${(bit / (1024 * 1024)).toFixed(2)}mb`;
 };
+export const compactNumberFormatter = (num: number) => {
+  return Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(num);
+};

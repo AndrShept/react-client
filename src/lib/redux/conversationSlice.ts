@@ -1,12 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { conversationApi } from '../services/conversationApi';
-import { Conversation } from '../types';
+import { Conversation, Message } from '../types';
 
 interface initialState {
   conversation: Conversation | null;
   allConversations: Conversation[];
   sumNotReadMessageCount: number;
+
 }
 
 // Define the initial state using that type
@@ -14,6 +15,7 @@ const initialState: initialState = {
   conversation: null,
   allConversations: [],
   sumNotReadMessageCount: 0,
+
 };
 
 export const conversationSlice = createSlice({
@@ -22,6 +24,16 @@ export const conversationSlice = createSlice({
   reducers: {
     getConversation: (state, action) => {
       state.conversation = action.payload;
+    },
+    addLastMessageToConversation: (state, action: PayloadAction<Message>) => {
+      state.allConversations = state.allConversations.map((conversation) =>
+        conversation.id === action.payload.conversationId
+          ? {
+              ...conversation,
+              messages: [...conversation.messages, action.payload],
+            }
+          : conversation,
+      );
     },
     addConversationMessage: (state, action) => {
       if (!state.conversation) return;
@@ -105,6 +117,7 @@ export const {
   deleteConversationMessage,
   decrementNotReadCount,
   incrementNotReadCount,
+  addLastMessageToConversation,
 } = conversationSlice.actions;
 
 export default conversationSlice.reducer;
