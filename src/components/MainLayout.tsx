@@ -24,7 +24,6 @@ function App() {
   const { socket } = useSocket();
   const dispatch = useAppDispatch();
   const { userId } = useAuth();
-  const lastItem = pathname.split('/').at(-1);
 
   useEffect(() => {
     if (!isAuthenticated) {

@@ -19,7 +19,29 @@ export type User = {
   conversationsSent: Conversation[];
   conversationsReceived: Conversation[];
   favoritePosts: FavoritePost[];
+  notifications: Notification[];
 };
+
+export interface Notification {
+  id: string;
+  type: NotificationType;
+  isRead: boolean;
+  user?: User;
+  userId?: string;
+  author?: User;
+  authorId?: string;
+  post?: Post;
+  postId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum NotificationType {
+  Message = 'message',
+  Like = 'like',
+  Comment = 'comment',
+  Post = 'post',
+}
 
 export interface FavoritePost {
   id: string;

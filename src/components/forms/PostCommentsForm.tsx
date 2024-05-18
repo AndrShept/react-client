@@ -13,10 +13,9 @@ import {
   useAddCommentMutation,
   useLazyGetCommentsQuery,
 } from '@/lib/services/commentApi';
-import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LucideSendHorizontal, Navigation, Navigation2 } from 'lucide-react';
-import { forwardRef } from 'react';
+import { Navigation2 } from 'lucide-react';
+
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';

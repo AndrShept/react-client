@@ -1,9 +1,10 @@
 import { useAuth } from '@/hooks/useAuth';
-import { MenuIcon } from 'lucide-react';
+import { BellIcon, MenuIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { ProfileAvatar } from './ProfileAvatar';
 import { SheetSidebar } from './SheetSidebar';
+import { NotificationIcon } from './icons/NotificationIcon';
 import { Button } from './ui/button';
 
 export const Navbar = () => {
@@ -23,7 +24,10 @@ export const Navbar = () => {
         </Button>
       </div>
 
-      {isAuthenticated && <ProfileAvatar />}
+      <div className="flex items-center gap-x-1">
+        <NotificationIcon />
+        {isAuthenticated && <ProfileAvatar />}
+      </div>
     </header>
   );
 };

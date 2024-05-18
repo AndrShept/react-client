@@ -23,9 +23,9 @@ interface MessageCardProps {
 
 export const MessageCard = ({ message }: MessageCardProps) => {
   const { ref, inView } = useInView({
-    /* Optional options */
-    threshold: 1,
+    threshold: 0.7,
     triggerOnce: true,
+
   });
   const { userId } = useAuth();
   const { sendMessage } = useSocket();
