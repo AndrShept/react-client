@@ -14,10 +14,10 @@ export const UsersBar = () => {
   const [refetchUsers] = useLazyGetAllUsersQuery();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    const refetchInterval = setInterval(async () => {
       await refetchUsers();
     }, 30000);
-    return () => clearInterval(interval);
+    return () => clearInterval(refetchInterval);
   }, []);
 
   if (isLoading) {

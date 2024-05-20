@@ -32,6 +32,13 @@ export interface Notification {
   authorId?: string;
   post?: Post;
   postId?: string;
+  follows?: Follows;
+  followsId?: string;
+  like?: Like;
+  likeId?: string;
+  comment?: Comment;
+  commentId?: string;
+  
   createdAt: Date;
   updatedAt: Date;
 }
@@ -41,6 +48,14 @@ export enum NotificationType {
   Like = 'like',
   Comment = 'comment',
   Post = 'post',
+  Follower = 'follower',
+}
+enum LikeType {
+  Post = 'post',
+  Message = 'message',
+  Photo = 'photo',
+  Comment = 'comment'
+  
 }
 
 export interface FavoritePost {
