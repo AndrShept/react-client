@@ -5,7 +5,7 @@ import { Post } from '@/lib/types';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
 import { ReactNode, useRef } from 'react';
 
-import { CommentsCard } from './CommentsCard';
+import { CommentsCard } from './comment/CommentsCard';
 import { UserAvatar } from './UserAvatar';
 import { PostCommentsForm } from './forms/PostCommentsForm';
 import { FavoritePostIcon } from './icons/FavoritePostIcon';

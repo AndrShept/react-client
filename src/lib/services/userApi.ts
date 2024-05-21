@@ -1,4 +1,4 @@
-import { ErrorMessage, User, UserWithCount } from '../types';
+import { ErrorMessage, Follows, User, UserWithCount } from '../types';
 import { api } from './api';
 
 export const userApi = api.injectEndpoints({
@@ -32,6 +32,12 @@ export const userApi = api.injectEndpoints({
     getAllUsers: builder.query<User[], void>({
       query: () => ({
         url: '/users',
+        method: 'GET',
+      }),
+    }),
+    getAllFollowingUsers: builder.query<User[], void>({
+      query: () => ({
+        url: '/users-following',
         method: 'GET',
       }),
     }),
@@ -85,6 +91,8 @@ export const {
   useLazyGetUserByUsernameQuery,
   useUserOfflineMutation,
   useUserOnlineMutation,
+  useGetAllFollowingUsersQuery,
+  useLazyGetAllFollowingUsersQuery,
 } = userApi;
 
 export const {

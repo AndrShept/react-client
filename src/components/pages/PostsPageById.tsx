@@ -3,7 +3,7 @@ import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { CommentsCard } from '../CommentsCard';
+import { CommentsCard } from '../comment/CommentsCard';
 import { PostCard } from '../PostCard';
 import { PostCommentsForm } from '../forms/PostCommentsForm';
 import { PostCommentsSkeleton } from '../skeletons/PostCommentsSkeleton';

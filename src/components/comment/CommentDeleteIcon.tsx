@@ -2,6 +2,10 @@ import {
   useDeleteCommentMutation,
   useLazyGetCommentsQuery,
 } from '@/lib/services/commentApi';
+import {
+  useDeleteReplyMutation,
+  useLazyGetReplysQuery,
+} from '@/lib/services/replyApi';
 import { Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -9,7 +13,7 @@ import { Button } from '../ui/button';
 
 interface CommentDeleteIconProps {
   commentId: string;
-  postId: string;
+  postId?: string | undefined;
 }
 
 export const CommentDeleteIcon = ({
@@ -18,10 +22,19 @@ export const CommentDeleteIcon = ({
 }: CommentDeleteIconProps) => {
   const [deleteComment, { isLoading }] = useDeleteCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
+  const [deleteReply, { isLoading: isLoadingDeleteReply }] =
+    useDeleteReplyMutation();
+  const [refetchReply] = useLazyGetReplysQuery();
   const handleDelete = async () => {
     try {
-      await deleteComment(commentId).unwrap();
-      await refetchComments(postId).unwrap();
+      if (postId && commentId) {
+        await deleteComment(commentId).unwrap();
+        await refetchComments(postId).unwrap();
+      }
+      if (commentId && !postId) {
+        const res = await deleteReply(commentId).unwrap();
+        await refetchReply(res.commentId).unwrap();
+      }
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -29,7 +42,7 @@ export const CommentDeleteIcon = ({
   return (
     <Button
       onClick={handleDelete}
-      disabled={isLoading}
+      disabled={isLoading || isLoadingDeleteReply}
       variant={'ghost'}
       size={'icon'}
       className="size-[26px]"

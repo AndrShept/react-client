@@ -1,5 +1,6 @@
 import { useFollowUserMutation } from '@/lib/services/followUserApi';
 import {
+  useLazyGetAllFollowingUsersQuery,
   useLazyGetAllUsersQuery,
   useLazyGetUserByUsernameQuery,
 } from '@/lib/services/userApi';
@@ -31,6 +32,7 @@ export const FollowButton = ({
   const [follow, { isLoading }] = useFollowUserMutation();
   const [refetchUsers] = useLazyGetAllUsersQuery();
   const [refetchUserByUsername] = useLazyGetUserByUsernameQuery();
+  const [refetchFollowingUsers] = useLazyGetAllFollowingUsersQuery();
 
   const handleFollow = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -40,6 +42,7 @@ export const FollowButton = ({
       const res = await follow(userId).unwrap();
       toast.success(res.message);
       await refetchUsers().unwrap();
+      await refetchFollowingUsers().unwrap();
       await refetchUserByUsername(username).unwrap();
     } catch (error) {
       toast.error('Something went wrong');

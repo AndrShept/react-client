@@ -13,7 +13,7 @@ import { useMediaQuery } from 'usehooks-ts';
 
 import { UserAvatar } from './UserAvatar';
 import { EditMessageForm } from './forms/EditMessageForm';
-import { CommentEditIcon } from './icons/CommentEditIcon';
+import { CommentEditIcon } from './comment/CommentEditIcon';
 import { MessageDeleteIcon } from './icons/MessageDeleteIcon';
 import { useSocket } from './providers/SocketProvider';
 

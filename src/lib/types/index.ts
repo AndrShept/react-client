@@ -20,7 +20,21 @@ export type User = {
   conversationsReceived: Conversation[];
   favoritePosts: FavoritePost[];
   notifications: Notification[];
+  reply: Reply[];
 };
+
+export interface Reply {
+  id: string;
+  content: string;
+  comment: Comment;
+  commentId: string;
+  author: User;
+  authorId: string;
+  likes: Like[];
+
+  updatedAt: Date;
+  createdAt: Date;
+}
 
 export interface Notification {
   id: string;
@@ -38,7 +52,7 @@ export interface Notification {
   likeId?: string;
   comment?: Comment;
   commentId?: string;
-  
+
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,13 +63,6 @@ export enum NotificationType {
   Comment = 'comment',
   Post = 'post',
   Follower = 'follower',
-}
-enum LikeType {
-  Post = 'post',
-  Message = 'message',
-  Photo = 'photo',
-  Comment = 'comment'
-  
 }
 
 export interface FavoritePost {
@@ -139,13 +146,14 @@ export type Like = {
 export type Comment = {
   id: string;
   content: string;
-  user: User;
-  userId: string;
-  post: Post;
-  postId: string;
+  author: User;
+  authorId: string;
+  post?: Post;
+  postId?: string;
   createdAt: Date;
   updatedAt: Date;
   likes: Like[];
+  replys?: Reply[];
 };
 export type ErrorMessage = {
   data: {

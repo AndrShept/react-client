@@ -35,6 +35,7 @@ export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
   const [refetchComments] = useLazyGetCommentsQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
+  
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: '',
@@ -42,6 +43,8 @@ export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values)
+    console.log(postId)
     try {
       await addComment({ ...values, postId }).unwrap();
       refetchComments(postId).unwrap();
