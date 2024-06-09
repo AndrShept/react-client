@@ -11,6 +11,8 @@ import {
   useEditCommentMutation,
   useLazyGetCommentsQuery,
 } from '@/lib/services/commentApi';
+import { useLazyGetReplysQuery } from '@/lib/services/replyApi';
+import { Reply } from '@/lib/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -26,7 +28,7 @@ const formSchema = z.object({
 interface EditFormProps {
   content: string;
   commentId: string;
-  postId: string;
+  postId: string | undefined;
   setIsEdit: (bool: boolean) => void;
 }
 
@@ -38,6 +40,7 @@ export const EditForm = ({
 }: EditFormProps) => {
   const [editComment, { isLoading }] = useEditCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
+  const [refetchReplys] = useLazyGetReplysQuery();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,12 +50,13 @@ export const EditForm = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await editComment({
+      const res = await editComment({
         content: { ...values },
         id: commentId,
       }).unwrap();
       setIsEdit(false);
-      await refetchComments(postId);
+      postId && (await refetchComments(postId).unwrap());
+      !postId && (await refetchReplys(res.commentId).unwrap());
     } catch (error) {
       toast.error('Something went wrong');
     }

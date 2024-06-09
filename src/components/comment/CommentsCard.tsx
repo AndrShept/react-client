@@ -18,6 +18,7 @@ interface CommentsListProps {
   avatarClassname?: string;
   cardSize?: 'fit' | 'full';
   textSize?: 'base' | 'sm' | 'xs';
+  classname?: string;
 }
 
 export const CommentsCard = ({
@@ -25,6 +26,7 @@ export const CommentsCard = ({
   avatarClassname,
   cardSize = 'fit',
   textSize = 'sm',
+  classname,
 }: CommentsListProps) => {
   const { userId } = useAuth();
   const { data: replys, isLoading } = useGetReplysQuery(comment.id);
@@ -49,6 +51,7 @@ export const CommentsCard = ({
             ' w-fit': cardSize === 'fit',
             ' w-full': cardSize === 'full',
           },
+          classname,
         )}
       >
         <section className="flex items-center gap-2 md:px-4 px-3">
@@ -86,7 +89,7 @@ export const CommentsCard = ({
         {isEdit && (
           <div className="md:px-3 px-2  ">
             <EditForm
-              content={comment.content}
+              content={`${commentContent.username} ${comment.content}`}
               commentId={comment.id}
               postId={comment.postId}
               setIsEdit={setIsEdit}
@@ -120,7 +123,6 @@ export const CommentsCard = ({
               <CommentDeleteIcon
                 postId={comment.postId}
                 commentId={comment.id}
-              
               />
             </div>
           )}
@@ -136,15 +138,18 @@ export const CommentsCard = ({
       )}
 
       {!!replys?.length && (
-        <ul className="flex mt-2">
+        <ul className="flex pl-6  ">
           {isLoading && <div>LAODDINGGGGGGGGGGGG</div>}
 
-          <div>
-            <div className="h-[57px] mb-auto  border  " />
-            <div className="w-[41px]  border mt-4 " />
+          <div className="w-5 border-b h-10 border-l rounded-bl-xl "></div>
+          <div className="mt-4 flex flex-col gap-2 ">
             {!isLoading &&
               replys?.map((reply) => (
-                <CommentsCard key={reply.id} comment={reply} />
+                <CommentsCard
+                  classname="border bg-transparent"
+                  key={reply.id}
+                  comment={reply}
+                />
               ))}
           </div>
         </ul>

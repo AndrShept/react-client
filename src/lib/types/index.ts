@@ -30,6 +30,7 @@ export interface Reply {
   commentId: string;
   author: User;
   authorId: string;
+ 
   likes: Like[];
 
   updatedAt: Date;

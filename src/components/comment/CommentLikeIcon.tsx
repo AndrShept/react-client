@@ -1,6 +1,7 @@
 import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useLikeCommentMutation } from '@/lib/services/likeApi';
 import { useLazyGetPostByIdQuery } from '@/lib/services/postApi';
+import { useLazyGetReplysQuery } from '@/lib/services/replyApi';
 import { cn } from '@/lib/utils';
 import { ThumbsUpIcon } from 'lucide-react';
 import React from 'react';
@@ -22,11 +23,13 @@ export const CommentLikeIcon = ({
 }: CommentLikeIconProps) => {
   const [addCommentLike, { isLoading }] = useLikeCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
+  const [refetchReplys] = useLazyGetReplysQuery();
 
   const handleCommentLike = async () => {
     try {
       await addCommentLike(commentId).unwrap();
-      await refetchComments(postId);
+      postId && (await refetchComments(postId));
+      !postId && (await refetchReplys(commentId));
     } catch (error) {
       toast.error('Something went wrong');
     }
