@@ -5,11 +5,11 @@ import { Post } from '@/lib/types';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
 import { ReactNode, useRef } from 'react';
 
-import { CommentsCard } from './comment/CommentsCard';
 import { UserAvatar } from './UserAvatar';
+import { CommentsCard } from './comment/CommentsCard';
 import { PostCommentsForm } from './forms/PostCommentsForm';
 import { FavoritePostIcon } from './icons/FavoritePostIcon';
-import { PostLikeIcon } from './icons/PostLikeIcon';
+import { LikeIcon } from './icons/LikeIcon';
 import { PostCommentsSkeleton } from './skeletons/PostCommentsSkeleton';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -88,8 +88,9 @@ export const PostModal = ({ children, post }: PostModalProps) => {
           <Separator />
           <div className="flex justify-between">
             <div className="flex gap-1">
-              <PostLikeIcon
-                postId={post.id}
+              <LikeIcon
+                type="post"
+                id={post.id}
                 likeCount={post.likes.length}
                 likedByUser={post.likedByUser}
               />

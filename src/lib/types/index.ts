@@ -30,7 +30,7 @@ export interface Reply {
   commentId: string;
   author: User;
   authorId: string;
- 
+
   likes: Like[];
 
   updatedAt: Date;
@@ -151,13 +151,18 @@ export type Comment = {
   authorId: string;
   post?: Post;
   postId?: string;
+  replyId?: string;
+  reply?: Comment;
+  parentId?: string;
   createdAt: Date;
   updatedAt: Date;
   likes: Like[];
-  replys?: Reply[];
+  replys: Comment[];
 };
 export type ErrorMessage = {
   data: {
     message: string;
   };
 };
+
+export type LikeType = 'post' | 'comment' | 'photo';

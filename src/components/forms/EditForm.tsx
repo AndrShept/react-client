@@ -28,19 +28,18 @@ const formSchema = z.object({
 interface EditFormProps {
   content: string;
   commentId: string;
-  postId: string | undefined;
+  id: string ;
   setIsEdit: (bool: boolean) => void;
 }
 
 export const EditForm = ({
   content,
   commentId,
-  postId,
+  id,
   setIsEdit,
 }: EditFormProps) => {
   const [editComment, { isLoading }] = useEditCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
-  const [refetchReplys] = useLazyGetReplysQuery();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,13 +49,12 @@ export const EditForm = ({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await editComment({
+      await editComment({
         content: { ...values },
         id: commentId,
       }).unwrap();
       setIsEdit(false);
-      postId && (await refetchComments(postId).unwrap());
-      !postId && (await refetchReplys(res.commentId).unwrap());
+      await refetchComments(id).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }

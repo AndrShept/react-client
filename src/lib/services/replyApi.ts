@@ -3,7 +3,10 @@ import { api } from './api';
 
 export const replyApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    addReply: builder.mutation<Reply, { commentId: string; content: string }>({
+    addReply: builder.mutation<
+      Reply,
+      { commentId: string; content: string; postId: string }
+    >({
       query: (replyData) => ({
         url: '/reply',
         method: 'POST',
@@ -16,7 +19,10 @@ export const replyApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    deleteReply: builder.mutation<{ message: string, commentId:string }, string>({
+    deleteReply: builder.mutation<
+      { message: string; commentId: string },
+      string
+    >({
       query: (commentId) => ({
         url: `/reply/${commentId}`,
         method: 'DELETE',

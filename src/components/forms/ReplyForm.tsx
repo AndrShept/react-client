@@ -7,11 +7,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  useAddReplyMutation,
-  useGetReplysQuery,
-  useLazyGetReplysQuery,
-} from '@/lib/services/replyApi';
+import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
+import { useAddReplyMutation } from '@/lib/services/replyApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -32,6 +29,7 @@ interface EditFormProps {
   };
   authorUsername: string;
   commentId: string;
+  id: string;
 
   setIsReply: (bool: boolean) => void;
 }
@@ -41,10 +39,11 @@ export const ReplyForm = ({
   commentId,
   authorUsername,
   setIsReply,
+  id,
 }: EditFormProps) => {
   const navigate = useNavigate();
   const [addReply, { isLoading }] = useAddReplyMutation();
-  const [refetchReply] = useLazyGetReplysQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,10 +56,10 @@ export const ReplyForm = ({
     try {
       await addReply({
         commentId,
+        postId: id,
         ...values,
-   
       }).unwrap();
-      await refetchReply(commentId).unwrap();
+      await refetchComments(id);
       setIsReply(false);
     } catch (error) {
       toast.error('Something went wrong');

@@ -9,7 +9,7 @@ export const CommentReplyButton = ({ setIsReply }: CommentReplyButton) => {
     <Button
       onClick={setIsReply}
       size={'sm'}
-      className="ml-1  px-2 rounded-full text-muted-foreground text-xs"
+      className="ml-2  rounded-full px-[7px]  h-[29px] text-muted-foreground text-xs"
       variant={'ghost'}
     >
       Reply

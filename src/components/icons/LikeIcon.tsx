@@ -1,8 +1,10 @@
-import { useLikePostMutation } from '@/lib/services/likeApi';
+import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
+import { useAddLikeMutation } from '@/lib/services/likeApi';
 import {
   useLazyGetAllPostsQuery,
   useLazyGetPostByIdQuery,
 } from '@/lib/services/postApi';
+import { LikeType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { HeartIcon, ThumbsUpIcon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -10,28 +12,41 @@ import { toast } from 'sonner';
 import { Button } from '../ui/button';
 
 interface LikeIconProps {
-  postId: string;
+  id: string;
   likedByUser: boolean;
   likeCount: number;
+  type: LikeType;
+  postId?: string;
+  classname?: string;
 }
 
-export const PostLikeIcon = ({
-  postId,
+export const LikeIcon = ({
+  id,
   likedByUser,
   likeCount,
+  type,
+  postId,
+  classname,
 }: LikeIconProps) => {
-  const [likePost, { isLoading }] = useLikePostMutation();
+  const [addLike, { isLoading }] = useAddLikeMutation();
   const [refetchPosts] = useLazyGetAllPostsQuery();
   const [refetchPostsById] = useLazyGetPostByIdQuery();
+  const [refetchComments] = useLazyGetCommentsQuery();
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.stopPropagation();
+
     try {
-      await likePost(postId).unwrap();
-      await refetchPosts().unwrap();
-      await refetchPostsById(postId).unwrap();
+      await addLike({ id, type }).unwrap();
+      if (type === 'post') {
+        await refetchPosts().unwrap();
+        await refetchPostsById(id).unwrap();
+      }
+      if (type === 'comment' && postId) {
+        await refetchComments(postId).unwrap();
+      }
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -41,7 +56,10 @@ export const PostLikeIcon = ({
       <Button
         disabled={isLoading}
         onClick={handleLike}
-        className={cn('size-9 rounded-full focus:scale-110 transition-all', {})}
+        className={cn(
+          'size-9 rounded-full focus:scale-110 transition-all ',
+          classname,
+        )}
         variant={likedByUser ? 'indigo' : 'ghost'}
         size={'icon'}
       >
@@ -50,16 +68,12 @@ export const PostLikeIcon = ({
             ' text-primary transition-all': likedByUser,
           })}
         />
-        {/* <HeartIcon
-          className={cn('size-6', {
-            'fill-red-500 stroke-none transition-all': likedByUser,
-          })}
-        /> */}
       </Button>
       {!!likeCount && (
         <p
           className={cn('text-xs  ml-2', {
             ' text-indigo-500': likedByUser,
+            '  ml-[1px]': type === 'comment',
           })}
         >
           {likeCount}

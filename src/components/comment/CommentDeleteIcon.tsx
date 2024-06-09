@@ -13,28 +13,21 @@ import { Button } from '../ui/button';
 
 interface CommentDeleteIconProps {
   commentId: string;
-  postId?: string | undefined;
+  id: string;
 }
 
 export const CommentDeleteIcon = ({
   commentId,
-  postId,
+  id,
 }: CommentDeleteIconProps) => {
   const [deleteComment, { isLoading }] = useDeleteCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
-  const [deleteReply, { isLoading: isLoadingDeleteReply }] =
-    useDeleteReplyMutation();
-  const [refetchReply] = useLazyGetReplysQuery();
+
   const handleDelete = async () => {
     try {
-      if (postId && commentId) {
-        await deleteComment(commentId).unwrap();
-        await refetchComments(postId).unwrap();
-      }
-      if (commentId && !postId) {
-        const res = await deleteReply(commentId).unwrap();
-        await refetchReply(res.commentId).unwrap();
-      }
+      await deleteComment(commentId).unwrap();
+
+      await refetchComments(id).unwrap();
     } catch (error) {
       toast.error('Something went wrong');
     }
@@ -42,7 +35,7 @@ export const CommentDeleteIcon = ({
   return (
     <Button
       onClick={handleDelete}
-      disabled={isLoading || isLoadingDeleteReply}
+      disabled={isLoading}
       variant={'ghost'}
       size={'icon'}
       className="size-[26px]"

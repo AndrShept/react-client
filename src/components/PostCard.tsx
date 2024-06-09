@@ -7,9 +7,9 @@ import { BookmarkIcon, EditIcon, EyeIcon } from 'lucide-react';
 import { UserAvatar } from './UserAvatar';
 import { UsersLikeList } from './UsersLikeList';
 import { FavoritePostIcon } from './icons/FavoritePostIcon';
+import { LikeIcon } from './icons/LikeIcon';
 import { PostCommentsIcon } from './icons/PostCommentsIcon';
 import { PostDeleteIcon } from './icons/PostDeleteIcon';
-import { PostLikeIcon } from './icons/PostLikeIcon';
 import { Button } from './ui/button';
 
 interface PostCardProps {
@@ -66,8 +66,9 @@ export const PostCard = ({ post }: PostCardProps) => {
 
       <section className="flex items-center px-6 pb-3 justify-between ">
         <div className="flex gap-2 ">
-          <PostLikeIcon
-            postId={post.id}
+          <LikeIcon
+            type="post"
+            id={post.id}
             likedByUser={post.likedByUser}
             likeCount={post.likes.length}
           />
@@ -78,7 +79,7 @@ export const PostCard = ({ post }: PostCardProps) => {
         </div>
         <div className="flex gap-1 items-center">
           <div className="flex items-center gap-x-[5px]">
-            <EyeIcon className='size-5' />
+            <EyeIcon className="size-5" />
 
             <span className="text-xs text-muted-foreground">
               {compactNumberFormatter(post._count.view)}

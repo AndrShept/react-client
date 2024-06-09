@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/useAuth';
-import { useGetReplysQuery } from '@/lib/services/replyApi';
 import { Comment } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
 import { useState } from 'react';
@@ -7,10 +6,9 @@ import { useState } from 'react';
 import { UserAvatar } from '../UserAvatar';
 import { EditForm } from '../forms/EditForm';
 import { ReplyForm } from '../forms/ReplyForm';
-import { Button } from '../ui/button';
+import { LikeIcon } from '../icons/LikeIcon';
 import { CommentDeleteIcon } from './CommentDeleteIcon';
 import { CommentEditIcon } from './CommentEditIcon';
-import { CommentLikeIcon } from './CommentLikeIcon';
 import { CommentReplyButton } from './CommentReplyButton';
 
 interface CommentsListProps {
@@ -29,8 +27,7 @@ export const CommentsCard = ({
   classname,
 }: CommentsListProps) => {
   const { userId } = useAuth();
-  const { data: replys, isLoading } = useGetReplysQuery(comment.id);
-  console.log(replys);
+  console.log(comment);
   const [isEdit, setIsEdit] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [commentContent, setCommentContent] = useState({
@@ -46,7 +43,7 @@ export const CommentsCard = ({
     <section>
       <article
         className={cn(
-          ' md:pt-4 pt-3    bg-secondary/40 rounded-xl flex flex-col',
+          ' md:pt-4 pt-3     bg-secondary/60 rounded-xl flex flex-col',
           {
             ' w-fit': cardSize === 'fit',
             ' w-full': cardSize === 'full',
@@ -54,7 +51,7 @@ export const CommentsCard = ({
           classname,
         )}
       >
-        <section className="flex items-center gap-2 md:px-4 px-3">
+        <section className="flex items-center gap-2 md:px-4 px-3 ">
           <UserAvatar
             className={avatarClassname}
             isOnline={comment.author.isOnline}
@@ -91,18 +88,20 @@ export const CommentsCard = ({
             <EditForm
               content={`${commentContent.username} ${comment.content}`}
               commentId={comment.id}
-              postId={comment.postId}
+              id={comment.postId ?? comment.parentId ?? ''}
               setIsEdit={setIsEdit}
             />
           </div>
         )}
         <section className="flex justify-between items-center mt-4 border-t md:px-3 px-2 ">
           <div className="flex items-center">
-            <CommentLikeIcon
+            <LikeIcon
+              id={comment.id}
               likeCount={comment.likes.length}
-              isCommentLikeExist={isCommentLikeExist}
-              commentId={comment.id}
-              postId={comment.postId}
+              likedByUser={isCommentLikeExist}
+              type="comment"
+              postId={comment.postId ?? comment.parentId}
+              classname="scale-75 focus:scale-80"
             />
             {!isReply && (
               <CommentReplyButton
@@ -121,7 +120,7 @@ export const CommentsCard = ({
             <div className="flex items-center text-muted-foreground gap-x-[2px] ">
               <CommentEditIcon setIsEdit={setIsEdit} />
               <CommentDeleteIcon
-                postId={comment.postId}
+                id={comment.postId ?? comment.parentId ?? ''}
                 commentId={comment.id}
               />
             </div>
@@ -131,26 +130,24 @@ export const CommentsCard = ({
       {isReply && (
         <ReplyForm
           commentId={comment.id}
+          id={comment.postId ?? comment.parentId ?? ''}
           authorUsername={comment.author.username}
           commentContent={commentContent}
           setIsReply={() => setIsReply(false)}
         />
       )}
 
-      {!!replys?.length && (
+      {!!comment.replys?.length && (
         <ul className="flex pl-6  ">
-          {isLoading && <div>LAODDINGGGGGGGGGGGG</div>}
-
           <div className="w-5 border-b h-10 border-l rounded-bl-xl "></div>
           <div className="mt-4 flex flex-col gap-2 ">
-            {!isLoading &&
-              replys?.map((reply) => (
-                <CommentsCard
-                  classname="border bg-transparent"
-                  key={reply.id}
-                  comment={reply}
-                />
-              ))}
+            {comment.replys.map((reply) => (
+              <CommentsCard
+                classname="border bg-transparent"
+                key={reply.id}
+                comment={reply}
+              />
+            ))}
           </div>
         </ul>
       )}
