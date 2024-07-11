@@ -2,6 +2,7 @@ import { useAppSelector } from '@/hooks/store';
 import { useGetAllConversationQuery } from '@/lib/services/conversationApi';
 import { cn } from '@/lib/utils';
 import {
+  BookmarkIcon,
   HomeIcon,
   MessageCircleIcon,
   NewspaperIcon,
@@ -17,32 +18,33 @@ const sidebarData = [
   {
     name: 'Home',
     to: '/',
-    id: 6,
+    id: 1,
     icon: HomeIcon,
   },
-  {
-    name: 'Posts',
-    to: '/posts',
-    id: 1,
-    icon: NewspaperIcon,
-  },
+
   {
     name: 'Messages',
     to: '/conversations',
-    id: 10,
+    id: 2,
     icon: MessageCircleIcon,
   },
   {
     name: 'Followers',
     to: '/followers',
-    id: 2,
+    id: 3,
     icon: UsersRoundIcon,
   },
   {
     name: 'Following',
     to: '/Following',
     icon: UserRoundSearchIcon,
-    id: 3,
+    id: 4,
+  },
+  {
+    name: 'Favorite',
+    to: '/favorite-posts',
+    icon: BookmarkIcon,
+    id: 5,
   },
 ];
 

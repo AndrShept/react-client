@@ -27,7 +27,6 @@ export const CommentsCard = ({
   classname,
 }: CommentsListProps) => {
   const { userId } = useAuth();
-  console.log(comment);
   const [isEdit, setIsEdit] = useState(false);
   const [isReply, setIsReply] = useState(false);
   const [commentContent, setCommentContent] = useState({
@@ -139,7 +138,7 @@ export const CommentsCard = ({
 
       {!!comment.replys?.length && (
         <ul className="flex pl-6  ">
-          <div className="w-5 border-b h-10 border-l rounded-bl-xl "></div>
+          <div className="w-7 border-b h-20 border-l rounded-bl-md "/>
           <div className="mt-4 flex flex-col gap-2 ">
             {comment.replys.map((reply) => (
               <CommentsCard

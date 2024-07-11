@@ -9,6 +9,12 @@ export const postApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getFavoritePosts: builder.query<Post[], void>({
+      query: () => ({
+        url: '/favorite-posts',
+        method: 'GET',
+      }),
+    }),
     getPostById: builder.query<Post, string>({
       query: (id) => ({
         url: `/posts/${id}`,
@@ -45,6 +51,8 @@ export const {
   useGetAllPostsQuery,
   useLazyGetPostByIdQuery,
   useLazyGetAllPostsQuery,
+  useGetFavoritePostsQuery,
+  useLazyGetFavoritePostsQuery,
 } = postApi;
 
 export const { addPost, deletePost, editPost, getPostById, getAllPosts } =

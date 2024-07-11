@@ -2,11 +2,12 @@ import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useAddLikeMutation } from '@/lib/services/likeApi';
 import {
   useLazyGetAllPostsQuery,
+  useLazyGetFavoritePostsQuery,
   useLazyGetPostByIdQuery,
 } from '@/lib/services/postApi';
 import { LikeType } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { HeartIcon, ThumbsUpIcon } from 'lucide-react';
+import { ThumbsUpIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';
@@ -32,6 +33,7 @@ export const LikeIcon = ({
   const [refetchPosts] = useLazyGetAllPostsQuery();
   const [refetchPostsById] = useLazyGetPostByIdQuery();
   const [refetchComments] = useLazyGetCommentsQuery();
+  const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -43,6 +45,7 @@ export const LikeIcon = ({
       if (type === 'post') {
         await refetchPosts().unwrap();
         await refetchPostsById(id).unwrap();
+        await refetchFavoritePosts().unwrap();
       }
       if (type === 'comment' && postId) {
         await refetchComments(postId).unwrap();

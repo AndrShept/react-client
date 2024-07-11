@@ -41,7 +41,7 @@ export const FollowButton = ({
     try {
       const res = await follow(userId).unwrap();
       toast.success(res.message);
-      await refetchUsers().unwrap();
+      await refetchUsers('').unwrap();
       await refetchFollowingUsers().unwrap();
       await refetchUserByUsername(username).unwrap();
     } catch (error) {

@@ -9,6 +9,7 @@ import { ConversationsSidebar } from './components/ConversationsSidebar.tsx';
 import MainLayout from './components/MainLayout.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
+import { FavoritePostsPage } from './components/pages/FavoritePosts.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
 import { FollowingsPage } from './components/pages/FollowingsPage.tsx';
 import { LoginPage } from './components/pages/LoginPage.tsx';
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: '/following',
         element: <FollowingsPage />,
+      },
+      {
+        path: '/favorite-posts',
+        element: <FavoritePostsPage />,
       },
       {
         path: '/users/:username',

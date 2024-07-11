@@ -1,6 +1,7 @@
 import { useAddFavoritePostMutation } from '@/lib/services/favoritePostApi';
 import {
   useLazyGetAllPostsQuery,
+  useLazyGetFavoritePostsQuery,
   useLazyGetPostByIdQuery,
 } from '@/lib/services/postApi';
 import { cn } from '@/lib/utils';
@@ -21,6 +22,7 @@ export const FavoritePostIcon = ({
   const [addFavoritePost, { isLoading }] = useAddFavoritePostMutation();
   const [refetchPosts] = useLazyGetAllPostsQuery();
   const [refetchPostById] = useLazyGetPostByIdQuery();
+  const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
 
   const onAddFavorite = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -30,6 +32,7 @@ export const FavoritePostIcon = ({
       await addFavoritePost(postId).unwrap();
       await refetchPostById(postId).unwrap();
       await refetchPosts().unwrap();
+      await refetchFavoritePosts().unwrap();
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');

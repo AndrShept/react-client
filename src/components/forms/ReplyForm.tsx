@@ -75,9 +75,9 @@ export const ReplyForm = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <section className="flex items-center">
-                  <div className="h-[57px] mb-auto  border  " />
-                  <div className="w-[41px]  border mt-4 " />
+                <section className="flex ">
+                  <div className="h-[57px] w-[30px]  border-l border-b ml-7 rounded-bl-md" />
+                  {/* <div className="w-[41px]  border mt-4 " /> */}
                   <div className="flex flex-col flex-1">
                     <div className="flex items-center border rounded-t-lg mt-4 ">
                       <Button
@@ -95,8 +95,8 @@ export const ReplyForm = ({
                     <div className="flex items-center  gap-x-1">
                       <Input
                         disabled={isLoading}
-                        className="  min-w-[200px] bg-secondary/70 focus-visible:ring-0 border-0 rounded-t-none focus-visible:ring-offset-0"
-                        placeholder="reply message..."
+                        className="  min-w-[200px] bg-secondary focus-visible:ring-0 border-0 rounded-t-none focus-visible:ring-offset-0"
+                        placeholder="message..."
                         {...field}
                       />
 

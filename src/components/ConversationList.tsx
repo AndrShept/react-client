@@ -47,7 +47,7 @@ export const ConversationList = () => {
     <div className="flex flex-col gap-3 xl:max-w-[300px] max-w-[250px] bg-secondary/40 ">
       <div className="flex flex-col gap-4 md:p-5 p-3  ">
         <p>Messages</p>
-        <Search placeholder="search" />
+        <Search placeholder="search" type='conversations' />
       </div>
       <Separator />
       <ScrollArea className="pr-2">

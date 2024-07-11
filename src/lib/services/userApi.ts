@@ -29,9 +29,9 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getAllUsers: builder.query<User[], void>({
-      query: () => ({
-        url: '/users',
+    getAllUsers: builder.query<User[],  string| undefined>({
+      query: (userName) => ({
+        url:  `/users/${userName}`,
         method: 'GET',
       }),
     }),
