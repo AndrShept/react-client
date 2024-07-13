@@ -22,12 +22,15 @@ export const searchSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setStoreSearchValue: (state, action:PayloadAction<ISearchData>) => {
+    setStoreSearchValue: (state, action: PayloadAction<ISearchData>) => {
       state.searchData = action.payload;
+    },
+    clearSearchValue: (state) => {
+      state = initialState;
     },
   },
 });
 
-export const { setStoreSearchValue } = searchSlice.actions;
+export const { setStoreSearchValue, clearSearchValue } = searchSlice.actions;
 
 export default searchSlice.reducer;

@@ -14,21 +14,27 @@ import { Separator } from './ui/separator';
 export const ConversationList = () => {
   const { isLoading } = useGetAllConversationQuery();
   const { socket } = useSocket();
-  const { userId } = useAuth();
+  const { userId, username } = useAuth();
   const dispatch = useAppDispatch();
 
-  const conversations = useAppSelector(
-    (state) => state.conversation.allConversations,
+  const searchValue = useAppSelector(
+    (state) => state.search.searchData.searchConversation,
+  );
+  const conversations = useAppSelector((state) =>
+    state.conversation.allConversations.filter((conversation) =>
+      conversation.receiverUser.username
+        .toLowerCase()
+        .includes(searchValue?.toLowerCase() ?? ''),
+    ),
   );
 
   useEffect(() => {
     if (!userId) return;
-   
+
     const socketListener = (
       message: Message & { type: 'create' | 'delete' | 'update' },
     ) => {
       if (message.type === 'create') {
-     
         dispatch(addLastMessageToConversation(message));
       }
     };
@@ -37,7 +43,7 @@ export const ConversationList = () => {
     return () => {
       socket?.off(userId, socketListener);
     };
-  }, [userId,socket]);
+  }, [userId, socket]);
 
   if (isLoading) {
     return <div>LAODING....</div>;
@@ -47,7 +53,7 @@ export const ConversationList = () => {
     <div className="flex flex-col gap-3 xl:max-w-[300px] max-w-[250px] bg-secondary/40 ">
       <div className="flex flex-col gap-4 md:p-5 p-3  ">
         <p>Messages</p>
-        <Search placeholder="search" type='conversations' />
+        <Search placeholder="search" type="conversations" />
       </div>
       <Separator />
       <ScrollArea className="pr-2">
