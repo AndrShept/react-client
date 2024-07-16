@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '../services/api';
 import conversationSlice from './conversationSlice';
+import photoSlice from './photoSlice';
 import searchSlice from './searchSlice';
 import userSlice from './userSlice';
 
@@ -11,6 +12,7 @@ export const store = configureStore({
     user: userSlice,
     conversation: conversationSlice,
     search: searchSlice,
+    photo: photoSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

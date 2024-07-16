@@ -7,12 +7,15 @@ import { Toaster } from 'sonner';
 import { AuthGuard } from './components/AuthGuard.tsx';
 import { ConversationsSidebar } from './components/ConversationsSidebar.tsx';
 import MainLayout from './components/MainLayout.tsx';
+import { UserProfilePhoto } from './components/UserProfilePhoto.tsx';
+import { UserProfilePost } from './components/UserProfilePost.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FavoritePostsPage } from './components/pages/FavoritePosts.tsx';
 import { FollowersPage } from './components/pages/FollowersPage.tsx';
 import { FollowingsPage } from './components/pages/FollowingsPage.tsx';
 import { LoginPage } from './components/pages/LoginPage.tsx';
+import { NotFoundPage } from './components/pages/NotFoundPage.tsx';
 import { PostsPage } from './components/pages/PostsPage.tsx';
 import { PostsPageById } from './components/pages/PostsPageById.tsx';
 import { RegisterPage } from './components/pages/RegisterPage.tsx';
@@ -69,6 +72,16 @@ const router = createBrowserRouter([
       {
         path: '/users/:username',
         element: <UserProfilePage />,
+        children: [
+          {
+            path: 'photos',
+            element: <UserProfilePhoto />,
+          },
+          {
+            path: 'posts',
+            element: <UserProfilePost />,
+          },
+        ],
       },
     ],
   },
@@ -79,6 +92,10 @@ const router = createBrowserRouter([
   {
     path: '/register',
     element: <RegisterPage />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ]);
 

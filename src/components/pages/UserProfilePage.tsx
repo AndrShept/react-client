@@ -1,17 +1,17 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
-import { useDelay } from '@/hooks/useDelay';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
 import { PencilIcon } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 
 import { ConversationButton } from '../ConversationButton';
 import { FollowButton } from '../FollowButton';
 import { UserAvatar } from '../UserAvatar';
+import { UserProfileTabs } from '../UserProfileTabs';
 import { UserProfileEditForm } from '../forms/UserProfileEditForm';
 import { UserProfilePageSkeleton } from '../skeletons/UserProfilePageSkeleton';
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 
 export const UserProfilePage = () => {
   const { username } = useParams();
@@ -29,31 +29,19 @@ export const UserProfilePage = () => {
   }
   console.log(user);
   return (
-    <div className="flex flex-col p-8">
-      <div className="h-[100px] "></div>
-      <article className="flex flex-col border border-indigo-400   rounded-3xl  gap-4  backdrop-blur-md md:p-12 p-6">
-        <div className="flex justify-between items-center relative">
-          <div
-            className={cn(
-              'absolute z-[-1] inset-0 flex  items-center justify-center -top-[135px]   ',
-              {
-                '-top-[95px]': isSelf,
-              },
-            )}
-          >
-            <UserAvatar
-              isOnline={user.isOnline}
-              avatarUrl={user.avatarUrl}
-              link={false}
-              username={user.username}
-              className="h-40 w-40 border shadow-lg shadow-primary/10"
-            />
-          </div>
-        </div>
+    <>
+      <article className="flex md:flex-row flex-col mx-auto gap-4 items-center bg-secondary/50 p-10  rounded-md  ">
+        <UserAvatar
+          isOnline={user.isOnline}
+          avatarUrl={user.avatarUrl}
+          link={false}
+          username={user.username}
+          className="h-40 w-40 border shadow-lg shadow-primary/10"
+        />
 
         <section
           className={cn(
-            'flex flex-col mx-auto text-center max-w-xs gap-10 mt-2 text-muted-foreground',
+            'flex flex-col justify-between text-center max-w-xs  mt-2 text-muted-foreground',
             {
               'mt-10': isSelf,
             },
@@ -69,28 +57,27 @@ export const UserProfilePage = () => {
           <p className="md:text-xl text-base">{user.bio}</p>
           <div className="flex justify-between  gap-4">
             <p className="flex flex-col items-center">
-              <span className="text-primary"> {user._count.posts}</span>
               <span>Posts</span>
+              <span className="text-primary"> {user._count.posts}</span>
             </p>
             <p className="flex flex-col items-center">
-              <span className="text-primary"> {user._count.comments}</span>
               <span>Comments</span>
+              <span className="text-primary"> {user._count.comments}</span>
             </p>
             <p className="flex flex-col items-center">
-              <span className="text-primary"> {user._count.following}</span>
-
               <span>Friends</span>
+              <span className="text-primary"> {user._count.following}</span>
             </p>
             <p className="flex flex-col items-center">
-              <span className="text-primary"> {user._count.likes}</span>
               <span>Likes</span>
+              <span className="text-primary"> {user._count.likes}</span>
             </p>
           </div>
           {isSelf && (
             <Dialog>
               <DialogTrigger>
-                <Button className="rounded-full gap-1 ">
-                  <PencilIcon className='size-4' />
+                <Button className="rounded-full gap-1 mt-6 ">
+                  <PencilIcon className="size-4" />
                   Update profile
                 </Button>
               </DialogTrigger>
@@ -107,7 +94,7 @@ export const UserProfilePage = () => {
             </Dialog>
           )}
           {!isSelf && (
-            <section className="flex items-center gap-4 mx-auto">
+            <section className="flex items-center gap-4 mx-auto mt-6">
               <FollowButton
                 label={true}
                 username={user.username}
@@ -120,6 +107,7 @@ export const UserProfilePage = () => {
           )}
         </section>
       </article>
-    </div>
+      <UserProfileTabs />
+    </>
   );
 };
