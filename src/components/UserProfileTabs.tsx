@@ -1,3 +1,4 @@
+import { ImageIcon, StickyNoteIcon } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { UploadPhotos } from './UploadPhotos';
@@ -9,7 +10,7 @@ export const UserProfileTabs = () => {
 
   return (
     <section className=" mt-5 rounded-md h-full flex flex-col ">
-      <div className="flex items-center  mx-auto md:flex-row flex-col gap-3">
+      <div className="flex items-center  mx-auto md:flex-row flex-col gap-2">
         <UploadPhotos />
         <div>
           <Link
@@ -20,7 +21,7 @@ export const UserProfileTabs = () => {
             })}
             to={'photos'}
           >
-            Photo
+            <ImageIcon className="mr-1 size-5" /> Photo
           </Link>
           <Link
             className={buttonVariants({
@@ -30,6 +31,7 @@ export const UserProfileTabs = () => {
             })}
             to={'posts'}
           >
+            <StickyNoteIcon className="mr-1 size-5" />
             Posts
           </Link>
         </div>

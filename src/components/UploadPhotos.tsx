@@ -2,16 +2,19 @@ import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setPhotos } from '@/lib/redux/photoSlice';
 import { CirclePlusIcon } from 'lucide-react';
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { UploadPhotoModal } from './UploadPhotoModal';
 import { Button } from './ui/button';
 
 export type PhotoDetail = {
+  id: string;
   name: string;
   size: number;
   type: string;
   lastModified: number;
   url: string;
+  isSelected: boolean;
 };
 
 export const UploadPhotos = () => {
@@ -24,11 +27,13 @@ export const UploadPhotos = () => {
     }
 
     const filesArray = [...files].map((file) => ({
+      id: uuidv4(),
       name: file.name,
       size: file.size,
       type: file.type,
       lastModified: file.lastModified,
       url: URL.createObjectURL(file),
+      isSelected: true,
     }));
 
     dispatch(setPhotos(filesArray));
