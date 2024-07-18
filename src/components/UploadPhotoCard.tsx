@@ -17,7 +17,7 @@ export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
       className="relative flex flex-col      border rounded border-transparent hover:border-primary p-1 hover:cursor-pointer "
       onClick={() => dispatch(setSelectedPhoto(photo.id))}
     >
-      <picture className="  md:size-[150px]  size-[140px] ">
+      <div className="  md:size-[150px]  size-[140px] ">
         <img
           loading="lazy"
           key={photo.url}
@@ -27,7 +27,7 @@ export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
             'opacity-30': !photo.isSelected,
           })}
         />
-      </picture>
+      </div>
 
       <Button
         className="absolute right-2 top-2 h-5 w-5"

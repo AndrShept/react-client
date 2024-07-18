@@ -45,10 +45,19 @@ export const photoSlice = createSlice({
       }));
       state.selectedPhotos = state.photos.filter((photo) => photo.isSelected);
     },
+    resetState: (state) => {
+      state.photos = [];
+      state.selectedPhotos = [];
+    },
   },
 });
 
-export const { setPhotos, setSelectedPhoto, selectAllPhoto, unSelectAllPhoto } =
-  photoSlice.actions;
+export const {
+  setPhotos,
+  setSelectedPhoto,
+  selectAllPhoto,
+  unSelectAllPhoto,
+  resetState,
+} = photoSlice.actions;
 
 export default photoSlice.reducer;

@@ -17,6 +17,7 @@ export const UserProfilePage = () => {
   const { username } = useParams();
   const { username: currentName } = useAuth();
   const isSelf = username === currentName;
+  console.log(isSelf)
   if (!username) {
     throw new Error('User not found');
   }

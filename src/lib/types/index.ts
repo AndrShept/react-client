@@ -23,6 +23,36 @@ export type User = {
   reply: Reply[];
 };
 
+export interface Photo {
+  id: string;
+  url: string;
+  size: number;
+  name: string;
+  userId?: string;
+  user?: User;
+  likes: Like[];
+  comments: Comment[];
+  createdAt: Date;
+  updatedAt: Date;
+  _count: {
+    comments: number;
+    likes: number;
+    view: number;
+  };
+}
+
+export interface View {
+  id: string;
+  postId?: string;
+  post?: Post;
+  userId?: string;
+  user?: User;
+  photoId?: string;
+  photo?: Photo;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Reply {
   id: string;
   content: string;
@@ -166,4 +196,4 @@ export type ErrorMessage = {
 };
 
 export type LikeType = 'post' | 'comment' | 'photo';
-export type SearchType = 'conversations' | 'users' | undefined
+export type SearchType = 'conversations' | 'users' | undefined;
