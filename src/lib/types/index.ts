@@ -28,6 +28,7 @@ export interface Photo {
   url: string;
   size: number;
   name: string;
+  likedByUser: boolean;
   userId?: string;
   user?: User;
   likes: Like[];

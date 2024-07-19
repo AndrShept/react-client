@@ -21,7 +21,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   const isAuthor = userId === post.authorId;
 
   return (
-    <article className="flex flex-col max-w-[600px]  text-start gap-2 bg-secondary/50 backdrop-blur-md  rounded-3xl border hover:border-primary transition ">
+    <article className="flex flex-col max-w-[600px]  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition ">
       <section className="flex justify-between px-6 pt-5 pb-1 ">
         <div className="flex items-center gap-2 ">
           <UserAvatar

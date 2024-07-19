@@ -1,16 +1,15 @@
-import React from 'react';
 
 import { Skeleton } from '../ui/skeleton';
 
 export const UserProfilePhotosSkeleton = () => {
   return (
-    <ul className="flex flex-wrap gap-1  ">
-      {[...Array(7)].map((_, idx) => (
-        <article key={idx} className="flex-1 max-w-[200px]   ">
-          <div className="relative max-w-[200px] min-w-[150px] overflow-hidden cursor-pointer  aspect-square ">
-            <Skeleton className="object-cover  size-full hover:scale-110 transition will-change-transform   " />
-          </div>
-        </article>
+    <ul className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:grid-cols-4  ">
+      {[...Array(8)].map((_, idx) => (
+        <div key={idx} className="w-[150px] aspect-square   ">
+
+            <Skeleton className="  size-full aspect-square   " />
+         
+        </div>
       ))}
     </ul>
   );
