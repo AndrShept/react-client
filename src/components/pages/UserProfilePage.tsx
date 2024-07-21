@@ -1,7 +1,7 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
-import { cn } from '@/lib/utils';
+import { cn, compactNumberFormatter } from '@/lib/utils';
 import { PencilIcon } from 'lucide-react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 
@@ -17,7 +17,6 @@ export const UserProfilePage = () => {
   const { username } = useParams();
   const { username: currentName } = useAuth();
   const isSelf = username === currentName;
-  console.log(isSelf)
   if (!username) {
     throw new Error('User not found');
   }
@@ -28,7 +27,6 @@ export const UserProfilePage = () => {
   if (!user) {
     return <div>User not found</div>;
   }
-  console.log(user);
   return (
     <>
       <article className="flex md:flex-row flex-col mx-auto gap-4 items-center bg-secondary/50 p-10  rounded-md  ">
@@ -67,11 +65,22 @@ export const UserProfilePage = () => {
             </p>
             <p className="flex flex-col items-center">
               <span>Friends</span>
-              <span className="text-primary"> {user._count.following}</span>
+              <span className="text-primary">
+                {' '}
+                {compactNumberFormatter(user._count.following)}
+              </span>
             </p>
             <p className="flex flex-col items-center">
               <span>Likes</span>
-              <span className="text-primary"> {user._count.likes}</span>
+              <span className="text-primary">
+                {' '}
+                {compactNumberFormatter(user._count.likes)}
+              </span>
+            </p>
+
+            <p className="flex flex-col items-center">
+              <span>Photos</span>
+              <span className="text-primary"> {user._count.photos}</span>
             </p>
           </div>
           {isSelf && (

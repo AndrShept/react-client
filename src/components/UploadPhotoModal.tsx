@@ -8,12 +8,16 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { useAuth } from '@/hooks/useAuth';
 import {
   resetState,
   selectAllPhoto,
   unSelectAllPhoto,
 } from '@/lib/redux/photoSlice';
-import { useAddPhotosMutation } from '@/lib/services/photoApi';
+import {
+  useAddPhotosMutation,
+  useLazyGetPhotosByUsernameQuery,
+} from '@/lib/services/photoApi';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -22,8 +26,10 @@ import { ScrollArea } from './ui/scroll-area';
 
 export const UploadPhotoModal = () => {
   const [addPhotos, { isLoading }] = useAddPhotosMutation();
+  const [refetchPhotos] = useLazyGetPhotosByUsernameQuery();
   const photos = useAppSelector((state) => state.photo.photos);
   const selectedPhotos = useAppSelector((state) => state.photo.selectedPhotos);
+  const { username } = useAuth();
 
   const dispatch = useAppDispatch();
   const [isShow, setIsShow] = useState(false);
@@ -38,6 +44,7 @@ export const UploadPhotoModal = () => {
         toast.success(
           `${res.count === 1 ? 'Photo success added' : `Photos success added ${res.count} count `}`,
         );
+        await refetchPhotos(username as string).unwrap();
       }
     } catch (error) {
       console.log(error);

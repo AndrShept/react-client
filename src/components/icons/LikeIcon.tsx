@@ -76,7 +76,7 @@ export const LikeIcon = ({
           'size-9 rounded-full focus:scale-110 transition-all ',
           classname,
           {
-            'bg-red-600 hover:bg-red-600': color === 'red' && likedByUser,
+            'bg-gradient-to-t from-red-800 via-red-500 to-red-400 hover:from-red-800/60 hover:via-red-500/60 hover:to-red-400/60  ': color === 'red' && likedByUser,
             ' hover:bg-red-500/70': color === 'red' && !likedByUser,
           },
         )}

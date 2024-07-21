@@ -139,6 +139,8 @@ export interface UserWithCount extends User {
     following: number;
     posts: number;
     likes: number;
+    message: number;
+    photos: number;
   };
 }
 
@@ -159,7 +161,6 @@ export type Post = {
 
   likes: Like[];
   favoritePosts: FavoritePost[];
-  // comments: Comment[];
   likedByUser: boolean;
   isFavoritePost: boolean;
   _count: { comments: number; view: number };
