@@ -40,7 +40,7 @@ export const UserProfileTabs = () => {
           </Link>
         </div>
       </div>
-      <div className="flex-1   mx-auto md:p-8 p-4 mt-4  ">
+      <div className="flex-1   mx-auto md:p-8 p-4   ">
         <Outlet />
       </div>
     </section>

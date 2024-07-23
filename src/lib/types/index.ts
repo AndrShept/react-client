@@ -198,4 +198,4 @@ export type ErrorMessage = {
 };
 
 export type LikeType = 'post' | 'comment' | 'photo';
-export type SearchType = 'conversations' | 'users' | undefined;
+export type SearchType = 'conversations' | 'users' | 'photo' | undefined;

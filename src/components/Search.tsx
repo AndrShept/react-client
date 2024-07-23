@@ -43,6 +43,9 @@ export const Search = ({ placeholder, className, type }: SearchProps) => {
     if (type === 'conversations') {
       dispatch(setStoreSearchValue({ searchConversation: searchValue }));
     }
+    if (type === 'photo') {
+      dispatch(setStoreSearchValue({ searchPhotos: searchValue }));
+    }
   }, [searchValue]);
 
   return (

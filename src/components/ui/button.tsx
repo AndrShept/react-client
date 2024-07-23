@@ -17,7 +17,7 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
-        indigo: 'bg-gradient-to-t from-indigo-800 via-indigo-500 to-indigo-400 text-primary hover:from-indigo-800/70 hover:via-indigo-500/70 hover:to-indigo-400/70 transition-all ',
+        indigo: 'bg-indigo-500 hover:bg-indigo-500/80 text-primary  ',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -3,6 +3,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 interface ISearchData {
   searchUser?: string;
   searchConversation?: string;
+  searchPhotos?: string;
 }
 
 interface InitialState {
@@ -14,6 +15,7 @@ const initialState: InitialState = {
   searchData: {
     searchUser: '',
     searchConversation: '',
+    searchPhotos: '',
   },
 };
 
