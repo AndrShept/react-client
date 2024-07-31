@@ -1,6 +1,6 @@
-import { useAppDispatch } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setSelectedPhoto } from '@/lib/redux/photoSlice';
-import { cn, convertToMb } from '@/lib/utils';
+import { cn, convertToMb, dateFns } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
 import { PhotoDetail } from './UploadPhotos';
@@ -11,6 +11,7 @@ interface UploadPhotoCardProps {
 }
 
 export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
+  const mode = useAppSelector((state) => state.photo.mode);
   const dispatch = useAppDispatch();
   return (
     <article
@@ -23,7 +24,7 @@ export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
           key={photo.url}
           src={photo.url}
           alt="user-photo"
-          className={cn(' transition size-full object-cover  ', {
+          className={cn(' transition size-full object-cover  will-change-contents ', {
             'opacity-30': !photo.isSelected,
           })}
         />
@@ -39,6 +40,11 @@ export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
 
       <div className="flex flex-col md:w-[150px] w-[140px]">
         <p className="break-all line-clamp-1 text-xs">{photo.name}</p>
+        {mode === 'edit' && (
+          <p className="text-muted-foreground text-xs">
+            {dateFns(photo.createdAt!)}
+          </p>
+        )}
         <p className="text-red-500 text-xs">{convertToMb(photo.size)}</p>
       </div>
     </article>

@@ -1,15 +1,21 @@
 import { PhotoDetail } from '@/components/UploadPhotos';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+type ModeType = 'add' | 'edit' | null;
+
 interface InitialState {
   photos: PhotoDetail[];
-  selectedPhotos: PhotoDetail[];
+  isShow: boolean;
+  mode: ModeType;
+  page: number;
 }
 
 // Define the initial state using that type
 const initialState: InitialState = {
   photos: [],
-  selectedPhotos: [],
+  isShow: false,
+  mode: null,
+  page: 1,
 };
 
 export const photoSlice = createSlice({
@@ -18,7 +24,6 @@ export const photoSlice = createSlice({
   reducers: {
     setPhotos: (state, action: PayloadAction<PhotoDetail[]>) => {
       state.photos = action.payload;
-      state.selectedPhotos = state.photos.filter((photo) => photo.isSelected);
     },
     setSelectedPhoto: (state, action: PayloadAction<string>) => {
       state.photos = state.photos.map((photo) =>
@@ -29,25 +34,33 @@ export const photoSlice = createSlice({
             }
           : photo,
       );
-      state.selectedPhotos = state.photos.filter((photo) => photo.isSelected);
     },
     selectAllPhoto: (state) => {
       state.photos = state.photos.map((photo) => ({
         ...photo,
         isSelected: true,
       }));
-      state.selectedPhotos = state.photos.filter((photo) => photo.isSelected);
     },
     unSelectAllPhoto: (state) => {
       state.photos = state.photos.map((photo) => ({
         ...photo,
         isSelected: false,
       }));
-      state.selectedPhotos = state.photos.filter((photo) => photo.isSelected);
     },
     resetState: (state) => {
-      state.photos = [];
-      state.selectedPhotos = [];
+      state = initialState;
+    },
+    setIsShow: (state, action: PayloadAction<boolean>) => {
+      state.isShow = action.payload;
+    },
+    setMode: (state, action: PayloadAction<ModeType>) => {
+      state.mode = action.payload;
+    },
+    incrementPage: (state) => {
+      state.page += 1;
+    },
+    defaultPage: (state) => {
+      state.page = 1;
     },
   },
 });
@@ -58,6 +71,10 @@ export const {
   selectAllPhoto,
   unSelectAllPhoto,
   resetState,
+  setIsShow,
+  setMode,
+  incrementPage,
+  defaultPage,
 } = photoSlice.actions;
 
 export default photoSlice.reducer;

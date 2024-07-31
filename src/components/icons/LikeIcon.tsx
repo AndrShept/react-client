@@ -12,6 +12,7 @@ import { HeartIcon, ThumbsUpIcon, icons } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';
+import { useAppSelector } from '@/hooks/store';
 
 interface LikeIconProps {
   id: string;
@@ -44,6 +45,7 @@ export const LikeIcon = ({
   const [refetchComments] = useLazyGetCommentsQuery();
   const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
   const [refetchPhotosByUsername] = useLazyGetPhotosByUsernameQuery();
+  const page = useAppSelector(state=> state.photo.page)
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -61,7 +63,7 @@ export const LikeIcon = ({
         await refetchComments(postId).unwrap();
       }
       if (type === 'photo' && username) {
-        await refetchPhotosByUsername(username).unwrap();
+        await refetchPhotosByUsername({username,page}).unwrap();
       }
     } catch (error) {
       toast.error('Something went wrong');

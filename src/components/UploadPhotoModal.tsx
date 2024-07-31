@@ -12,108 +12,173 @@ import { useAuth } from '@/hooks/useAuth';
 import {
   resetState,
   selectAllPhoto,
+  setIsShow,
   unSelectAllPhoto,
 } from '@/lib/redux/photoSlice';
 import {
   useAddPhotosMutation,
+  useDeletePhotosMutation,
   useLazyGetPhotosByUsernameQuery,
 } from '@/lib/services/photoApi';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { LucideSearch } from 'lucide-react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 
+import { Search } from './Search';
 import { UploadPhotoCard } from './UploadPhotoCard';
+import { PhotoDetail } from './UploadPhotos';
+import { SelectedButton } from './ui/custom-button/SelectedButton';
 import { ScrollArea } from './ui/scroll-area';
 
 export const UploadPhotoModal = () => {
-  const [addPhotos, { isLoading }] = useAddPhotosMutation();
-  const [refetchPhotos] = useLazyGetPhotosByUsernameQuery();
-  const photos = useAppSelector((state) => state.photo.photos);
-  const selectedPhotos = useAppSelector((state) => state.photo.selectedPhotos);
   const { username } = useAuth();
-
+  const [addPhotos, { isLoading }] = useAddPhotosMutation();
+  const [refetchPhotos] =
+    useLazyGetPhotosByUsernameQuery();
+  const [deletePhotos, { isLoading: isLoadingDeletePhotos }] =
+    useDeletePhotosMutation();
   const dispatch = useAppDispatch();
-  const [isShow, setIsShow] = useState(false);
+  const mode = useAppSelector((state) => state.photo.mode);
+  const isShow = useAppSelector((state) => state.photo.isShow);
+  const searchValue = useAppSelector(
+    (state) => state.search.searchData.searchPhotos,
+  );
+  const page = useAppSelector((state) => state.photo.page);
+  const photos = useAppSelector((state) =>
+    state.photo.photos.filter((photo) =>
+      photo.name
+        .toLocaleLowerCase()
+        .includes(searchValue?.toLocaleLowerCase() ?? ''),
+    ),
+  );
+  const selectedPhotos = useMemo<PhotoDetail[]>(() => {
+    return photos.filter((photo) => photo.isSelected);
+  }, [photos]);
 
   const createPhotos = async () => {
     const formData = new FormData();
-    selectedPhotos.forEach((item) => formData.append('files', item.file));
+    selectedPhotos.forEach((item) => formData.append('files', item.file!!));
     try {
       const res = await addPhotos(formData).unwrap();
       if (res.count >= 1) {
-        setIsShow(false);
+        dispatch(setIsShow(false));
         toast.success(
           `${res.count === 1 ? 'Photo success added' : `Photos success added ${res.count} count `}`,
         );
-        await refetchPhotos(username as string).unwrap();
+        await refetchPhotos({ username: username as string, page }).unwrap()
       }
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
     }
   };
+  const onDelete = async () => {
+    try {
+      const res = await deletePhotos(selectedPhotos).unwrap();
+      if (res.count >= 1) {
+        toast.success(
+          `${res.count === 1 ? 'Photo success delete' : `Photos success deleted ${res.count} count `}`,
+        );
+        dispatch(setIsShow(false));
+        await refetchPhotos({ username: username as string, page }).unwrap();
 
-  useEffect(() => {
-    if (!!photos.length) {
-      setIsShow(true);
+      }
+    } catch (error) {
+      toast.error('Something went wrong');
     }
-    return () => setIsShow(false);
-  }, [photos, selectedPhotos]);
-  useLayoutEffect(() => {
-    dispatch(resetState());
+  };
+  useEffect(() => {
+;
   }, []);
   return (
     <div>
-      <Dialog open={isShow} onOpenChange={setIsShow}>
-        <DialogContent className=" md:w-fit w-[380px]    ">
+      <Dialog open={isShow} onOpenChange={() => dispatch(setIsShow(false))}>
+        <DialogContent className=" md:w-fit w-[380px] flex flex-col md:min-w-[430px]    ">
           <DialogHeader>
-            <DialogTitle>Add photos on profile</DialogTitle>
+            <DialogTitle>
+              {mode === 'add' && <p>Add photos on profile</p>}
+              {mode === 'edit' && <p>Select your photos to edit</p>}
+            </DialogTitle>
             <DialogDescription>
-              Select your photos to add your profile
+              {mode === 'add' && <p>Select your photos to add your profile</p>}
+              {mode === 'edit' && <p></p>}
             </DialogDescription>
+
+            <div className="py-4 ">
+              <Search placeholder="search..." type="photo" />
+            </div>
           </DialogHeader>
-          <ScrollArea className=" h-[55vh]  ">
-            <ul className="flex flex-wrap  gap-1 mt-8 ">
-              {photos.map((photo) => (
-                <UploadPhotoCard key={photo.url} photo={photo} />
-              ))}
-            </ul>
-          </ScrollArea>
+
+          {searchValue && !photos.length && (
+            <div className=" h-[55vh] flex text-muted-foreground  text-sm  ">
+              <div className="flex flex-col items-center gap-2 m-auto">
+                <LucideSearch className="text-primary  size-8" />
+                <p className=" ">not found photo...</p>
+              </div>
+            </div>
+          )}
+
+          {!!photos.length && (
+            <ScrollArea className=" h-[55vh]     ">
+              <ul className="flex flex-wrap  gap-1 mt-4 ">
+                {photos.map((photo) => (
+                  <UploadPhotoCard key={photo.url} photo={photo} />
+                ))}
+              </ul>
+            </ScrollArea>
+          )}
 
           <DialogFooter className="mt-4 flex flex-row">
-            {photos.length > 2 && (
-              <div className="mr-auto flex gap-2">
-                <Button
-                  disabled={!selectedPhotos.length || isLoading}
-                  onClick={() => dispatch(unSelectAllPhoto())}
-                  size={'icon'}
-                  className="text-lg"
-                  variant={'secondary'}
-                  type="button"
-                >
-                  -
-                </Button>
-                <Button
-                  disabled={
-                    photos.length === selectedPhotos.length || isLoading
-                  }
-                  onClick={() => dispatch(selectAllPhoto())}
-                  size={'icon'}
-                  className="text-lg"
-                  variant={'secondary'}
-                  type="button"
-                >
-                  +
-                </Button>
-              </div>
-            )}
+            <div className=" mr-auto flex gap-2 items-center">
+              {photos.length > 2 && (
+                <div className="flex gap-2">
+                  <SelectedButton
+                    disabled={!selectedPhotos.length || isLoading}
+                    onClick={() => dispatch(unSelectAllPhoto())}
+                  >
+                    -
+                  </SelectedButton>
 
-            <Button
-              onClick={createPhotos}
-              disabled={!selectedPhotos.length || isLoading}
-              type="button"
-            >
-              Save
-            </Button>
+                  <SelectedButton
+                    disabled={
+                      photos.length === selectedPhotos.length || isLoading
+                    }
+                    onClick={() => dispatch(selectAllPhoto())}
+                  >
+                    +
+                  </SelectedButton>
+                </div>
+              )}
+              <p className="text-muted-foreground text-sm">
+                Selected
+                <span className="text-green-600 m-1">
+                  {selectedPhotos.length}
+                </span>
+                items
+              </p>
+            </div>
+
+            {mode === 'add' && (
+              <Button
+                onClick={createPhotos}
+                disabled={!selectedPhotos.length || isLoading}
+                type="button"
+              >
+                Save
+              </Button>
+            )}
+            {mode === 'edit' && (
+              <Button
+                onClick={onDelete}
+                disabled={
+                  !selectedPhotos.length || isLoading || isLoadingDeletePhotos
+                }
+                type="button"
+                variant={'destructive'}
+              >
+                Delete
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

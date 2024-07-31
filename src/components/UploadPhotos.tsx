@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { setPhotos } from '@/lib/redux/photoSlice';
+import { setIsShow, setMode, setPhotos } from '@/lib/redux/photoSlice';
 import { CirclePlusIcon } from 'lucide-react';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,16 +7,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { UploadPhotoModal } from './UploadPhotoModal';
 import { Button } from './ui/button';
 
-
 export type PhotoDetail = {
   id: string;
   name: string;
   size: number;
-  type: string;
-  lastModified: number;
+  type?: string;
+  lastModified?: number;
   url: string;
   isSelected: boolean;
-  file : File
+  file?: File;
+  createdAt?: Date ;
 };
 
 export const UploadPhotos = () => {
@@ -36,11 +36,14 @@ export const UploadPhotos = () => {
       lastModified: file.lastModified,
       url: URL.createObjectURL(file),
       isSelected: true,
-      file
-      
+      file,
     }));
-  
-    dispatch(setPhotos(filesArray));
+
+    if (!!filesArray.length) {
+      dispatch(setPhotos(filesArray));
+      dispatch(setIsShow(true));
+      dispatch(setMode('add'));
+    }
   };
 
   return (
@@ -60,7 +63,7 @@ export const UploadPhotos = () => {
         accept="image/*"
       />
 
-      <UploadPhotoModal  />
+      <UploadPhotoModal />
     </>
   );
 };
