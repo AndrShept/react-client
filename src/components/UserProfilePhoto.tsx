@@ -69,14 +69,9 @@ export const UserProfilePhoto = () => {
     return <UserProfilePhotosSkeleton />;
   }
 
-  // if (!isLoading && !photos?.length) {
-  //   return (
-  <p className="text-muted-foreground text-[15px]  m-auto">Photo not found</p>;
-  //   );
-  // }
 
   return (
-    <section className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4 ">
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
@@ -113,15 +108,16 @@ export const UserProfilePhoto = () => {
           )}
         </div>
       </motion.div>
-      <ul className="flex flex-wrap gap-1 w-full  ">
-        {!isLoading && !photos?.length && (
+      {!isLoading && !photos?.length && (
           <p className="text-muted-foreground text-[15px]  m-auto">
             Photo not found
           </p>
         )}
+      <ul className="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
+
         <AnimatePresence initial={false}>
-          {photos?.map((photo, idx) => (
-            <li key={photo.id} className="flex-1 flex flex-col">
+          {photos?.map((photo) => (
+            <li key={photo.id} className=" flex flex-col">
               <motion.article
                 // initial={{ opacity: 0, scale: 0.5 }}
                 // animate={{ opacity: 1, scale: 1 }}
@@ -131,7 +127,7 @@ export const UserProfilePhoto = () => {
                 //   delay: 0.1 * idx,
                 //   ease: 'anticipate',
                 // }}
-                className="flex-1 flex flex-col max-w-[200px] relative group    "
+                className=" flex flex-col max-w-[200px] relative group    "
               >
                 <div className="relative max-w-[200px] min-w-[150px] overflow-hidden cursor-pointer  aspect-square ">
                   <img
@@ -139,7 +135,7 @@ export const UserProfilePhoto = () => {
                     className="object-cover  size-full   "
                     src={`${BASE_URL}${photo.url}`}
                   />
-                  {/* <div className="size-full bg-secondary"></div> */}
+          
                 </div>
 
                 <div className="absolute flex items-center justify-center inset-0 bg-black/70 opacity-0 hover:opacity-100 transition-all  border">
@@ -151,7 +147,7 @@ export const UserProfilePhoto = () => {
                     type="photo"
                     icon="heart"
                     color="red"
-                    username={username}
+                    username={params.username}
                   />
                 </div>
               </motion.article>

@@ -3,6 +3,7 @@ import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { compactNumberFormatter, dateFnsLessTime } from '@/lib/utils';
 import { BookmarkIcon, EditIcon, EyeIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { UserAvatar } from './UserAvatar';
 import { UsersLikeList } from './UsersLikeList';
@@ -19,9 +20,14 @@ interface PostCardProps {
 export const PostCard = ({ post }: PostCardProps) => {
   const { userId } = useAuth();
   const isAuthor = userId === post.authorId;
-
+  const navigate = useNavigate();
   return (
-    <article className="flex flex-col max-w-[600px]  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition ">
+    <article
+      onClick={() =>
+        navigate(`?postId=${post.id}`, { state: { post: post, mode: 'post' } })
+      }
+      className="flex flex-col max-w-[600px] cursor-pointer  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition "
+    >
       <section className="flex justify-between px-6 pt-5 pb-1 ">
         <div className="flex items-center gap-2 ">
           <UserAvatar

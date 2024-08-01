@@ -3,7 +3,8 @@ import { BASE_URL } from '@/lib/constants';
 import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { Post } from '@/lib/types';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { UserAvatar } from './UserAvatar';
 import { CommentsCard } from './comment/CommentsCard';
@@ -16,24 +17,26 @@ import { Input } from './ui/input';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
 
-interface PostModalProps {
-  children: ReactNode;
-  post: Post;
-}
+export const PostModal = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
 
-export const PostModal = ({ children, post }: PostModalProps) => {
+  const { post, mode }: { post: Post; mode: 'post' } = state;
   const { data: comments, isLoading } = useGetCommentsQuery(post.id);
 
   return (
-    <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+    <Dialog
+      open={mode === 'post'}
+      onOpenChange={() => navigate('', { state: null })}
+    >
+      {/* <DialogTrigger>{children}</DialogTrigger> */}
       <DialogContent className="h-[95%] max-w-[95%] flex ">
         <section className="size-full  relative sm:block hidden ">
           {post.imageUrl && (
             <div className="size-full ">
               <img
                 className="object-contain size-full"
-                src={`${BASE_URL}${post.imageUrl}`}
+                src={`${BASE_URL}${post?.imageUrl ?? ''}`}
               />
             </div>
           )}
@@ -76,6 +79,7 @@ export const PostModal = ({ children, post }: PostModalProps) => {
                 {!isLoading &&
                   comments?.map((comment) => (
                     <CommentsCard
+                      key={comment.id}
                       cardSize="full"
                       textSize="sm"
                       avatarClassname="size-9"

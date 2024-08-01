@@ -63,6 +63,7 @@ export const LikeIcon = ({
         await refetchComments(postId).unwrap();
       }
       if (type === 'photo' && username) {
+        console.log(username)
         await refetchPhotosByUsername({username,page}).unwrap();
       }
     } catch (error) {

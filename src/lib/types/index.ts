@@ -197,5 +197,10 @@ export type ErrorMessage = {
   };
 };
 
+export interface LocationState {
+  post: Post;
+  mode: 'post';
+}
+
 export type LikeType = 'post' | 'comment' | 'photo';
 export type SearchType = 'conversations' | 'users' | 'photo' | undefined;
