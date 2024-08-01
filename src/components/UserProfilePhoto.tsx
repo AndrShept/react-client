@@ -69,13 +69,11 @@ export const UserProfilePhoto = () => {
     return <UserProfilePhotosSkeleton />;
   }
 
-  if (!isLoading && !photos?.length) {
-    return (
-      <p className="text-muted-foreground text-[15px]  m-auto">
-        Photo not found
-      </p>
-    );
-  }
+  // if (!isLoading && !photos?.length) {
+  //   return (
+  <p className="text-muted-foreground text-[15px]  m-auto">Photo not found</p>;
+  //   );
+  // }
 
   return (
     <section className="flex flex-col gap-4">
@@ -115,7 +113,12 @@ export const UserProfilePhoto = () => {
           )}
         </div>
       </motion.div>
-      <ul className="flex flex-wrap gap-1    ">
+      <ul className="flex flex-wrap gap-1 w-full  ">
+        {!isLoading && !photos?.length && (
+          <p className="text-muted-foreground text-[15px]  m-auto">
+            Photo not found
+          </p>
+        )}
         <AnimatePresence initial={false}>
           {photos?.map((photo, idx) => (
             <li key={photo.id} className="flex-1 flex flex-col">

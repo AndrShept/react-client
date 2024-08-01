@@ -77,26 +77,26 @@ export const ReplyForm = ({
               <FormControl>
                 <section className="flex ">
                   <div className="h-[57px] w-[30px]  border-l border-b ml-7 rounded-bl-md" />
-                  {/* <div className="w-[41px]  border mt-4 " /> */}
+
                   <div className="flex flex-col flex-1">
                     <div className="flex items-center border rounded-t-lg mt-4 ">
                       <Button
-                        className="text-blue-500 font-semibold text-base"
+                        className=" font-semibold text-sm text-indigo-500"
                         onClick={() => navigate(`/users/${authorUsername}`)}
                         variant={'link'}
                         type="button"
                       >
                         {authorUsername}
                       </Button>
-                      <p className="break-all line-clamp-1 text-sm text-muted-foreground/80">
+                      <p className="break-all line-clamp-1 text-sm text-emerald-600">
                         {commentContent.content}
                       </p>
                     </div>
                     <div className="flex items-center  gap-x-1">
                       <Input
                         disabled={isLoading}
-                        className="  min-w-[200px] bg-secondary focus-visible:ring-0 border-0 rounded-t-none focus-visible:ring-offset-0"
-                        placeholder="message..."
+                        className="  min-w-[200px] bg-secondary/20 focus-visible:ring-0  rounded-t-none focus-visible:ring-offset-0 border-x border-b border-t-0"
+                        placeholder='message...'
                         {...field}
                       />
 
