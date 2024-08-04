@@ -11,8 +11,8 @@ import { toast } from 'sonner';
 import { Button } from '../ui/button';
 
 interface FavoritePostIconProps {
-  postId: string;
-  isFavoritePost: boolean;
+  postId: string ;
+  isFavoritePost: boolean ;
 }
 
 export const FavoritePostIcon = ({

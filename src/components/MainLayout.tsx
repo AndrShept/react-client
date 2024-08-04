@@ -15,14 +15,16 @@ import { Sidebar } from './Sidebar';
 import { UsersBar } from './UsersBar';
 import { HomePage } from './pages/HomePage';
 import { useSocket } from './providers/SocketProvider';
+import { PostModal } from './PostModal';
 
 function App() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { socket } = useSocket();
   const dispatch = useAppDispatch();
+
   const { userId } = useAuth();
 
   useEffect(() => {
@@ -63,7 +65,7 @@ function App() {
         {!isMobile && <Sidebar />}
         <div
           className={cn('flex-1 flex flex-col mt-[56px]    ', {
-            'max-w-[900px] md:p-4 p-2 mx-auto  ':
+            'max-w-[900px] md:p-4 p-2    ':
               !pathname.includes('/conversations'),
           })}
         >
@@ -74,6 +76,7 @@ function App() {
           <UsersBar />
         </aside>
       </div>
+      {state && <PostModal />}
     </section>
   );
 }

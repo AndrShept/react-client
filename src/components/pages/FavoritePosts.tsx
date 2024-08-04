@@ -11,15 +11,17 @@ export const FavoritePostsPage = () => {
   }
 
   return (
-    <>
-      {!isLoading && favoritePosts?.length === 0 && (
+    <section className="size-full flex">
+      {!isLoading && !favoritePosts?.length && (
         <p className="text-muted-foreground text-sm m-auto ">
           Favorite posts not found
         </p>
       )}
-      <ul className="mx-auto space-y-10">
-        {favoritePosts?.map((post) => <PostCard key={post.id} post={post} />)}
-      </ul>
-    </>
+      {!!favoritePosts?.length && (
+        <ul className="mx-auto space-y-10">
+          {favoritePosts?.map((post) => <PostCard key={post.id} post={post} />)}
+        </ul>
+      )}
+    </section>
   );
 };

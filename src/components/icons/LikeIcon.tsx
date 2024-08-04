@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/hooks/store';
 import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useAddLikeMutation } from '@/lib/services/likeApi';
 import { useLazyGetPhotosByUsernameQuery } from '@/lib/services/photoApi';
@@ -12,7 +13,6 @@ import { HeartIcon, ThumbsUpIcon, icons } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';
-import { useAppSelector } from '@/hooks/store';
 
 interface LikeIconProps {
   id: string;
@@ -45,7 +45,9 @@ export const LikeIcon = ({
   const [refetchComments] = useLazyGetCommentsQuery();
   const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
   const [refetchPhotosByUsername] = useLazyGetPhotosByUsernameQuery();
-  const page = useAppSelector(state=> state.photo.page)
+  const page = useAppSelector((state) => state.photo.page);
+
+
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -56,15 +58,14 @@ export const LikeIcon = ({
       await addLike({ id, type }).unwrap();
       if (type === 'post') {
         await refetchPosts().unwrap();
-        await refetchPostsById(id).unwrap();
+        await refetchPostsById(id).unwrap()
         await refetchFavoritePosts().unwrap();
       }
       if (type === 'comment' && postId) {
         await refetchComments(postId).unwrap();
       }
       if (type === 'photo' && username) {
-        console.log(username)
-        await refetchPhotosByUsername({username,page}).unwrap();
+        await refetchPhotosByUsername({ username, page }).unwrap();
       }
     } catch (error) {
       toast.error('Something went wrong');
@@ -79,7 +80,8 @@ export const LikeIcon = ({
           'size-9 rounded-full focus:scale-110 transition-all ',
           classname,
           {
-            'bg-gradient-to-t from-red-800 via-red-500 to-red-400 hover:from-red-800/60 hover:via-red-500/60 hover:to-red-400/60  ': color === 'red' && likedByUser,
+            'bg-gradient-to-t from-red-800 via-red-500 to-red-400 hover:from-red-800/60 hover:via-red-500/60 hover:to-red-400/60  ':
+              color === 'red' && likedByUser,
             ' hover:bg-red-500/70': color === 'red' && !likedByUser,
           },
         )}

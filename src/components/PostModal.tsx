@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { BASE_URL } from '@/lib/constants';
 import { useGetCommentsQuery } from '@/lib/services/commentApi';
+import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { Post } from '@/lib/types';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { UserAvatar } from './UserAvatar';
@@ -13,26 +13,29 @@ import { FavoritePostIcon } from './icons/FavoritePostIcon';
 import { LikeIcon } from './icons/LikeIcon';
 import { PostCommentsSkeleton } from './skeletons/PostCommentsSkeleton';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
 
 export const PostModal = () => {
   const navigate = useNavigate();
-  const { state } = useLocation();
+  const { state, pathname } = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const postId = searchParams.get('postId') as string;
+  const { mode }: { mode: 'post' } = state;
+  const { data: comments, isLoading } = useGetCommentsQuery(postId);
+  const { data: post, isLoading: isLoadingPost } = useGetPostByIdQuery(postId);
 
-  const { post, mode }: { post: Post; mode: 'post' } = state;
-  const { data: comments, isLoading } = useGetCommentsQuery(post.id);
-
+  console.log(post);
+  // if (isLoadingPost) return 'LOADING';
   return (
     <Dialog
       open={mode === 'post'}
-      onOpenChange={() => navigate('', { state: null })}
+      onOpenChange={() => navigate(pathname, { state: null })}
     >
       {/* <DialogTrigger>{children}</DialogTrigger> */}
-      <DialogContent className="h-[95%] max-w-[95%] flex ">
+      <DialogContent className="h-[95%] max-w-[95%] flex  ">
         <section className="size-full  relative sm:block hidden ">
-          {post.imageUrl && (
+          {post?.imageUrl && !isLoadingPost && (
             <div className="size-full ">
               <img
                 className="object-contain size-full"
@@ -40,8 +43,14 @@ export const PostModal = () => {
               />
             </div>
           )}
+          {isLoadingPost && (
+            <div className="  flex flex-col gap-2 text-muted-foreground items-center h-full justify-center">
+              <ImageOffIcon className="size-10" />
+              <p>LOADING...</p>
+            </div>
+          )}
 
-          {!post.imageUrl && (
+          {!post?.imageUrl && (
             <div className="  flex flex-col gap-2 text-muted-foreground items-center h-full justify-center">
               <ImageOffIcon className="size-10" />
               <p>this post does not have a picture</p>
@@ -55,24 +64,23 @@ export const PostModal = () => {
         >
           <div className="flex gap-2">
             <UserAvatar
-              className="size-8"
-              avatarUrl={post.author.avatarUrl}
-              isOnline={post.author.isOnline}
-              username={post.author.username}
+              className="size-8 "
+              avatarUrl={post?.author.avatarUrl}
+              isOnline={post?.author.isOnline!}
+              username={post?.author.username}
             />
             <p className="text-muted-foreground text-sm line-clamp-3">
-              {post.content}
+              {post?.content}
             </p>
           </div>
           <Separator />
-          {!comments?.length && (
+          {!comments?.length && !isLoading ? (
             <div className="flex-1 flex">
               <p className="text-muted-foreground text-sm m-auto   ">
                 Comment not found
               </p>
             </div>
-          )}
-          {!!comments?.length && (
+          ) : (
             <ScrollArea className="pr-3 flex-1 ">
               <ul className="flex flex-col   gap-4 ">
                 {isLoading && <PostCommentsSkeleton />}
@@ -89,26 +97,27 @@ export const PostModal = () => {
               </ul>
             </ScrollArea>
           )}
+
           <Separator />
           <div className="flex justify-between">
             <div className="flex gap-1">
               <LikeIcon
                 type="post"
-                id={post.id}
-                likeCount={post.likes.length}
-                likedByUser={post.likedByUser}
+                id={post?.id ?? ''}
+                likeCount={post?.likes.length ?? 0}
+                likedByUser={post?.likedByUser ?? false}
               />
               <Button className="rounded-full" variant={'ghost'} size={'icon'}>
                 <MessageCircle />
               </Button>
             </div>
             <FavoritePostIcon
-              postId={post.id}
-              isFavoritePost={post.isFavoritePost}
+              postId={post?.id ?? ''}
+              isFavoritePost={post?.isFavoritePost ?? false}
             />
           </div>
           <div>
-            <PostCommentsForm postId={post.id} />
+            <PostCommentsForm postId={post?.id ?? ''} />
           </div>
         </section>
       </DialogContent>

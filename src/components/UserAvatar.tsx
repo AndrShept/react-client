@@ -27,6 +27,7 @@ export const UserAvatar = ({
     <>
       {link && (
         <Button
+          onClick={(e) => e.stopPropagation()}
           variant={'ghost'}
           size={'icon'}
           className="rounded-full relative"

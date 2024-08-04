@@ -11,6 +11,7 @@ export const userApi = api.injectEndpoints({
     >({
       query: (photoData) => ({
         url: `/users-photo/${photoData.username}?page=${photoData.page}&search=${photoData.search}`,
+
       }),
     }),
     addPhotos: builder.mutation<{ count: number }, FormData>({

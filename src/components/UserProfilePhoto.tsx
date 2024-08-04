@@ -10,7 +10,7 @@ import {
 } from '@/lib/redux/photoSlice';
 import { useGetPhotosByUsernameQuery } from '@/lib/services/photoApi';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 
@@ -29,19 +29,27 @@ export const UserProfilePhoto = () => {
   const dispatch = useAppDispatch();
 
   const page = useAppSelector((state) => state.photo.page);
+
   const searchValue = useAppSelector(
     (state) => state.search.searchData.searchPhotos,
   );
-  const { ref, inView } = useInView({
-    threshold: 0,
-    triggerOnce: true,
-  });
-  const { isLoading, data: photos } = useGetPhotosByUsernameQuery({
+  // const { ref, inView } = useInView({
+  //   threshold: 0.1,
+
+
+  //   // delay: 1000,
+  // });
+  const {
+    isLoading,
+    data: photos,
+    isFetching,
+  } = useGetPhotosByUsernameQuery({
     username: params.username,
     page,
     search: searchValue ? searchValue : undefined,
   });
 
+  const refOld = useRef<null | number | undefined>(null);
   const onEdit = () => {
     if (!photos) return;
     const changedPhotos = photos?.map((photo) => ({
@@ -56,19 +64,10 @@ export const UserProfilePhoto = () => {
     dispatch(setPhotos(changedPhotos));
     dispatch(setMode('edit'));
   };
-  useEffect(() => {
-    if (inView) {
-      dispatch(incrementPage());
-    }
-    return () => {
-      dispatch(defaultPage());
-    };
-  }, [inView]);
 
   if (isLoading) {
     return <UserProfilePhotosSkeleton />;
   }
-
 
   return (
     <section className="flex flex-col gap-4 ">
@@ -109,12 +108,11 @@ export const UserProfilePhoto = () => {
         </div>
       </motion.div>
       {!isLoading && !photos?.length && (
-          <p className="text-muted-foreground text-[15px]  m-auto">
-            Photo not found
-          </p>
-        )}
+        <p className="text-muted-foreground text-[15px]  m-auto">
+          Photo not found
+        </p>
+      )}
       <ul className="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
-
         <AnimatePresence initial={false}>
           {photos?.map((photo) => (
             <li key={photo.id} className=" flex flex-col">
@@ -135,7 +133,6 @@ export const UserProfilePhoto = () => {
                     className="object-cover  size-full   "
                     src={`${BASE_URL}${photo.url}`}
                   />
-          
                 </div>
 
                 <div className="absolute flex items-center justify-center inset-0 bg-black/70 opacity-0 hover:opacity-100 transition-all  border">
@@ -158,7 +155,20 @@ export const UserProfilePhoto = () => {
           ))}
         </AnimatePresence>
       </ul>
-      <div className="bg-primary text-muted-foreground opacity-0" ref={ref} />
+      {isFetching && (
+        <div className=" text-center ">
+          {' '}
+          LOADING...
+        </div>
+      )}
+      <div
+        onClick={() => dispatch(incrementPage())}
+        className="bg-primary text-muted-foreground h-10 "
+        // ref={ref}
+      >
+        {' '}
+        sadas
+      </div>
     </section>
   );
 };

@@ -16,9 +16,12 @@ export const PostCommentsIcon = ({
   const { pathname } = useLocation();
   const navigate = useNavigate();
   return (
-    <section className='flex items-center'>
+    <section className="flex items-center">
       <Button
-        onClick={() => navigate(`/posts/${postId}`)}
+        onClick={(e) => {
+          e.stopPropagation();
+          navigate(`/posts/${postId}`);
+        }}
         className="size-10 rounded-full"
         variant={pathname !== `/posts/${postId}` ? 'ghost' : 'secondary'}
         size={'icon'}
