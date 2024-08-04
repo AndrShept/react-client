@@ -2,7 +2,6 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { BASE_URL } from '@/lib/constants';
 import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
-import { Post } from '@/lib/types';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -19,17 +18,16 @@ import { Separator } from './ui/separator';
 export const PostModal = () => {
   const navigate = useNavigate();
   const { state, pathname } = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const postId = searchParams.get('postId') as string;
-  const { mode }: { mode: 'post' } = state;
-  const { data: comments, isLoading } = useGetCommentsQuery(postId);
-  const { data: post, isLoading: isLoadingPost } = useGetPostByIdQuery(postId);
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get('id') as string;
+  const { mode }: { mode: 'open' } = state;
 
-  console.log(post);
-  // if (isLoadingPost) return 'LOADING';
+  const { data: comments, isLoading } = useGetCommentsQuery(id);
+  const { data: post, isLoading: isLoadingPost } = useGetPostByIdQuery(id);
+
   return (
     <Dialog
-      open={mode === 'post'}
+      open={mode === 'open'}
       onOpenChange={() => navigate(pathname, { state: null })}
     >
       {/* <DialogTrigger>{children}</DialogTrigger> */}

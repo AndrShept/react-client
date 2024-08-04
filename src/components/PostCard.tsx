@@ -24,7 +24,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <article
       onClick={() =>
-        navigate(`?postId=${post.id}`, { state: { post: post, mode: 'post' } })
+        navigate(`?id=${post.id}`, { state: {  mode: 'open' } })
       }
       className="flex flex-col max-w-[600px] md:min-w-[400px] min-w-[300px] cursor-pointer  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition "
     >

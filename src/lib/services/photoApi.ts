@@ -10,8 +10,12 @@ export const userApi = api.injectEndpoints({
       { username: string; page: number; search?: string }
     >({
       query: (photoData) => ({
-        url: `/users-photo/${photoData.username}?page=${photoData.page}&search=${photoData.search}`,
-
+        url: `/users-photos/${photoData.username}?page=${photoData.page}&search=${photoData.search}`,
+      }),
+    }),
+    getPhotoById: builder.query<Photo, string>({
+      query: (photoId) => ({
+        url: `/users-photo/${photoId}`,
       }),
     }),
     addPhotos: builder.mutation<{ count: number }, FormData>({
@@ -36,6 +40,8 @@ export const {
   useGetPhotosByUsernameQuery,
   useLazyGetPhotosByUsernameQuery,
   useDeletePhotosMutation,
+  useGetPhotoByIdQuery,
+  useLazyGetPhotoByIdQuery,
 } = userApi;
 
 export const {} = userApi.endpoints;

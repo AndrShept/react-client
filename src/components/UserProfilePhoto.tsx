@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useParams } from 'react-router-dom';
 
+import { PhotoCard } from './PhotoCard';
 import { Search } from './Search';
 import { LikeIcon } from './icons/LikeIcon';
 import { UserProfilePhotosSkeleton } from './skeletons/UserProfilePhotosSkeleton';
@@ -35,7 +36,6 @@ export const UserProfilePhoto = () => {
   );
   // const { ref, inView } = useInView({
   //   threshold: 0.1,
-
 
   //   // delay: 1000,
   // });
@@ -116,38 +116,7 @@ export const UserProfilePhoto = () => {
         <AnimatePresence initial={false}>
           {photos?.map((photo) => (
             <li key={photo.id} className=" flex flex-col">
-              <motion.article
-                // initial={{ opacity: 0, scale: 0.5 }}
-                // animate={{ opacity: 1, scale: 1 }}
-                // exit={{ opacity: 0, scale: 0.5 }}
-                // transition={{
-                //   duration: 0.5,
-                //   delay: 0.1 * idx,
-                //   ease: 'anticipate',
-                // }}
-                className=" flex flex-col max-w-[200px] relative group    "
-              >
-                <div className="relative max-w-[200px] min-w-[150px] overflow-hidden cursor-pointer  aspect-square ">
-                  <img
-                    loading="lazy"
-                    className="object-cover  size-full   "
-                    src={`${BASE_URL}${photo.url}`}
-                  />
-                </div>
-
-                <div className="absolute flex items-center justify-center inset-0 bg-black/70 opacity-0 hover:opacity-100 transition-all  border">
-                  <LikeIcon
-                    likedByUser={photo.likedByUser}
-                    id={photo.id}
-                    photoId={photo.id}
-                    likeCount={photo._count.likes}
-                    type="photo"
-                    icon="heart"
-                    color="red"
-                    username={params.username}
-                  />
-                </div>
-              </motion.article>
+              <PhotoCard photo={photo} username={params.username} />
               {isShowName && (
                 <p className="break-all line-clamp-1 text-sm">{photo.name}</p>
               )}
@@ -155,12 +124,7 @@ export const UserProfilePhoto = () => {
           ))}
         </AnimatePresence>
       </ul>
-      {isFetching && (
-        <div className=" text-center ">
-          {' '}
-          LOADING...
-        </div>
-      )}
+      {isFetching && <div className=" text-center "> LOADING...</div>}
       <div
         onClick={() => dispatch(incrementPage())}
         className="bg-primary text-muted-foreground h-10 "
