@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setIsShow, setMode, setPhotos } from '@/lib/redux/photoSlice';
 import { CirclePlusIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UploadPhotoModal } from './UploadPhotoModal';
@@ -16,11 +16,12 @@ export type PhotoDetail = {
   url: string;
   isSelected: boolean;
   file?: File;
-  createdAt?: Date ;
+  createdAt?: Date;
 };
 
 export const UploadPhotos = () => {
   const dispatch = useAppDispatch();
+  const photos = useAppSelector((state) => state.photo.photos);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -45,6 +46,11 @@ export const UploadPhotos = () => {
       dispatch(setMode('add'));
     }
   };
+  useEffect(() => {
+    return () => {
+      photos.forEach((photo) => URL.revokeObjectURL(photo.url));
+    };
+  }, [photos]);
 
   return (
     <>

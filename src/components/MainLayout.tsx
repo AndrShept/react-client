@@ -64,7 +64,7 @@ function App() {
       <div className=" flex-1 flex">
         {!isMobile && <Sidebar />}
         <div
-          className={cn('flex-1 flex flex-col mt-[56px]    ', {
+          className={cn('flex-1 flex flex-col mt-[56px] mx-auto    ', {
             'max-w-[900px] md:p-4 p-2    ':
               !pathname.includes('/conversations'),
           })}

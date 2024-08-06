@@ -4,6 +4,7 @@ import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { UserAvatar } from './UserAvatar';
 import { CommentsCard } from './comment/CommentsCard';
@@ -14,6 +15,7 @@ import { PostCommentsSkeleton } from './skeletons/PostCommentsSkeleton';
 import { Button } from './ui/button';
 import { ScrollArea } from './ui/scroll-area';
 import { Separator } from './ui/separator';
+import { useEffect } from 'react';
 
 export const PostModal = () => {
   const navigate = useNavigate();
@@ -22,8 +24,10 @@ export const PostModal = () => {
   const id = searchParams.get('id') as string;
   const { mode }: { mode: 'open' } = state;
 
-  const { data: comments, isLoading } = useGetCommentsQuery(id);
+  const { data: comments, isLoading, isError } = useGetCommentsQuery(id);
   const { data: post, isLoading: isLoadingPost } = useGetPostByIdQuery(id);
+  console.log(isError);
+
 
   return (
     <Dialog
