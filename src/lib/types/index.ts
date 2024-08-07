@@ -203,4 +203,9 @@ export interface LocationState {
 }
 
 export type LikeType = 'post' | 'comment' | 'photo';
-export type SearchType = 'conversations' | 'users' | 'photo' | undefined;
+export type SearchType =
+  | 'conversations'
+  | 'users'
+  | 'photo'
+  | 'photoModal'
+  | undefined;

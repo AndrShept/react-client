@@ -4,6 +4,7 @@ interface ISearchData {
   searchUser?: string;
   searchConversation?: string;
   searchPhotos?: string;
+  searchPhotosModal?: string;
 }
 
 interface InitialState {
@@ -16,6 +17,7 @@ const initialState: InitialState = {
     searchUser: '',
     searchConversation: '',
     searchPhotos: '',
+    searchPhotosModal: '',
   },
 };
 

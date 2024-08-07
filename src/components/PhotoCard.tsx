@@ -24,7 +24,7 @@ export const PhotoCard = ({ photo, username }: PhotoCardProps) => {
       //   ease: 'anticipate',
       // }}
       onClick={() =>
-        navigate(`?id=${photo.id}`, { state: { mode: 'open' } })
+        navigate(`?id=${photo.id}`, { state: { mode: 'photo' } })
       }
       className=" flex flex-col max-w-[200px] relative group    "
     >

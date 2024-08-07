@@ -11,11 +11,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { Navbar } from './Header';
+import { PhotoModal } from './PhotoModal';
+import { PostModal } from './PostModal';
 import { Sidebar } from './Sidebar';
 import { UsersBar } from './UsersBar';
 import { HomePage } from './pages/HomePage';
 import { useSocket } from './providers/SocketProvider';
-import { PostModal } from './PostModal';
 
 function App() {
   const isAuthenticated = useAppSelector((state) => state.user.isAuthenticated);
@@ -76,7 +77,8 @@ function App() {
           <UsersBar />
         </aside>
       </div>
-      {state && <PostModal />}
+      {state?.mode === 'post' && <PostModal />}
+      {state?.mode === 'photo' && <PhotoModal />}
     </section>
   );
 }

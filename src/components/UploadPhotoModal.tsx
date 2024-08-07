@@ -21,7 +21,7 @@ import {
   useLazyGetPhotosByUsernameQuery,
 } from '@/lib/services/photoApi';
 import { LucideSearch } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import { Search } from './Search';
@@ -30,18 +30,25 @@ import { PhotoDetail } from './UploadPhotos';
 import { SelectedButton } from './ui/custom-button/SelectedButton';
 import { ScrollArea } from './ui/scroll-area';
 
-export const UploadPhotoModal = () => {
+interface UploadPhotoModalProps {
+  files: File[];
+  setFiles: (arr: File[]) => void;
+}
+export const UploadPhotoModal = ({
+  files,
+  setFiles,
+}: UploadPhotoModalProps) => {
   const { username } = useAuth();
   const [addPhotos, { isLoading }] = useAddPhotosMutation();
-  const [refetchPhotos] =
-    useLazyGetPhotosByUsernameQuery();
+  const [formData, setFormData] = useState(new FormData());
+  const [refetchPhotos] = useLazyGetPhotosByUsernameQuery();
   const [deletePhotos, { isLoading: isLoadingDeletePhotos }] =
     useDeletePhotosMutation();
   const dispatch = useAppDispatch();
   const mode = useAppSelector((state) => state.photo.mode);
   const isShow = useAppSelector((state) => state.photo.isShow);
   const searchValue = useAppSelector(
-    (state) => state.search.searchData.searchPhotos,
+    (state) => state.search.searchData.searchPhotosModal,
   );
   const page = useAppSelector((state) => state.photo.page);
   const photos = useAppSelector((state) =>
@@ -54,18 +61,25 @@ export const UploadPhotoModal = () => {
   const selectedPhotos = useMemo<PhotoDetail[]>(() => {
     return photos.filter((photo) => photo.isSelected);
   }, [photos]);
-
   const createPhotos = async () => {
-    const formData = new FormData();
-    selectedPhotos.forEach((item) => formData.append('files', item.file!!));
+    selectedPhotos.forEach((item) => {
+      files.forEach((file) => {
+        if (item.name === file.name) {
+          formData.append('files', file);
+        }
+      });
+    });
+
     try {
       const res = await addPhotos(formData).unwrap();
+      setFiles([]);
+      setFormData(new FormData());
       if (res.count >= 1) {
         dispatch(setIsShow(false));
         toast.success(
           `${res.count === 1 ? 'Photo success added' : `Photos success added ${res.count} count `}`,
         );
-        await refetchPhotos({ username: username as string, page }).unwrap()
+        await refetchPhotos({ username: username as string, page }).unwrap();
       }
     } catch (error) {
       console.log(error);
@@ -81,15 +95,12 @@ export const UploadPhotoModal = () => {
         );
         dispatch(setIsShow(false));
         await refetchPhotos({ username: username as string, page }).unwrap();
-
       }
     } catch (error) {
       toast.error('Something went wrong');
     }
   };
-  useEffect(() => {
-;
-  }, []);
+
   return (
     <div>
       <Dialog open={isShow} onOpenChange={() => dispatch(setIsShow(false))}>
@@ -105,7 +116,7 @@ export const UploadPhotoModal = () => {
             </DialogDescription>
 
             <div className="py-4 ">
-              <Search placeholder="search..." type="photo" />
+              <Search placeholder="search..." type="photoModal" />
             </div>
           </DialogHeader>
 
