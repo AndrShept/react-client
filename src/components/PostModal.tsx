@@ -26,7 +26,6 @@ export const PostModal = () => {
 
   const { data: comments, isLoading, isError } = useGetCommentsQuery(id);
   const { data: post, isLoading: isLoadingPost } = useGetPostByIdQuery(id);
-  console.log(isError);
 
   return (
     <Dialog

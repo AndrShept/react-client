@@ -48,8 +48,8 @@ export const UserProfilePhoto = () => {
     page,
     search: searchValue ? searchValue : undefined,
   });
+console.log(photos)
 
-  const refOld = useRef<null | number | undefined>(null);
   const onEdit = () => {
     if (!photos) return;
     const changedPhotos = photos?.map((photo) => ({

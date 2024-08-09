@@ -1,7 +1,10 @@
 import { useAppSelector } from '@/hooks/store';
 import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useAddLikeMutation } from '@/lib/services/likeApi';
-import { useLazyGetPhotosByUsernameQuery } from '@/lib/services/photoApi';
+import {
+  useLazyGetPhotoByIdQuery,
+  useLazyGetPhotosByUsernameQuery,
+} from '@/lib/services/photoApi';
 import {
   useLazyGetAllPostsQuery,
   useLazyGetFavoritePostsQuery,
@@ -36,6 +39,7 @@ export const LikeIcon = ({
   photoId,
   classname,
   username,
+
   icon = 'hand',
   color = 'default',
 }: LikeIconProps) => {
@@ -45,9 +49,8 @@ export const LikeIcon = ({
   const [refetchComments] = useLazyGetCommentsQuery();
   const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
   const [refetchPhotosByUsername] = useLazyGetPhotosByUsernameQuery();
+  const [refetchPhotoById] = useLazyGetPhotoByIdQuery();
   const page = useAppSelector((state) => state.photo.page);
-
-
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -58,7 +61,7 @@ export const LikeIcon = ({
       await addLike({ id, type }).unwrap();
       if (type === 'post') {
         await refetchPosts().unwrap();
-        await refetchPostsById(id).unwrap()
+        await refetchPostsById(id).unwrap();
         await refetchFavoritePosts().unwrap();
       }
       if (type === 'comment' && postId) {
@@ -66,6 +69,9 @@ export const LikeIcon = ({
       }
       if (type === 'photo' && username) {
         await refetchPhotosByUsername({ username, page }).unwrap();
+      }
+      if (type === 'photo' && id) {
+        await refetchPhotoById(id).unwrap();
       }
     } catch (error) {
       toast.error('Something went wrong');

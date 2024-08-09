@@ -25,9 +25,9 @@ export const PhotoModal = () => {
   const id = searchParams.get('id') as string;
   const { mode }: { mode: 'photo' } = state;
 
-  const { data: comments, isLoading, isError } = useGetCommentsQuery(id);
+  const { data: comments, isLoading } = useGetCommentsQuery(id);
   const { data: photo, isLoading: isLoadingPhoto } = useGetPhotoByIdQuery(id);
-  console.log(isError);
+console.log(photo)
 
   return (
     <Dialog
@@ -104,7 +104,9 @@ export const PhotoModal = () => {
           <div className="flex justify-between">
             <div className="flex gap-1">
               <LikeIcon
-                type="post"
+                type="photo"
+                icon='heart'
+                color='red'
                 id={photo?.id ?? ''}
                 likeCount={photo?.likes.length ?? 0}
                 likedByUser={photo?.likedByUser ?? false}
