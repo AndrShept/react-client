@@ -56,7 +56,7 @@ export const ReplyForm = ({
     try {
       await addReply({
         commentId,
-        postId: id,
+         id,
         ...values,
       }).unwrap();
       await refetchComments(id);

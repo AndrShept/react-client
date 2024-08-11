@@ -15,7 +15,6 @@ import {
 } from '@/lib/services/commentApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Navigation2 } from 'lucide-react';
-
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -27,15 +26,18 @@ const formSchema = z.object({
 });
 
 interface PostCommentsFormProps {
-  postId: string;
+  postId?: string;
+  photoId?: string;
 }
 
-export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
+export const PostCommentsForm = ({
+  postId,
+  photoId,
+}: PostCommentsFormProps) => {
   const [addComment, { isLoading }] = useAddCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
 
   const form = useForm<z.infer<typeof formSchema>>({
-  
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: '',
@@ -43,11 +45,15 @@ export const PostCommentsForm = ({ postId }: PostCommentsFormProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    console.log(postId)
     try {
-      await addComment({ ...values, postId }).unwrap();
-      refetchComments(postId).unwrap();
+      if (postId) {
+        await addComment({ ...values, postId }).unwrap();
+        await refetchComments(postId ).unwrap();
+      }
+      if (photoId) {
+        await addComment({ ...values, photoId }).unwrap();
+        await refetchComments(photoId).unwrap();
+      }
       toast.success('Add new comment');
       form.reset();
       form.setFocus('content');

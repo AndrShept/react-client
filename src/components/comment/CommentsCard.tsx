@@ -1,12 +1,14 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Comment } from '@/lib/types';
 import { cn, dateFnsLessTime } from '@/lib/utils';
+import { ChevronDownIcon } from 'lucide-react';
 import { useState } from 'react';
 
 import { UserAvatar } from '../UserAvatar';
 import { EditForm } from '../forms/EditForm';
 import { ReplyForm } from '../forms/ReplyForm';
 import { LikeIcon } from '../icons/LikeIcon';
+import { Button } from '../ui/button';
 import { CommentDeleteIcon } from './CommentDeleteIcon';
 import { CommentEditIcon } from './CommentEditIcon';
 import { CommentReplyButton } from './CommentReplyButton';
@@ -29,6 +31,7 @@ export const CommentsCard = ({
   const { userId } = useAuth();
   const [isEdit, setIsEdit] = useState(false);
   const [isReply, setIsReply] = useState(false);
+  const [isShowReplies, setIsShowReplies] = useState(false);
   const [commentContent, setCommentContent] = useState({
     content: comment.content,
     username: comment.author.username,
@@ -87,7 +90,7 @@ export const CommentsCard = ({
             <EditForm
               content={`${commentContent.username} ${comment.content}`}
               commentId={comment.id}
-              id={comment.postId ?? comment.parentId ?? ''}
+              id={comment.postId ?? comment.parentId ?? comment.photoId ?? ''}
               setIsEdit={setIsEdit}
             />
           </div>
@@ -100,6 +103,7 @@ export const CommentsCard = ({
               likedByUser={isCommentLikeExist}
               type="comment"
               postId={comment.postId ?? comment.parentId}
+              photoId={comment.photoId}
               classname="scale-75 focus:scale-80"
             />
             {!isReply && (
@@ -119,7 +123,7 @@ export const CommentsCard = ({
             <div className="flex items-center text-muted-foreground gap-x-[2px] ">
               <CommentEditIcon setIsEdit={setIsEdit} />
               <CommentDeleteIcon
-                id={comment.postId ?? comment.parentId ?? ''}
+                id={comment.postId ?? comment.parentId ?? comment.photoId ?? ''}
                 commentId={comment.id}
               />
             </div>
@@ -129,7 +133,7 @@ export const CommentsCard = ({
       {isReply && (
         <ReplyForm
           commentId={comment.id}
-          id={comment.postId ?? comment.parentId ?? ''}
+          id={comment.postId ?? comment.parentId ?? comment.photoId ?? ''}
           authorUsername={comment.author.username}
           commentContent={commentContent}
           setIsReply={() => setIsReply(false)}
@@ -137,8 +141,21 @@ export const CommentsCard = ({
       )}
 
       {!!comment.replys?.length && (
+        <Button
+          onClick={() => setIsShowReplies((prev) => !prev)}
+          variant={'ghost'}
+          className="rounded-full flex items-center gap-1 "
+        >
+          <ChevronDownIcon
+            className={`${isShowReplies ? 'rotate-180 ' : 'rotate-0 '} transition-transform `}
+          />{' '}
+          {comment.replys.length} replies
+        </Button>
+      )}
+
+      {!!comment.replys?.length && isShowReplies && (
         <ul className="flex pl-6  ">
-          <div className="w-7 border-b h-20 border-l rounded-bl-md "/>
+          <div className="w-7 border-b h-20 border-l rounded-bl-md " />
           <div className="mt-4 flex flex-col gap-2 ">
             {comment.replys.map((reply) => (
               <CommentsCard

@@ -183,6 +183,8 @@ export type Comment = {
   authorId: string;
   post?: Post;
   postId?: string;
+  photo?: Photo;
+  photoId?: string;
   replyId?: string;
   reply?: Comment;
   parentId?: string;

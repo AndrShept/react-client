@@ -12,7 +12,7 @@ import {
 } from '@/lib/services/postApi';
 import { LikeType } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { HeartIcon, ThumbsUpIcon, icons } from 'lucide-react';
+import { HeartIcon, ThumbsUpIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '../ui/button';
@@ -67,11 +67,14 @@ export const LikeIcon = ({
       if (type === 'comment' && postId) {
         await refetchComments(postId).unwrap();
       }
+      if (type === 'comment' && photoId) {
+        await refetchComments(photoId).unwrap();
+      }
       if (type === 'photo' && username) {
         await refetchPhotosByUsername({ username, page }).unwrap();
       }
-      if (type === 'photo' && id) {
-        await refetchPhotoById(id).unwrap();
+      if (type === 'photo' && photoId) {
+        await refetchPhotoById(photoId).unwrap();
       }
     } catch (error) {
       toast.error('Something went wrong');

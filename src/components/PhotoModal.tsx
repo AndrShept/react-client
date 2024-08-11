@@ -104,10 +104,11 @@ console.log(photo)
           <div className="flex justify-between">
             <div className="flex gap-1">
               <LikeIcon
+              id= {photo?.id ?? ''}
                 type="photo"
                 icon='heart'
                 color='red'
-                id={photo?.id ?? ''}
+                photoId={photo?.id}
                 likeCount={photo?.likes.length ?? 0}
                 likedByUser={photo?.likedByUser ?? false}
               />
@@ -121,7 +122,7 @@ console.log(photo)
             /> */}
           </div>
           <div>
-            <PostCommentsForm postId={photo?.id ?? ''} />
+            <PostCommentsForm photoId={photo?.id} />
           </div>
         </section>
       </DialogContent>

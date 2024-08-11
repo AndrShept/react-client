@@ -1,7 +1,13 @@
 import { BASE_URL } from '@/lib/constants';
 import { Photo } from '@/lib/types';
+import { compactNumberFormatter } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { HeartIcon, MessageCircle, MessageCircleIcon } from 'lucide-react';
+import {
+  EyeIcon,
+  HeartIcon,
+  MessageCircle,
+  MessageCircleIcon,
+} from 'lucide-react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,15 +57,24 @@ export const PhotoCard = ({ photo, username }: PhotoCardProps) => {
           />
         </div>
       </motion.article>
-      <section className="flex gap-2 text-muted-foreground mt-1 items-center">
+      <section className="flex gap-2 text-muted-foreground mt-1 items-center ">
         <div className="flex items-center gap-[3px]">
           <HeartIcon className="size-4 " />
-          <p className=" text-muted-foreground text-xs">{photo._count.likes}</p>
+          <p className=" text-muted-foreground text-xs">
+            {compactNumberFormatter(photo._count.likes)}
+          </p>
         </div>
         <div className="flex items-center gap-[3px]">
           <MessageCircleIcon className="size-4 " />
           <p className=" text-muted-foreground text-xs">
-            {photo._count.comments}
+            {compactNumberFormatter(photo._count.comments)}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-[3px]">
+          <EyeIcon className="size-4 " />
+          <p className=" text-muted-foreground text-xs">
+            {compactNumberFormatter(photo._count.view)}
           </p>
         </div>
       </section>

@@ -5,7 +5,7 @@ export const replyApi = api.injectEndpoints({
   endpoints: (builder) => ({
     addReply: builder.mutation<
       Reply,
-      { commentId: string; content: string; postId: string }
+      { commentId: string; content: string; id: string }
     >({
       query: (replyData) => ({
         url: '/reply',

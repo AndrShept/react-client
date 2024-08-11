@@ -38,7 +38,7 @@ export const EmojiButton = ({
           )}
           size={'icon'}
         >
-          <img src={`../public/smile.png`} alt="smile-image" />
+          <img src={`/smile.png`} alt="smile-image" />
         </Button>
       </PopoverTrigger>
       <PopoverContent

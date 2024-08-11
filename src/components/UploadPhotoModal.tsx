@@ -175,7 +175,7 @@ export const UploadPhotoModal = ({
                 disabled={!selectedPhotos.length || isLoading}
                 type="button"
               >
-                Save
+                {isLoading ? `Saving...` : `Save`}
               </Button>
             )}
             {mode === 'edit' && (
