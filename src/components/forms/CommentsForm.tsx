@@ -25,15 +25,12 @@ const formSchema = z.object({
   content: z.string().min(5).max(170),
 });
 
-interface PostCommentsFormProps {
+interface CommentsFormProps {
   postId?: string;
   photoId?: string;
 }
 
-export const PostCommentsForm = ({
-  postId,
-  photoId,
-}: PostCommentsFormProps) => {
+export const CommentsForm = ({ postId, photoId }: CommentsFormProps) => {
   const [addComment, { isLoading }] = useAddCommentMutation();
   const [refetchComments] = useLazyGetCommentsQuery();
 
@@ -48,7 +45,7 @@ export const PostCommentsForm = ({
     try {
       if (postId) {
         await addComment({ ...values, postId }).unwrap();
-        await refetchComments(postId ).unwrap();
+        await refetchComments(postId).unwrap();
       }
       if (photoId) {
         await addComment({ ...values, photoId }).unwrap();

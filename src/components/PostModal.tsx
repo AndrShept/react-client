@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 
 import { UserAvatar } from './UserAvatar';
 import { CommentsCard } from './comment/CommentsCard';
-import { PostCommentsForm } from './forms/PostCommentsForm';
+import { CommentsForm } from './forms/CommentsForm';
 import { FavoritePostIcon } from './icons/FavoritePostIcon';
 import { LikeIcon } from './icons/LikeIcon';
 import { PostCommentsSkeleton } from './skeletons/PostCommentsSkeleton';
@@ -117,7 +117,7 @@ export const PostModal = () => {
             />
           </div>
           <div>
-            <PostCommentsForm postId={post?.id ?? ''} />
+            <CommentsForm postId={post?.id ?? ''} />
           </div>
         </section>
       </DialogContent>

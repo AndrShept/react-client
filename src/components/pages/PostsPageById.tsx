@@ -5,9 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { CommentsCard } from '../comment/CommentsCard';
 import { PostCard } from '../PostCard';
-import { PostCommentsForm } from '../forms/PostCommentsForm';
 import { PostCommentsSkeleton } from '../skeletons/PostCommentsSkeleton';
 import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
+import { CommentsForm } from '../forms/CommentsForm';
 
 export const PostsPageById = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export const PostsPageById = () => {
         <PostCard post={post} />
       </div>
 
-      <PostCommentsForm postId={post.id} />
+      <CommentsForm postId={post.id} />
 
       <ul className="flex flex-col gap-4 mt-3  ">
         {!comments?.length && (

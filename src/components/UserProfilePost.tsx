@@ -14,11 +14,15 @@ export const UserProfilePost = () => {
   }
 
   return (
-    <ul className=" flex flex-col h-full gap-10 items-center">
+    <>
       {!isLoading && !posts?.length && (
         <p className="text-sm text-muted-foreground m-auto">Post not found</p>
       )}
-      {posts?.map((post) => <PostCard key={post.id} post={post} />)}
-    </ul>
+      {!!posts?.length && !isLoading && (
+        <ul className=" mx-auto  space-y-10 ">
+          {posts?.map((post) => <PostCard key={post.id} post={post} />)}
+        </ul>
+      )}
+    </>
   );
 };

@@ -143,7 +143,7 @@ export const CommentsCard = ({
       {!!comment.replys?.length && (
         <Button
           onClick={() => setIsShowReplies((prev) => !prev)}
-          variant={'ghost'}
+          variant={'link'}
           className="rounded-full flex items-center gap-1 "
         >
           <ChevronDownIcon

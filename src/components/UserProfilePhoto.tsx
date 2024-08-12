@@ -48,7 +48,6 @@ export const UserProfilePhoto = () => {
     page,
     search: searchValue ? searchValue : undefined,
   });
-console.log(photos)
 
   const onEdit = () => {
     if (!photos) return;
@@ -65,12 +64,8 @@ console.log(photos)
     dispatch(setMode('edit'));
   };
 
-  if (isLoading) {
-    return <UserProfilePhotosSkeleton />;
-  }
-
   return (
-    <section className="flex flex-col gap-4 ">
+    <section className="mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
@@ -114,14 +109,18 @@ console.log(photos)
       )}
       <ul className="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
         <AnimatePresence initial={false}>
-          {photos?.map((photo) => (
-            <li key={photo.id} className=" flex flex-col">
-              <PhotoCard photo={photo} username={params.username} />
-              {isShowName && (
-                <p className="break-all line-clamp-1 text-sm">{photo.name}</p>
-              )}
-            </li>
-          ))}
+          {!isLoading ? (
+            photos?.map((photo) => (
+              <li key={photo.id} className=" flex flex-col">
+                <PhotoCard photo={photo} username={params.username} />
+                {isShowName && (
+                  <p className="break-all line-clamp-1 text-sm">{photo.name}</p>
+                )}
+              </li>
+            ))
+          ) : (
+            <UserProfilePhotosSkeleton />
+          )}
         </AnimatePresence>
       </ul>
       {isFetching && <div className=" text-center "> LOADING...</div>}

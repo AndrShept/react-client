@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/lib/constants';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -15,7 +16,7 @@ export const useFileUpload = () => {
 
     try {
       setIsLoading(true);
-      const res = await fetch('http://localhost:3000/api/upload', {
+      const res = await fetch(`${BASE_URL}/api/upload`, {
         method: 'POST', 
         body: formData,
       });
