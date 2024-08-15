@@ -60,7 +60,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       {post.imageUrl && (
         <img
           className="aspect-video object-cover object-center border-t   "
-          src={`${BASE_URL}${post.imageUrl}`}
+          src={post.imageUrl}
           alt="post_image"
         />
       )}

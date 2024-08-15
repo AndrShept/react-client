@@ -23,6 +23,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 
 export const UserProfilePhoto = () => {
+
   const params = useParams() as { username: string };
   const { username } = useAuth();
   const [isShowName, setIsShowName] = useState(false);

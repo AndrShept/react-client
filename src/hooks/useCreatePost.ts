@@ -4,12 +4,12 @@ import {
 } from '@/lib/services/postApi';
 import { dateNowFns } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { useFileUpload } from './useFileUpload';
+import { useS3FileUpload } from './useS3UploadFile';
 
 export const postFormSchema = z.object({
   content: z.string().min(5),
@@ -17,9 +17,8 @@ export const postFormSchema = z.object({
 });
 
 export const useCreatePost = () => {
-  const { errorMessage, handleUpload, imageUrl, setImageUrl } =
-  useFileUpload();
-
+  const { fileState, handleUpload, setFileState, errorMessage } =
+    useS3FileUpload();
   const [addPost, { isLoading }] = useAddPostMutation();
   const [refetch] = useLazyGetAllPostsQuery();
   const form = useForm<z.infer<typeof postFormSchema>>({
@@ -30,18 +29,21 @@ export const useCreatePost = () => {
     },
   });
   useEffect(() => {
-    form.setValue('imageUrl', imageUrl);
-  }, [imageUrl]);
+    form.setValue('imageUrl', fileState?.url ?? '');
+  }, [fileState]);
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
+    const formData = new FormData();
+    formData.append('content', values.content);
+    formData.append('file', fileState?.file ?? '');
     try {
-      await addPost(values).unwrap();
+      await addPost(formData).unwrap();
 
       toast.success('Post created!', {
         description: dateNowFns(),
       });
       refetch();
       form.reset({ content: '', imageUrl: '' });
-      setImageUrl('');
+      setFileState(null);
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
@@ -54,7 +56,7 @@ export const useCreatePost = () => {
     isLoading,
     errorMessage,
     handleUpload,
-    imageUrl,
-    setImageUrl,
+    fileState,
+    setFileState,
   };
 };

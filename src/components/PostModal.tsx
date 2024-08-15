@@ -1,11 +1,9 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { BASE_URL } from '@/lib/constants';
 import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { ImageOffIcon, MessageCircle } from 'lucide-react';
 import { useEffect } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import { UserAvatar } from './UserAvatar';
 import { CommentsCard } from './comment/CommentsCard';
@@ -39,7 +37,7 @@ export const PostModal = () => {
             <div className="size-full ">
               <img
                 className="object-contain size-full"
-                src={`${BASE_URL}${post?.imageUrl ?? ''}`}
+                src={post?.imageUrl}
               />
             </div>
           )}

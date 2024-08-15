@@ -30,11 +30,13 @@ export const PostForm = () => {
     form,
     handleUpload,
     onSubmit,
-    imageUrl,
     isLoading,
-    setImageUrl,
     errorMessage,
+    fileState,
+    setFileState,
   } = useCreatePost();
+
+  const imageUrl = fileState?.url;
 
   return (
     <Form {...form}>
@@ -85,11 +87,11 @@ export const PostForm = () => {
         {imageUrl && (
           <div className="relative">
             <img
-              src={`${BASE_URL}${imageUrl}`}
+              src={imageUrl}
               className="h-full w-full aspect-video object-cover"
             />
             <Button
-              onClick={() => setImageUrl('')}
+              onClick={() => setFileState(null)}
               variant={'secondary'}
               size={'icon'}
               className="absolute top-2 right-2 rounded-full"
