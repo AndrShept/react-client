@@ -13,8 +13,8 @@ export const useS3FileUpload = () => {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    if (file.size > 3 * 1024 * 1024) {
-      setErrorMessage('File  cannot be larger than 3mb');
+    if (file.size > 10 * 1024 * 1024) {
+      setErrorMessage('File  cannot be larger than 10mb');
       setTimeout(() => setErrorMessage(''), 5000);
       return;
     }

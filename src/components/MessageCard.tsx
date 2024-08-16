@@ -1,6 +1,5 @@
 import { useAppDispatch } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { BASE_URL } from '@/lib/constants';
 import { decrementNotReadCount } from '@/lib/redux/conversationSlice';
 import { useIsReadOnceMessageMutation } from '@/lib/services/messageApi';
 import { Message } from '@/lib/types';
@@ -12,8 +11,8 @@ import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { UserAvatar } from './UserAvatar';
-import { EditMessageForm } from './forms/EditMessageForm';
 import { CommentEditIcon } from './comment/CommentEditIcon';
+import { EditMessageForm } from './forms/EditMessageForm';
 import { MessageDeleteIcon } from './icons/MessageDeleteIcon';
 import { useSocket } from './providers/SocketProvider';
 
@@ -25,7 +24,6 @@ export const MessageCard = ({ message }: MessageCardProps) => {
   const { ref, inView } = useInView({
     threshold: 0.7,
     triggerOnce: true,
-
   });
   const { userId } = useAuth();
   const { sendMessage } = useSocket();
@@ -100,15 +98,11 @@ export const MessageCard = ({ message }: MessageCardProps) => {
         )}
         {message.imageUrl && (
           <div className="mb-2 max-w-md">
-            <Link
-              target="_blank"
-              className=""
-              to={`${BASE_URL}${message.imageUrl}`}
-            >
+            <Link target="_blank" className="" to={message.imageUrl}>
               <img
                 loading="lazy"
                 className="rounded-lg border"
-                src={`${BASE_URL}${message.imageUrl}`}
+                src={message.imageUrl}
                 alt="imageUrl"
               />
             </Link>

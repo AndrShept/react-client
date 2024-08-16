@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { BASE_URL } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 
@@ -36,7 +35,7 @@ export const UserAvatar = ({
             <Avatar className={cn('', className)}>
               <AvatarImage
                 className="object-cover"
-                src={`${BASE_URL}${avatarUrl}`}
+                src={avatarUrl}
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -49,7 +48,7 @@ export const UserAvatar = ({
           <Avatar className={cn('', className)}>
             <AvatarImage
               className="object-cover"
-              src={`${BASE_URL}${avatarUrl}`}
+              src={avatarUrl}
             />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>

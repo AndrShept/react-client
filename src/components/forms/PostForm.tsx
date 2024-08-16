@@ -11,7 +11,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreatePost } from '@/hooks/useCreatePost';
-import { BASE_URL } from '@/lib/constants';
 import { ImageIcon, X } from 'lucide-react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';

@@ -1,10 +1,9 @@
-import { useAuth } from '@/hooks/useAuth';
-import { useFileUpload } from '@/hooks/useFileUpload';
 import { useSocket } from '@/components/providers/SocketProvider';
-import { useLazyGetAllConversationQuery } from '@/lib/services/conversationApi';
+import { useAuth } from '@/hooks/useAuth';
+import { useS3FileUpload } from '@/hooks/useS3UploadFile';
 import { useAddMessageMutation } from '@/lib/services/messageApi';
 import { convertToMb } from '@/lib/utils';
-import { Loader2, Navigation2Icon, PaperclipIcon, X } from 'lucide-react';
+import { Navigation2Icon, PaperclipIcon, X } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -20,33 +19,30 @@ interface MessageInputProps {
 export const MessageInput = ({ conversationId }: MessageInputProps) => {
   const { userId } = useAuth();
   const [createMessage, { isLoading }] = useAddMessageMutation();
-  // const [refetchAllConversations] = useLazyGetAllConversationQuery();
   const [content, setContent] = useState('');
-  const { sendMessage, } = useSocket();
-  const {
-    errorMessage,
-    handleUpload,
-    imageUrl,
-    setImageUrl,
-    fileInfo,
-    setFileInfo,
-    isLoading: isLoadingFile,
-  } = useFileUpload();
+  const { sendMessage } = useSocket();
+  const { errorMessage, fileState, handleUpload, setFileState } =
+    useS3FileUpload();
+  const imageUrl = fileState?.url;
 
   const onCreate = async () => {
     if (!conversationId) {
       console.log('SEND MESSAGE ERROR CONVERSATION ID NOT FOUND');
       toast.error('Something went wrong conversationId');
     }
+    const messageData = {
+      conversationId,
+      content,
+      authorId: userId!,
+    };
+    const formData = new FormData();
+    if (fileState?.file) {
+      formData.append('file', fileState?.file);
+    }
+    formData.append('messageData', JSON.stringify(messageData));
     try {
       if (content.trimStart() || imageUrl) {
-        const res = await createMessage({
-          conversationId,
-          content,
-          authorId: userId!,
-          imageUrl,
-        }).unwrap();
-        // await refetchAllConversations().unwrap();
+        const res = await createMessage(formData).unwrap();
         setContent('');
         sendMessage(res);
         onClear();
@@ -57,18 +53,19 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
     }
   };
   const onClear = () => {
-    setImageUrl('');
-    setFileInfo({ name: '', size: 0 });
+    setFileState(null);
   };
   return (
     <>
-      {fileInfo && imageUrl && !isLoadingFile && (
+      {fileState && imageUrl && (
         <div className="flex border items-center p-2 rounded-md text-sm gap-2  break-all">
           <PaperclipIcon className="shrink-0 size-5" />
           <p className="text-rose-500 whitespace-nowrap">
-            {convertToMb(fileInfo.size)}
+            {convertToMb(fileState.size)}
           </p>
-          <p className="line-clamp-1 text-muted-foreground">{fileInfo.name} </p>
+          <p className="line-clamp-1 text-muted-foreground">
+            {fileState.name}{' '}
+          </p>
           <Button
             onClick={onClear}
             className="ml-auto size-7"
@@ -79,14 +76,10 @@ export const MessageInput = ({ conversationId }: MessageInputProps) => {
           </Button>
         </div>
       )}
-      {isLoadingFile && (
-        <div className="w-full flex items-center justify-center">
-          <Loader2 className="animate-spin" />
-        </div>
-      )}
+
       {errorMessage && <p className="text-rose-500 text-sm">{errorMessage}</p>}
       <div className="flex ">
-        <AddFileInput isLoading={isLoadingFile} handleUpload={handleUpload} />
+        <AddFileInput isLoading={isLoading} handleUpload={handleUpload} />
         <form className="flex relative items-center w-full">
           <Input
             placeholder="Message..."

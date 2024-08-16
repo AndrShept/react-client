@@ -14,7 +14,7 @@ interface EmojiPickerProps {
   isLoading: boolean;
   sideOffset?: number;
   alignOffset?: number;
-  align: 'end' | 'start' | 'center';
+  align?: 'end' | 'start' | 'center';
   classname?: string;
 }
 

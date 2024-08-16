@@ -1,25 +1,21 @@
+import { useSocket } from '@/components/providers/SocketProvider';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useAuth } from '@/hooks/useAuth';
-import { useSocket } from '@/components/providers/SocketProvider';
-import { BASE_URL } from '@/lib/constants';
 import { logout } from '@/lib/redux/userSlice';
-import { LogOutIcon, UserCog2Icon } from 'lucide-react';
-import React from 'react';
+import { LogOutIcon } from 'lucide-react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { ActionTooltip } from './ActionTooltip';
 import { UserAvatar } from './UserAvatar';
 import { Button } from './ui/button';
 
 export const ProfileAvatar = () => {
-  const { socket,isConnected } = useSocket();
-  console.log(socket)
-  console.log(isConnected)
+  const { socket, isConnected } = useSocket();
   const { userData } = useAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();

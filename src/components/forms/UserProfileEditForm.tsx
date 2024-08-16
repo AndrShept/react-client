@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useFileUpload } from '@/hooks/useFileUpload';
+import { useS3FileUpload } from '@/hooks/useS3UploadFile';
 import { BASE_URL } from '@/lib/constants';
 import {
   useLazyGetUserByIdQuery,
@@ -50,12 +51,12 @@ interface UserProfileFormProps {
 
 export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
   const ref = useRef<HTMLButtonElement | null>(null);
-  console.log(user);
   const navigate = useNavigate();
   const [updateUser, { isLoading }] = useUpdateUserMutation();
   const [refetchUser] = useLazyGetUserByUsernameQuery();
-  const { errorMessage, handleUpload, imageUrl, setImageUrl } =
-  useFileUpload();
+  const { errorMessage, fileState, handleUpload, setFileState } =
+    useS3FileUpload();
+  const imageUrl = fileState?.url;
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -84,11 +85,18 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
   }, [user, imageUrl, errorMessage]);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const isUsername = values.username === user.username;
-
+    console.log(values);
+    console.log(fileState?.file);
+    const newValues = isUsername ? { ...values, username: undefined } : values;
+    const formData = new FormData();
+    if (fileState?.file) {
+      formData.append('file', fileState?.file);
+    }
+    formData.append('profileData', JSON.stringify(newValues));
     try {
       const updatedUser = await updateUser({
         id: user.id,
-        userData: isUsername ? { ...values, username: undefined } : values,
+        formData,
       }).unwrap();
       await refetchUser(updatedUser.username as string).unwrap();
 
@@ -120,18 +128,14 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
                       <div className=" h-[150px] w-[150px]">
                         <img
                           className="object-cover  rounded-full  size-full"
-                          src={
-                            imageUrl
-                              ? `${BASE_URL}${imageUrl}`
-                              : `${BASE_URL}${field.value}`
-                          }
+                          src={imageUrl ? `${imageUrl}` : `${field.value}`}
                           alt="avatar_img"
                         />
                       </div>
 
                       {imageUrl && (
                         <Button
-                          onClick={() => setImageUrl('')}
+                          onClick={() => setFileState(null)}
                           className="rounded-full absolute right-0 top-2 size-7"
                           variant={'destructive'}
                           size={'icon'}

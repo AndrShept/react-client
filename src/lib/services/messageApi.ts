@@ -3,11 +3,11 @@ import { api } from './api';
 
 export const messageApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    addMessage: builder.mutation<Message, Partial<Message>>({
-      query: (messageData) => ({
+    addMessage: builder.mutation<Message, FormData>({
+      query: (formData) => ({
         url: '/messages',
         method: 'POST',
-        body: messageData,
+        body: formData,
       }),
     }),
     editMessage: builder.mutation<

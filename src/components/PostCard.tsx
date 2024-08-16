@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/useAuth';
-import { BASE_URL } from '@/lib/constants';
 import { Post } from '@/lib/types';
 import { compactNumberFormatter, dateFnsLessTime } from '@/lib/utils';
 import { BookmarkIcon, EditIcon, EyeIcon } from 'lucide-react';
@@ -23,9 +22,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   const navigate = useNavigate();
   return (
     <article
-      onClick={() =>
-        navigate(`?id=${post.id}`, { state: {  mode: 'post' } })
-      }
+      onClick={() => navigate(`?id=${post.id}`, { state: { mode: 'post' } })}
       className="flex flex-col max-w-[600px] md:min-w-[400px] min-w-[300px] cursor-pointer  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition "
     >
       <section className="flex justify-between px-6 pt-5 pb-1 ">
@@ -59,6 +56,7 @@ export const PostCard = ({ post }: PostCardProps) => {
 
       {post.imageUrl && (
         <img
+          draggable={false}
           className="aspect-video object-cover object-center border-t   "
           src={post.imageUrl}
           alt="post_image"
