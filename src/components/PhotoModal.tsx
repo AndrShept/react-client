@@ -27,7 +27,6 @@ export const PhotoModal = () => {
 
   const { data: comments, isLoading } = useGetCommentsQuery(id);
   const { data: photo, isLoading: isLoadingPhoto } = useGetPhotoByIdQuery(id);
-console.log(photo)
 
   return (
     <Dialog
@@ -41,7 +40,7 @@ console.log(photo)
             <div className="size-full ">
               <img
                 className="object-contain size-full"
-                src={`${BASE_URL}${photo?.url ?? ''}`}
+                src={photo?.url ?? ''}
               />
             </div>
           )}
@@ -104,10 +103,10 @@ console.log(photo)
           <div className="flex justify-between">
             <div className="flex gap-1">
               <LikeIcon
-              id= {photo?.id ?? ''}
+                id={photo?.id ?? ''}
                 type="photo"
-                icon='heart'
-                color='red'
+                icon="heart"
+                color="red"
                 photoId={photo?.id}
                 likeCount={photo?.likes.length ?? 0}
                 likedByUser={photo?.likedByUser ?? false}

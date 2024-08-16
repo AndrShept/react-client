@@ -55,7 +55,7 @@ export const UserProfilePhoto = () => {
     const changedPhotos = photos?.map((photo) => ({
       id: photo.id,
       name: photo.name,
-      url: BASE_URL + photo.url,
+      url: photo.url,
       size: photo.size,
       isSelected: false,
       createdAt: photo.createdAt,
@@ -111,9 +111,9 @@ export const UserProfilePhoto = () => {
       <ul className="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
         <AnimatePresence initial={false}>
           {!isLoading ? (
-            photos?.map((photo) => (
+            photos?.map((photo, idx) => (
               <li key={photo.id} className=" flex flex-col">
-                <PhotoCard photo={photo} username={params.username} />
+                <PhotoCard photo={photo} username={params.username} idx={idx} />
                 {isShowName && (
                   <p className="break-all line-clamp-1 text-sm">{photo.name}</p>
                 )}

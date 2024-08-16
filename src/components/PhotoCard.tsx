@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/lib/constants';
+import { useAppSelector } from '@/hooks/store';
 import { Photo } from '@/lib/types';
 import { compactNumberFormatter } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -16,10 +16,12 @@ import { LikeIcon } from './icons/LikeIcon';
 interface PhotoCardProps {
   photo: Photo;
   username: string;
+  idx: number;
 }
 
-export const PhotoCard = ({ photo, username }: PhotoCardProps) => {
+export const PhotoCard = ({ photo, username, idx }: PhotoCardProps) => {
   const navigate = useNavigate();
+
   return (
     <>
       <motion.article
@@ -40,7 +42,7 @@ export const PhotoCard = ({ photo, username }: PhotoCardProps) => {
           <img
             loading="lazy"
             className="object-cover  size-full   "
-            src={`${BASE_URL}${photo.url}`}
+            src={photo.url}
           />
         </div>
 

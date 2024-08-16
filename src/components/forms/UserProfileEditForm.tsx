@@ -14,9 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { useFileUpload } from '@/hooks/useFileUpload';
 import { useS3FileUpload } from '@/hooks/useS3UploadFile';
-import { BASE_URL } from '@/lib/constants';
 import {
   useLazyGetUserByIdQuery,
   useLazyGetUserByUsernameQuery,
