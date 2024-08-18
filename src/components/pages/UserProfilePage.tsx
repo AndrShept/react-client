@@ -33,7 +33,7 @@ export const UserProfilePage = () => {
         <UserAvatar
           isOnline={user.isOnline}
           avatarUrl={user.avatarUrl}
-          link={false}
+          isLink={false}
           username={user.username}
           className="h-40 w-40 border shadow-lg shadow-primary/10"
         />

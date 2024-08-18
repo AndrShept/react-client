@@ -10,6 +10,7 @@ import {
   useLazyGetFavoritePostsQuery,
   useLazyGetPostByIdQuery,
 } from '@/lib/services/postApi';
+import { useLazyGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { LikeType } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { HeartIcon, ThumbsUpIcon } from 'lucide-react';
@@ -49,6 +50,7 @@ export const LikeIcon = ({
   const [refetchComments] = useLazyGetCommentsQuery();
   const [refetchFavoritePosts] = useLazyGetFavoritePostsQuery();
   const [refetchPhotosByUsername] = useLazyGetPhotosByUsernameQuery();
+  const [refetchUserByUsername] = useLazyGetUserByUsernameQuery();
   const [refetchPhotoById] = useLazyGetPhotoByIdQuery();
   const page = useAppSelector((state) => state.photo.page);
 
@@ -71,6 +73,10 @@ export const LikeIcon = ({
         await refetchComments(photoId).unwrap();
       }
       if (type === 'photo' && username) {
+        await refetchPhotosByUsername({ username, page }).unwrap();
+        await refetchUserByUsername(username).unwrap();
+      }
+      if (username) {
         await refetchPhotosByUsername({ username, page }).unwrap();
       }
       if (type === 'photo' && photoId) {

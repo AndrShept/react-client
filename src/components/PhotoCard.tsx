@@ -16,14 +16,14 @@ import { LikeIcon } from './icons/LikeIcon';
 interface PhotoCardProps {
   photo: Photo;
   username: string;
-  idx: number;
+  idx?: number;
 }
 
 export const PhotoCard = ({ photo, username, idx }: PhotoCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <article>
       <motion.article
         // initial={{ opacity: 0, scale: 0.5 }}
         // animate={{ opacity: 1, scale: 1 }}
@@ -80,6 +80,6 @@ export const PhotoCard = ({ photo, username, idx }: PhotoCardProps) => {
           </p>
         </div>
       </section>
-    </>
+    </article>
   );
 };

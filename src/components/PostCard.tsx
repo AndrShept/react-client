@@ -31,6 +31,7 @@ export const PostCard = ({ post }: PostCardProps) => {
             isOnline={post.author.isOnline}
             avatarUrl={post.author.avatarUrl}
             username={post.author.username}
+            isHover={true}
           />
           <div>
             <p>{post.author.username}</p>

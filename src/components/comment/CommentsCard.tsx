@@ -59,6 +59,7 @@ export const CommentsCard = ({
             isOnline={comment.author.isOnline}
             avatarUrl={comment.author.avatarUrl}
             username={comment.author.username}
+            isHover={true}
           />
           <div className="flex flex-col">
             <p

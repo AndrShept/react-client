@@ -12,6 +12,7 @@ export type User = {
   isOnline: boolean;
   isFollowing: boolean;
   posts: Post[];
+  photos : Photo[]
   following: Follows[];
   followers: Follows[];
   likes: Like[];

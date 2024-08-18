@@ -25,11 +25,11 @@ export const UsersBarList = ({ user }: UsersBarList) => {
       >
         <div className="flex items-center ">
           <UserAvatar
-            badge={true}
+            isBadge={true}
             isOnline={user.isOnline}
             username={user.username}
             avatarUrl={user.avatarUrl}
-            link={false}
+            isLink={false}
           />
           <p className="ml-2 text-wrap  break-all line-clamp-1">
             {user.username}

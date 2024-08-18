@@ -69,6 +69,7 @@ export const PhotoModal = () => {
               avatarUrl={photo?.user?.avatarUrl}
               isOnline={photo?.user?.isOnline!}
               username={photo?.user?.username}
+           
             />
             <p className="text-muted-foreground text-sm line-clamp-3">
               {photo?.name}

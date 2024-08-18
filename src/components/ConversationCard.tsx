@@ -37,11 +37,11 @@ export const ConversationCard = ({
         <div className="flex items-center gap-2">
           <UserAvatar
             className="size-9"
-            link={false}
+            isLink={false}
             avatarUrl={conversationPartner.avatarUrl}
             username={conversationPartner.username}
             isOnline={conversationPartner.isOnline}
-            badge={true}
+            isBadge={true}
           />
           <div className="space-y-[1px] flex flex-col">
             <p>{conversationPartner.username}</p>
