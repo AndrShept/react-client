@@ -1,3 +1,4 @@
+import { useAuth } from '@/hooks/useAuth';
 import { User } from '@/lib/types';
 import React from 'react';
 
@@ -18,6 +19,8 @@ interface Props {
 }
 
 export const UserAvatarHoverCard = ({ user }: Props) => {
+  const { userId } = useAuth();
+  const isSelf = userId === user.id;
   return (
     <>
       <section className="flex gap-3">
@@ -77,14 +80,16 @@ export const UserAvatarHoverCard = ({ user }: Props) => {
           </p>
         </div>
 
-        <div className="flex gap-1 items-center">
-          <FollowButton
-            isFollowing={user.isFollowing}
-            username={user.username}
-            userId={user.id}
-          />
-          <ConversationButton receiverId={user.id} />
-        </div>
+        {!isSelf && (
+          <div className="flex gap-1 items-center">
+            <FollowButton
+              isFollowing={user.isFollowing}
+              username={user.username}
+              userId={user.id}
+            />
+            <ConversationButton receiverId={user.id} />
+          </div>
+        )}
       </section>
     </>
   );

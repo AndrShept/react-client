@@ -12,7 +12,7 @@ export type User = {
   isOnline: boolean;
   isFollowing: boolean;
   posts: Post[];
-  photos : Photo[]
+  photos: Photo[];
   following: Follows[];
   followers: Follows[];
   likes: Like[];
@@ -157,6 +157,7 @@ export type Post = {
   id: string;
   content: string;
   imageUrl: string;
+  videoUrl: string;
   author: User;
   authorId: string;
 

@@ -4,18 +4,15 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import { useGetPhotosByUsernameQuery } from '@/lib/services/photoApi';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ConversationButton } from './ConversationButton';
-import { FollowButton } from './FollowButton';
 import { OnlineBadge } from './OnlineBadge';
-import { PhotoCard } from './PhotoCard';
-import { Button } from './ui/button';
+import { Spinner } from './Spinner';
 import { UserAvatarHoverCard } from './UserAvatarHoverCard';
+import { Button } from './ui/button';
 
 interface UserAvatarProps {
   avatarUrl: string | undefined;
@@ -37,8 +34,9 @@ export const UserAvatar = ({
   isHover = false,
 }: UserAvatarProps) => {
   const [isHoverOpen, setIsHoverOpen] = useState(false);
-  let { data: user, isLoading } = useGetUserByUsernameQuery(username as string);
-
+  const { data: user, isLoading } = useGetUserByUsernameQuery(
+    username as string,
+  );
   return (
     <>
       <HoverCard
@@ -53,7 +51,7 @@ export const UserAvatar = ({
               onClick={(e) => e.stopPropagation()}
               variant={'ghost'}
               size={'icon'}
-              className="rounded-full relative"
+              className="rounded-full relative flex"
             >
               <Link to={`/users/${username}`}>
                 <Avatar className={cn('', className)}>
@@ -67,15 +65,23 @@ export const UserAvatar = ({
           {!isLink && (
             <div className="relative">
               <Avatar className={cn('', className)}>
-                <AvatarImage className="object-cover will-change-transform" src={avatarUrl} />
+                <AvatarImage
+                  className="object-cover will-change-transform"
+                  src={avatarUrl}
+                />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               {isBadge && <OnlineBadge isOnline={isOnline} />}
             </div>
           )}
         </HoverCardTrigger>
-        <HoverCardContent className="w-full flex flex-col gap-4 max-w-[500px]  min-h-[200px] text-[15px] text-muted-foreground cursor-default">
-          {isLoading && 'Loading...'}
+        <HoverCardContent className="w-full flex flex-col gap-4 max-w-[500px]  min-h-[200px] min-w-[300px] text-[15px] text-muted-foreground cursor-default">
+          {isLoading && (
+            <p className="m-auto space-y-4 ">
+              <Spinner />
+              <span className="">Loading...</span>
+            </p>
+          )}
           {!isLoading && user && <UserAvatarHoverCard user={user} />}
         </HoverCardContent>
       </HoverCard>

@@ -13,7 +13,7 @@ import { useS3FileUpload } from './useS3UploadFile';
 
 export const postFormSchema = z.object({
   content: z.string().min(5),
-  imageUrl: z.string(),
+  fileUrl: z.string(),
 });
 
 export const useCreatePost = () => {
@@ -25,16 +25,18 @@ export const useCreatePost = () => {
     resolver: zodResolver(postFormSchema),
     defaultValues: {
       content: '',
-      imageUrl: '',
+      fileUrl: '',
     },
   });
   useEffect(() => {
-    form.setValue('imageUrl', fileState?.url ?? '');
+    form.setValue('fileUrl', fileState?.url ?? '');
   }, [fileState]);
   async function onSubmit(values: z.infer<typeof postFormSchema>) {
     const formData = new FormData();
     formData.append('content', values.content);
-    formData.append('file', fileState?.file ?? '');
+    if (fileState?.file) {
+      formData.append('file', fileState.file);
+    }
     try {
       await addPost(formData).unwrap();
 
@@ -42,7 +44,7 @@ export const useCreatePost = () => {
         description: dateNowFns(),
       });
       refetch();
-      form.reset({ content: '', imageUrl: '' });
+      form.reset({ content: '', fileUrl: '' });
       setFileState(null);
     } catch (error) {
       console.log(error);

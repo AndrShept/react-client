@@ -35,7 +35,7 @@ export const PostForm = () => {
     setFileState,
   } = useCreatePost();
 
-  const imageUrl = fileState?.url;
+  const fileUrl = fileState?.url;
 
   return (
     <Form {...form}>
@@ -83,11 +83,30 @@ export const PostForm = () => {
             Post
           </Button>
         </div>
-        {imageUrl && (
+        {fileUrl && fileState.file.type.startsWith('image/') && (
           <div className="relative">
             <img
-              src={imageUrl}
+              src={fileUrl}
               className="h-full w-full aspect-video object-cover"
+            />
+            <Button
+              onClick={() => setFileState(null)}
+              variant={'secondary'}
+              size={'icon'}
+              className="absolute top-2 right-2 rounded-full"
+            >
+              <X />
+            </Button>
+          </div>
+        )}
+        {fileUrl && fileState.file.type.startsWith('video/') && (
+          <div className="relative">
+            <video
+              src={fileUrl}
+              className="h-full w-full aspect-video object-cover"
+              autoPlay
+              muted
+              loop
             />
             <Button
               onClick={() => setFileState(null)}
@@ -104,7 +123,7 @@ export const PostForm = () => {
         onChange={handleUpload}
         hidden
         id="image"
-        accept="image/*"
+        accept="image/png, image/jpeg, video/mp4, video/webm"
         type="file"
       />
     </Form>
