@@ -9,6 +9,8 @@ import { ConversationsSidebar } from './components/ConversationsSidebar.tsx';
 import MainLayout from './components/MainLayout.tsx';
 import { UserProfilePhoto } from './components/UserProfilePhoto.tsx';
 import { UserProfilePost } from './components/UserProfilePost.tsx';
+import { LoginForm } from './components/forms/LoginForm.tsx';
+import { ResetPasswordForm } from './components/forms/ResetPasswordForm.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
 import { FavoritePostsPage } from './components/pages/FavoritePosts.tsx';
@@ -88,6 +90,16 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+    children: [
+      {
+        path: 'reset-password',
+        element: <ResetPasswordForm />,
+      },
+      {
+        path: '',
+        element: <LoginForm />,
+      },
+    ],
   },
   {
     path: '/register',

@@ -63,7 +63,11 @@ export const PostCard = ({ post }: PostCardProps) => {
           alt="post_image"
         />
       )}
-      {post.videoUrl && <video src={post.videoUrl}  muted  controls/>}
+      {post.videoUrl && <video src={post.videoUrl}  muted  controls
+      className='aspect-square size-full'
+        preload="auto"
+
+      />}
       {!!post.likes.length && (
         <ul className=" px-6 py-2  flex border-b -space-x-3 items-center relative      min-h-[50px]  ">
           {post.likes.map((like) => <UsersLikeList like={like} />).slice(-4)}

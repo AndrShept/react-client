@@ -107,13 +107,22 @@ export function LoginForm() {
           )}
         />
         {queryError && <p className="text-rose-500 text-sm ">{queryError}</p>}
-        <Button disabled={isLoading} className="rounded-full   " type="submit">
-          Login
-        </Button>
+        <div className='flex items-center justify-between'>
+          <Button
+            disabled={isLoading}
+            className="rounded-full   "
+            type="submit"
+          >
+            Login
+          </Button>
+          <Link className='text-[13px] text-blue-400' to={'reset-password'}>Forgot your password?</Link>
+        </div>
+
         <div className="flex items-center">
           <p className="text-sm text-muted-foreground">
             Don't have an account?
           </p>
+
           <Button className="text-blue-400 p-2" asChild variant={'link'}>
             <Link to="/register">register</Link>
           </Button>

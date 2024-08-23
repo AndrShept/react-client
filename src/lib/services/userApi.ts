@@ -29,9 +29,9 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    getAllUsers: builder.query<User[],  string| undefined>({
+    getAllUsers: builder.query<User[], string | undefined>({
       query: (userName) => ({
-        url:  `/users/${userName}`,
+        url: `/users/${userName}`,
         method: 'GET',
       }),
     }),
@@ -53,15 +53,23 @@ export const userApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
-    updateUser: builder.mutation<User, { id: string; formData: FormData }>(
-      {
-        query: ({ id, formData }) => ({
-          url: `/users/${id}`,
-          method: 'PUT',
-          body: formData,
-        }),
-      },
-    ),
+    updateUser: builder.mutation<User, { id: string; formData: FormData }>({
+      query: ({ id, formData }) => ({
+        url: `/users/${id}`,
+        method: 'PUT',
+        body: formData,
+      }),
+    }),
+    resetPassword: builder.mutation<
+      { success: boolean; data: { id: string }; message: string },
+      { email: string }
+    >({
+      query: (data) => ({
+        url: `/reset-password`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
     userOnline: builder.mutation<void, void>({
       query: () => ({
         url: '/users-online',
@@ -93,6 +101,7 @@ export const {
   useUserOnlineMutation,
   useGetAllFollowingUsersQuery,
   useLazyGetAllFollowingUsersQuery,
+  useResetPasswordMutation,
 } = userApi;
 
 export const {
