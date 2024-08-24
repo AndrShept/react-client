@@ -12,6 +12,7 @@ import { UserProfileTabs } from '../UserProfileTabs';
 import { UserProfileEditForm } from '../forms/UserProfileEditForm';
 import { UserProfilePageSkeleton } from '../skeletons/UserProfilePageSkeleton';
 import { Button, buttonVariants } from '../ui/button';
+import { Separator } from '../ui/separator';
 
 export const UserProfilePage = () => {
   const { username } = useParams();
@@ -35,25 +36,24 @@ export const UserProfilePage = () => {
           avatarUrl={user.avatarUrl}
           isLink={false}
           username={user.username}
-          className="h-40 w-40 border shadow-lg shadow-primary/10"
+          className="h-40 w-40 border shadow-lg shadow-primary/10 "
         />
 
         <section
           className={cn(
             'flex flex-col justify-between text-center max-w-xs  mt-2 text-muted-foreground',
-            {
-              'mt-10': isSelf,
-            },
           )}
         >
-          <div className="flex flex-col gap-3">
-            <h1 className="md:text-2xl text-xl font-semibold text-indigo-500">
-              {user.username}
-            </h1>
+          <h1 className="md:text-2xl text-xl font-semibold text-indigo-500">
+            {user.username}
+          </h1>
+          <div className=''>
             <p className="">{user.location}</p>
+
+            <p className="">{user.bio}</p>
           </div>
 
-          <p className="md:text-xl text-base">{user.bio}</p>
+          <Separator className="my-3" />
           <div className="flex justify-between  gap-4">
             <p className="flex flex-col items-center">
               <span>Posts</span>

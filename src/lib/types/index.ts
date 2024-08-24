@@ -196,8 +196,10 @@ export type Comment = {
   replys: Comment[];
 };
 export type ErrorMessage = {
+  status: number;
   data: {
     message: string;
+    success: boolean;
   };
 };
 

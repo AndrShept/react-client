@@ -10,6 +10,7 @@ import MainLayout from './components/MainLayout.tsx';
 import { UserProfilePhoto } from './components/UserProfilePhoto.tsx';
 import { UserProfilePost } from './components/UserProfilePost.tsx';
 import { LoginForm } from './components/forms/LoginForm.tsx';
+import { NewPasswordForm } from './components/forms/NewPasswordForm.tsx';
 import { ResetPasswordForm } from './components/forms/ResetPasswordForm.tsx';
 import { ConversationsPageById } from './components/pages/ConversationsPageById.tsx';
 import ErrorPage from './components/pages/ErrorPage.tsx';
@@ -21,6 +22,7 @@ import { NotFoundPage } from './components/pages/NotFoundPage.tsx';
 import { PostsPage } from './components/pages/PostsPage.tsx';
 import { PostsPageById } from './components/pages/PostsPageById.tsx';
 import { RegisterPage } from './components/pages/RegisterPage.tsx';
+import { SuccessResetPassPage } from './components/pages/SuccessResetPassPage.tsx';
 import { UserProfilePage } from './components/pages/UserProfilePage.tsx';
 import { SocketProvider } from './components/providers/SocketProvider.tsx';
 import { ThemeProvider } from './components/providers/ThemeProvider.tsx';
@@ -92,12 +94,20 @@ const router = createBrowserRouter([
     element: <LoginPage />,
     children: [
       {
+        path: '',
+        element: <LoginForm />,
+      },
+      {
         path: 'reset-password',
         element: <ResetPasswordForm />,
       },
       {
-        path: '',
-        element: <LoginForm />,
+        path: 'new-password',
+        element: <NewPasswordForm />,
+      },
+      {
+        path: 'success-reset',
+        element: <SuccessResetPassPage />,
       },
     ],
   },

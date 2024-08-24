@@ -41,11 +41,9 @@ export const ResetPasswordForm = () => {
         toast.success(
           'Send you an email with instructions to reset your password.',
         );
-        navigate('/login');
       }
-
+      navigate('/login/success-reset', { state: values });
     } catch (error) {
-        console.log(error)
       const err = error as ErrorMessage;
       if (err.data.message) {
         setMessage(err.data.message);

@@ -70,6 +70,16 @@ export const userApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    updatePassword: builder.mutation<
+      { success: boolean; message: string },
+      { newPassword: string; token: string }
+    >({
+      query: (data) => ({
+        url: `/update-password`,
+        method: 'PUT',
+        body: data,
+      }),
+    }),
     userOnline: builder.mutation<void, void>({
       query: () => ({
         url: '/users-online',
@@ -102,6 +112,7 @@ export const {
   useGetAllFollowingUsersQuery,
   useLazyGetAllFollowingUsersQuery,
   useResetPasswordMutation,
+  useUpdatePasswordMutation,
 } = userApi;
 
 export const {
