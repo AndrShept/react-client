@@ -23,7 +23,6 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 
 export const UserProfilePhoto = () => {
-
   const params = useParams() as { username: string };
   const { username } = useAuth();
   const [isShowName, setIsShowName] = useState(false);
@@ -35,15 +34,12 @@ export const UserProfilePhoto = () => {
   const searchValue = useAppSelector(
     (state) => state.search.searchData.searchPhotos,
   );
-  // const { ref, inView } = useInView({
-  //   threshold: 0.1,
-
-  //   // delay: 1000,
-  // });
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
   const {
     isLoading,
     data: photos,
-    isFetching,
   } = useGetPhotosByUsernameQuery({
     username: params.username,
     page,
@@ -64,7 +60,15 @@ export const UserProfilePhoto = () => {
     dispatch(setPhotos(changedPhotos));
     dispatch(setMode('edit'));
   };
-
+  const refCount = useRef(photos?.length);
+  useEffect(() => {
+    if (inView && refCount.current !== photos?.length) {
+      setTimeout(() => {
+        dispatch(incrementPage());
+        refCount.current = photos?.length;
+      }, 200);
+    }
+  }, [inView]);
   return (
     <section className="mx-auto">
       <motion.div
@@ -124,15 +128,8 @@ export const UserProfilePhoto = () => {
           )}
         </AnimatePresence>
       </ul>
-      {isFetching && <div className=" text-center "> LOADING...</div>}
-      <div
-        onClick={() => dispatch(incrementPage())}
-        className="bg-primary text-muted-foreground h-10 "
-        // ref={ref}
-      >
-        {' '}
-        sadas
-      </div>
+
+      <div ref={ref}></div>
     </section>
   );
 };

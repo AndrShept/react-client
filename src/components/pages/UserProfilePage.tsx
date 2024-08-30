@@ -47,10 +47,10 @@ export const UserProfilePage = () => {
           <h1 className="md:text-2xl text-xl font-semibold text-indigo-500">
             {user.username}
           </h1>
-          <div className=''>
-            <p className="">{user.location}</p>
+          <div >
+            <p >{user.location}</p>
 
-            <p className="">{user.bio}</p>
+            <p >{user.bio}</p>
           </div>
 
           <Separator className="my-3" />

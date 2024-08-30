@@ -41,6 +41,15 @@ export const PostModal = () => {
               />
             </div>
           )}
+          {post?.videoUrl && !isLoadingPost && (
+            <div className="size-full ">
+              <video
+              controls
+                className="object-contain size-full"
+                src={post?.videoUrl}
+              />
+            </div>
+          )}
           {isLoadingPost && (
             <div className="  flex flex-col gap-2 text-muted-foreground items-center h-full justify-center">
               <ImageOffIcon className="size-10" />

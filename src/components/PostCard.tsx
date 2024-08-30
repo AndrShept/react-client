@@ -1,7 +1,9 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Post } from '@/lib/types';
 import { compactNumberFormatter, dateFnsLessTime } from '@/lib/utils';
-import { BookmarkIcon, EditIcon, EyeIcon } from 'lucide-react';
+import { EditIcon, EyeIcon } from 'lucide-react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 
 import { UserAvatar } from './UserAvatar';
@@ -18,12 +20,32 @@ interface PostCardProps {
 
 export const PostCard = ({ post }: PostCardProps) => {
   const { userId } = useAuth();
+  const ref = useRef<null | HTMLVideoElement>(null);
+  const { ref: inViewRef, inView } = useInView({
+    threshold: 0.9,
+  });
   const isAuthor = userId === post.authorId;
   const navigate = useNavigate();
+  const setRefs = useCallback(
+    (node: HTMLVideoElement) => {
+      ref.current = node;
+
+      inViewRef(node);
+    },
+    [inViewRef],
+  );
+  useEffect(() => {
+    if (inView) {
+      ref.current?.play();
+    }
+    if (!inView) {
+      ref.current?.pause();
+    }
+  }, [inView]);
   return (
     <article
       onClick={() => navigate(`?id=${post.id}`, { state: { mode: 'post' } })}
-      className="flex flex-col max-w-[600px] md:min-w-[400px] min-w-[300px] cursor-pointer  text-start gap-2 bg-secondary/50 backdrop-blur-lg  rounded-md border hover:border-primary transition "
+      className="flex flex-col max-w-[600px] md:min-w-[400px] min-w-[300px] cursor-pointer  text-start gap-2 bg-secondary/30   rounded-md border hover:border-primary transition "
     >
       <section className="flex justify-between px-6 pt-5 pb-1 ">
         <div className="flex items-center gap-2 ">
@@ -63,11 +85,15 @@ export const PostCard = ({ post }: PostCardProps) => {
           alt="post_image"
         />
       )}
-      {post.videoUrl && <video src={post.videoUrl}  muted  controls
-      className='aspect-square size-full'
-        preload="auto"
-
-      />}
+      {post.videoUrl && (
+        <video
+          ref={setRefs}
+          src={post.videoUrl}
+          muted
+          controls
+          className="aspect-square size-full"
+        />
+      )}
       {!!post.likes.length && (
         <ul className=" px-6 py-2  flex border-b -space-x-3 items-center relative      min-h-[50px]  ">
           {post.likes.map((like) => <UsersLikeList like={like} />).slice(-4)}
