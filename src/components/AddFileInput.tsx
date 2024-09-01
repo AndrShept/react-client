@@ -16,9 +16,8 @@ export const AddFileInput = ({
   handleUpload,
   isLoading,
 }: AddFileInputProps) => {
-  
   return (
-    <Popover >
+    <Popover>
       <PopoverTrigger>
         <Button
           disabled={isLoading}
@@ -26,7 +25,7 @@ export const AddFileInput = ({
           variant={'ghost'}
           size={'icon'}
         >
-          <PlusIcon className='size-6' />
+          <PlusIcon className="size-6" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-fit p-0">

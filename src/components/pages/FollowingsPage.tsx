@@ -14,9 +14,9 @@ export const FollowingsPage = () => {
   const { data: comments, isLoading: isLoadingComments } = useGetCommentsQuery(
     '66263185f8ce36fa2ab5b741',
   );
-  if(isLoadingComments){
-    return <p>LOADING</p>
+  if (isLoadingComments) {
+    return <p>LOADING</p>;
   }
-  console.log(comments)
+  console.log(comments);
   return <>saddassda</>;
 };

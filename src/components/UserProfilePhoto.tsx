@@ -37,10 +37,7 @@ export const UserProfilePhoto = () => {
   const { ref, inView } = useInView({
     threshold: 0.1,
   });
-  const {
-    isLoading,
-    data: photos,
-  } = useGetPhotosByUsernameQuery({
+  const { isLoading, data: photos } = useGetPhotosByUsernameQuery({
     username: params.username,
     page,
     search: searchValue ? searchValue : undefined,
@@ -70,65 +67,75 @@ export const UserProfilePhoto = () => {
     }
   }, [inView]);
   return (
-    <section className="mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          duration: 0.6,
-          delay: 0.3,
-          ease: [0, 0.71, 0.2, 1.01],
-        }}
-        className="bg-secondary/40 rounded-md  flex md:flex-row flex-col justify-between px-6 py-4 gap-4 items-center "
-      >
-        <Search
-          className="md:w-fit w-full"
-          placeholder="search..."
-          type="photo"
-        />
-        <div className="flex items-center gap-4">
-          <Label className="flex items-center gap-2 ">
-            <p className="text-muted-foreground"> Photo name</p>
-            <Input
-              onChange={(e) => setIsShowName(e.target.checked)}
-              className="size-4"
-              type="checkbox"
-            />
-          </Label>
-          {isSelf && (
-            <Button
-              onClick={onEdit}
-              className=""
-              size={'sm'}
-              variant={'secondary'}
-            >
-              Edit
-            </Button>
-          )}
-        </div>
-      </motion.div>
+    <section className="w-full flex flex-col">
+      {!isLoading && !!photos?.length && (
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.6,
+            delay: 0.3,
+            ease: [0, 0.71, 0.2, 1.01],
+          }}
+          className="bg-secondary/40 rounded-md  flex md:flex-row flex-col justify-between px-6 py-4 gap-4 items-center "
+        >
+          <Search
+            className="md:w-fit w-full"
+            placeholder="search..."
+            type="photo"
+          />
+          <div className="flex items-center gap-4">
+            <Label className="flex items-center gap-2 ">
+              <p className="text-muted-foreground"> Photo name</p>
+              <Input
+                onChange={(e) => setIsShowName(e.target.checked)}
+                className="size-4"
+                type="checkbox"
+              />
+            </Label>
+            {isSelf && (
+              <Button
+                onClick={onEdit}
+                className=""
+                size={'sm'}
+                variant={'secondary'}
+              >
+                Edit
+              </Button>
+            )}
+          </div>
+        </motion.div>
+      )}
+
+      {!isLoading && !!photos?.length && (
+        <ul className="grid mt-3 lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
+          <AnimatePresence initial={false}>
+            {!isLoading ? (
+              photos?.map((photo, idx) => (
+                <li key={photo.id} className=" flex flex-col ">
+                  <PhotoCard
+                    photo={photo}
+                    username={params.username}
+                    idx={idx}
+                  />
+                  {isShowName && (
+                    <p className="break-all line-clamp-1 text-sm">
+                      {photo.name}
+                    </p>
+                  )}
+                </li>
+              ))
+            ) : (
+              <UserProfilePhotosSkeleton />
+            )}
+          </AnimatePresence>
+        </ul>
+      )}
       {!isLoading && !photos?.length && (
         <p className="text-muted-foreground text-[15px]  m-auto">
           Photo not found
         </p>
       )}
-      <ul className="grid lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-1 max-w-fit mx-auto   ">
-        <AnimatePresence initial={false}>
-          {!isLoading ? (
-            photos?.map((photo, idx) => (
-              <li key={photo.id} className=" flex flex-col">
-                <PhotoCard photo={photo} username={params.username} idx={idx} />
-                {isShowName && (
-                  <p className="break-all line-clamp-1 text-sm">{photo.name}</p>
-                )}
-              </li>
-            ))
-          ) : (
-            <UserProfilePhotosSkeleton />
-          )}
-        </AnimatePresence>
-      </ul>
-
       <div ref={ref}></div>
     </section>
   );

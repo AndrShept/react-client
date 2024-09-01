@@ -7,7 +7,6 @@ interface initialState {
   conversation: Conversation | null;
   allConversations: Conversation[];
   sumNotReadMessageCount: number;
-
 }
 
 // Define the initial state using that type
@@ -15,7 +14,6 @@ const initialState: initialState = {
   conversation: null,
   allConversations: [],
   sumNotReadMessageCount: 0,
-
 };
 
 export const conversationSlice = createSlice({

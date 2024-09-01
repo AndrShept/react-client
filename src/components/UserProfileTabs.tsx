@@ -35,11 +35,12 @@ export const UserProfileTabs = () => {
             })}
             to={'posts'}
           >
-            <StickyNoteIcon className="mr-1 size-5" />
+            <StickyNoteIcon className="mr-1 size-5 " />
             Posts
           </Link>
         </div>
       </div>
+
       <div className="flex flex-1  md:p-8 p-4   ">
         <Outlet />
       </div>

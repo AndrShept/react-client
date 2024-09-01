@@ -15,10 +15,7 @@ export const notificationApi = api.injectEndpoints({
         method: 'DELETE',
       }),
     }),
-    updateNotification: builder.mutation<
-      { message: string },
-      string
-    >({
+    updateNotification: builder.mutation<{ message: string }, string>({
       query: (notificationId) => ({
         url: `/notifications/${notificationId}`,
         method: 'PUT',

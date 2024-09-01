@@ -3,11 +3,11 @@ import { useGetCommentsQuery } from '@/lib/services/commentApi';
 import { useGetPostByIdQuery } from '@/lib/services/postApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { CommentsCard } from '../comment/CommentsCard';
 import { PostCard } from '../PostCard';
+import { CommentsCard } from '../comment/CommentsCard';
+import { CommentsForm } from '../forms/CommentsForm';
 import { PostCommentsSkeleton } from '../skeletons/PostCommentsSkeleton';
 import { PostPageSkeleton } from '../skeletons/PostPageSkeleton';
-import { CommentsForm } from '../forms/CommentsForm';
 
 export const PostsPageById = () => {
   const navigate = useNavigate();
@@ -34,7 +34,7 @@ export const PostsPageById = () => {
 
   return (
     <section className="flex  flex-col gap-4 mx-auto">
-      <div className='mx-auto'>
+      <div className="mx-auto">
         <PostCard post={post} />
       </div>
 

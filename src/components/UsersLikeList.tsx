@@ -5,7 +5,6 @@ import { UserAvatar } from './UserAvatar';
 
 interface UsersLikeListProps {
   like: Like;
-
 }
 
 export const UsersLikeList = ({ like }: UsersLikeListProps) => {
@@ -16,6 +15,7 @@ export const UsersLikeList = ({ like }: UsersLikeListProps) => {
         className={cn('size-8  ring-1 ring-white ')}
         avatarUrl={like.user.avatarUrl}
         username={like.user.username}
+        isHover
       />
     </li>
   );

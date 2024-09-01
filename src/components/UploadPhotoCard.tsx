@@ -24,9 +24,12 @@ export const UploadPhotoCard = ({ photo }: UploadPhotoCardProps) => {
           key={photo.url}
           src={photo.url}
           alt="user-photo"
-          className={cn(' transition size-full object-cover  will-change-contents ', {
-            'opacity-30': !photo.isSelected,
-          })}
+          className={cn(
+            ' transition size-full object-cover  will-change-contents ',
+            {
+              'opacity-30': !photo.isSelected,
+            },
+          )}
         />
       </div>
 

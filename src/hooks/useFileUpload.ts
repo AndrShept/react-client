@@ -17,7 +17,7 @@ export const useFileUpload = () => {
     try {
       setIsLoading(true);
       const res = await fetch(`${BASE_URL}/api/upload`, {
-        method: 'POST', 
+        method: 'POST',
         body: formData,
       });
       const data = await res.json();

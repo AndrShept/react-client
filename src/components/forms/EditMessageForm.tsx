@@ -1,3 +1,4 @@
+import { useSocket } from '@/components/providers/SocketProvider';
 import {
   Form,
   FormControl,
@@ -8,7 +9,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useAppDispatch } from '@/hooks/store';
-import { useSocket } from '@/components/providers/SocketProvider';
 import { editConversationMessage } from '@/lib/redux/conversationSlice';
 import { useEditMessageMutation } from '@/lib/services/messageApi';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -77,7 +77,7 @@ export const EditMessageForm = ({
                   />
 
                   <Button
-                    disabled={isLoading || content ===form.getValues().content }
+                    disabled={isLoading || content === form.getValues().content}
                     type="submit"
                     className="size-7 ml-1"
                     variant={'ghost'}

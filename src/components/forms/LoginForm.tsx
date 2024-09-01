@@ -107,7 +107,7 @@ export function LoginForm() {
           )}
         />
         {queryError && <p className="text-rose-500 text-sm ">{queryError}</p>}
-        <div className='flex items-center justify-between'>
+        <div className="flex items-center justify-between">
           <Button
             disabled={isLoading}
             className="rounded-full   "
@@ -115,7 +115,9 @@ export function LoginForm() {
           >
             Login
           </Button>
-          <Link className='text-[13px] text-blue-400' to={'reset-password'}>Forgot your password?</Link>
+          <Link className="text-[13px] text-blue-400" to={'reset-password'}>
+            Forgot your password?
+          </Link>
         </div>
 
         <div className="flex items-center">

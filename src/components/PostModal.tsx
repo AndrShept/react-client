@@ -35,16 +35,13 @@ export const PostModal = () => {
         <section className="size-full  relative sm:block hidden ">
           {post?.imageUrl && !isLoadingPost && (
             <div className="size-full ">
-              <img
-                className="object-contain size-full"
-                src={post?.imageUrl}
-              />
+              <img className="object-contain size-full" src={post?.imageUrl} />
             </div>
           )}
           {post?.videoUrl && !isLoadingPost && (
             <div className="size-full ">
               <video
-              controls
+                controls
                 className="object-contain size-full"
                 src={post?.videoUrl}
               />
@@ -114,9 +111,6 @@ export const PostModal = () => {
                 likeCount={post?.likes.length ?? 0}
                 likedByUser={post?.likedByUser ?? false}
               />
-              <Button className="rounded-full" variant={'ghost'} size={'icon'}>
-                <MessageCircle />
-              </Button>
             </div>
             <FavoritePostIcon
               postId={post?.id ?? ''}

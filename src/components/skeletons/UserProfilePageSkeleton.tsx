@@ -1,4 +1,3 @@
-
 import { Skeleton } from '../ui/skeleton';
 
 export const UserProfilePageSkeleton = () => {
@@ -7,11 +6,9 @@ export const UserProfilePageSkeleton = () => {
       <div className="h-[100px] "></div>
       <div className="flex flex-col bg-secondary/30  rounded-3xl min-h-[300px]  gap-6  md:p-12 p-6  ">
         <div className="flex justify-between items-center relative">
-
           <div className="absolute z-[-1] inset-0 flex  items-center justify-center -top-[134px]   ">
             <Skeleton className="h-40 w-40 rounded-full" />
           </div>
-
         </div>
         <div className="max-w-xs  flex flex-col items-center justify-between mx-auto gap-2">
           <Skeleton className="w-40 h-10 rounded-full" />

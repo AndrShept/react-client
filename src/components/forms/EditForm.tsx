@@ -28,7 +28,7 @@ const formSchema = z.object({
 interface EditFormProps {
   content: string;
   commentId: string;
-  id: string ;
+  id: string;
   setIsEdit: (bool: boolean) => void;
 }
 
@@ -48,6 +48,7 @@ export const EditForm = ({
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
     try {
       await editComment({
         content: { ...values },

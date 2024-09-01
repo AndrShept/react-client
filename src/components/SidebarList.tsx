@@ -28,18 +28,7 @@ const sidebarData = [
     id: 2,
     icon: MessageCircleIcon,
   },
-  {
-    name: 'Followers',
-    to: '/followers',
-    id: 3,
-    icon: UsersRoundIcon,
-  },
-  {
-    name: 'Following',
-    to: '/Following',
-    icon: UserRoundSearchIcon,
-    id: 4,
-  },
+
   {
     name: 'Favorite',
     to: '/favorite-posts',

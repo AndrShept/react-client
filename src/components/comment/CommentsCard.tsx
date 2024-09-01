@@ -89,7 +89,7 @@ export const CommentsCard = ({
         {isEdit && (
           <div className="md:px-3 px-2  ">
             <EditForm
-              content={`${commentContent.username} ${comment.content}`}
+              content={`${comment.content}`}
               commentId={comment.id}
               id={comment.postId ?? comment.parentId ?? comment.photoId ?? ''}
               setIsEdit={setIsEdit}

@@ -36,10 +36,7 @@ export const NotificationIcon = () => {
     }
   };
   useEffect(() => {
-    const refetchInterval = setInterval(
-     () =>  refetchNotifications(),
-      100000,
-    );
+    const refetchInterval = setInterval(() => refetchNotifications(), 100000);
     return () => clearInterval(refetchInterval);
   }, []);
   return (

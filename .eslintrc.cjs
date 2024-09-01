@@ -5,13 +5,12 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
-    "allowEmptyCatch": true,
+    allowEmptyCatch: true,
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'react-refresh/only-export-components': [

@@ -48,7 +48,7 @@ export const ProfileAvatar = () => {
     //     </Button>
     //   </PopoverContent>
     // </Popover>
-    <div className="flex items-center md:gap-2 gap-1 scale-95 ">
+    <div className="flex items-center md:gap-2 gap-1 scale-95 ml-2 ">
       <UserAvatar
         isOnline={userData.isOnline}
         avatarUrl={userData.avatarUrl}

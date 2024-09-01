@@ -42,6 +42,7 @@ export const ConversationCard = ({
             username={conversationPartner.username}
             isOnline={conversationPartner.isOnline}
             isBadge={true}
+            isHover={false}
           />
           <div className="space-y-[1px] flex flex-col">
             <p>{conversationPartner.username}</p>

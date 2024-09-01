@@ -1,8 +1,10 @@
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useGetUserByUsernameQuery } from '@/lib/services/userApi';
 import { cn, compactNumberFormatter } from '@/lib/utils';
 import { PencilIcon } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 
 import { ConversationButton } from '../ConversationButton';
@@ -47,10 +49,10 @@ export const UserProfilePage = () => {
           <h1 className="md:text-2xl text-xl font-semibold text-indigo-500">
             {user.username}
           </h1>
-          <div >
-            <p >{user.location}</p>
+          <div>
+            <p>{user.location}</p>
 
-            <p >{user.bio}</p>
+            <p>{user.bio}</p>
           </div>
 
           <Separator className="my-3" />
@@ -117,6 +119,16 @@ export const UserProfilePage = () => {
           )}
         </section>
       </article>
+      {isSelf && (
+        <Alert className="md:max-w-[600px] max-w-[400px] mx-auto mt-4 ">
+          <AlertCircle className="size-4" />
+          <AlertTitle className="">Warning!</AlertTitle>
+          <AlertDescription>
+            Please ensure that the photos you upload to your profile do not
+            exceed <span className="text-red-500">10 mb</span> in size
+          </AlertDescription>
+        </Alert>
+      )}
       <UserProfileTabs />
     </>
   );

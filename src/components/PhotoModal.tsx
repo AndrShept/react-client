@@ -69,7 +69,6 @@ export const PhotoModal = () => {
               avatarUrl={photo?.user?.avatarUrl}
               isOnline={photo?.user?.isOnline!}
               username={photo?.user?.username}
-           
             />
             <p className="text-muted-foreground text-sm line-clamp-3">
               {photo?.name}
@@ -112,9 +111,6 @@ export const PhotoModal = () => {
                 likeCount={photo?.likes.length ?? 0}
                 likedByUser={photo?.likedByUser ?? false}
               />
-              <Button className="rounded-full" variant={'ghost'} size={'icon'}>
-                <MessageCircle />
-              </Button>
             </div>
             {/* <FavoritePostIcon
               postId={post?.id ?? ''}

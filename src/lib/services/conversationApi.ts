@@ -23,7 +23,7 @@ export const conversationApi = api.injectEndpoints({
     isReadMessages: builder.mutation<Conversation, string>({
       query: (conversationId) => ({
         url: `/conversations/${conversationId}`,
-        method: 'PUT'
+        method: 'PUT',
       }),
     }),
     deleteConversation: builder.mutation<string, void>({
@@ -42,7 +42,12 @@ export const {
   useDeleteConversationMutation,
   useGetConversationByIdQuery,
   useLazyGetConversationByIdQuery,
-  useIsReadMessagesMutation
+  useIsReadMessagesMutation,
 } = conversationApi;
-export const { addConversation, getAllConversation, deleteConversation ,isReadMessages,getConversationById} =
-  conversationApi.endpoints;
+export const {
+  addConversation,
+  getAllConversation,
+  deleteConversation,
+  isReadMessages,
+  getConversationById,
+} = conversationApi.endpoints;

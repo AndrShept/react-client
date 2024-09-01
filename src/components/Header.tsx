@@ -5,6 +5,7 @@ import { useMediaQuery } from 'usehooks-ts';
 
 import { ProfileAvatar } from './ProfileAvatar';
 import { SheetSidebar } from './SheetSidebar';
+import { UsersBarIcon } from './UsersBarIcon';
 import { NotificationIcon } from './icons/NotificationIcon';
 import { Button } from './ui/button';
 
@@ -35,8 +36,8 @@ export const Navbar = () => {
         </Button>
       </div>
 
-      <div className="flex items-center gap-x-1">
-        <div></div>
+      <div className="flex items-center ">
+        <UsersBarIcon />
         <NotificationIcon />
         {isAuthenticated && <ProfileAvatar />}
       </div>

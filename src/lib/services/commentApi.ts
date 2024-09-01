@@ -10,10 +10,9 @@ export const commentApi = api.injectEndpoints({
         body: commentData,
       }),
     }),
-    getComments: builder.query<Comment[], string >({
+    getComments: builder.query<Comment[], string>({
       query: (postId) => ({
         url: `/comments/${postId}`,
-        
       }),
     }),
     deleteComment: builder.mutation<void, string>({
@@ -23,7 +22,7 @@ export const commentApi = api.injectEndpoints({
       }),
     }),
     editComment: builder.mutation<
-      Comment & {commentId: string },
+      Comment & { commentId: string },
       { id: string; content: Partial<Comment> }
     >({
       query: ({ id, content }) => ({

@@ -11,6 +11,7 @@ import { useLazyGetCommentsQuery } from '@/lib/services/commentApi';
 import { useAddReplyMutation } from '@/lib/services/replyApi';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CheckIcon, X } from 'lucide-react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -56,7 +57,7 @@ export const ReplyForm = ({
     try {
       await addReply({
         commentId,
-         id,
+        id,
         ...values,
       }).unwrap();
       await refetchComments(id);
@@ -65,6 +66,10 @@ export const ReplyForm = ({
       toast.error('Something went wrong');
     }
   }
+
+  useEffect(() => {
+    form.setFocus('content');
+  }, []);
 
   return (
     <Form {...form}>
@@ -96,7 +101,7 @@ export const ReplyForm = ({
                       <Input
                         disabled={isLoading}
                         className="  min-w-[200px] bg-secondary/20 focus-visible:ring-0  rounded-t-none focus-visible:ring-offset-0 border-x border-b border-t-0"
-                        placeholder='message...'
+                        placeholder="message..."
                         {...field}
                       />
 

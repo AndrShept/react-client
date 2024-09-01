@@ -11,12 +11,12 @@ import { UsersBarList } from './UsersBarList';
 import { UserBarSkeleton } from './skeletons/UserBarSkeleton';
 
 export const UsersBar = () => {
-  let { searchUser } = useAppSelector((state) => state.search.searchData);
+  const { searchUser } = useAppSelector((state) => state.search.searchData);
 
-  let { data: users, isLoading } = useGetAllUsersQuery(searchUser);
+  const { data: users, isLoading } = useGetAllUsersQuery(searchUser);
 
   const [refetchUsers] = useLazyGetAllUsersQuery();
-  let { data: followingUsers, isLoading: isLoadingFollowingUsers } =
+  const { data: followingUsers, isLoading: isLoadingFollowingUsers } =
     useGetAllFollowingUsersQuery();
   useEffect(() => {
     const refetchInterval = setInterval(async () => {
@@ -25,7 +25,12 @@ export const UsersBar = () => {
     return () => clearInterval(refetchInterval);
   }, []);
 
-  if (!users?.length && !followingUsers?.length && !searchUser && !isLoadingFollowingUsers) {
+  if (
+    !users?.length &&
+    !followingUsers?.length &&
+    !searchUser &&
+    !isLoadingFollowingUsers
+  ) {
     return (
       <p className="text-sm text-muted-foreground text-center m-auto">
         Users not found

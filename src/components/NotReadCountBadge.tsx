@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 export const NotReadCountBadge = ({
   notReadMessageCount,
-  classname
+  classname,
 }: {
   notReadMessageCount: number;
   classname?: string;
