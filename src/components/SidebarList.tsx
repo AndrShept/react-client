@@ -3,6 +3,7 @@ import { useGetAllConversationQuery } from '@/lib/services/conversationApi';
 import { cn } from '@/lib/utils';
 import {
   BookmarkIcon,
+  Gamepad2Icon,
   HomeIcon,
   MessageCircleIcon,
   NewspaperIcon,
@@ -33,6 +34,12 @@ const sidebarData = [
     name: 'Favorite',
     to: '/favorite-posts',
     icon: BookmarkIcon,
+    id: 5,
+  },
+  {
+    name: 'Game',
+    to: '/game',
+    icon: Gamepad2Icon,
     id: 5,
   },
 ];

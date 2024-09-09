@@ -1,5 +1,6 @@
 import { AuthGuard } from '@/components/AuthGuard';
 import { ConversationsSidebar } from '@/components/ConversationsSidebar';
+import { Game } from '@/components/Game/Game';
 import MainLayout from '@/components/MainLayout';
 import { UserProfilePhoto } from '@/components/UserProfilePhoto';
 import { UserProfilePost } from '@/components/UserProfilePost';
@@ -52,6 +53,10 @@ export const appRoutes = [
       {
         path: '/favorite-posts',
         element: <FavoritePostsPage />,
+      },
+      {
+        path: '/game',
+        element: <Game />,
       },
       {
         path: '/users/:username',
