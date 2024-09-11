@@ -5,3 +5,5 @@ export const getRandomValue = (min: number, max: number) => {
 export const rand = (num: number) => {
   return Math.floor(Math.random() * num);
 };
+
+
