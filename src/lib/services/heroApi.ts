@@ -1,5 +1,5 @@
 import { Post } from '../types';
-import { Hero } from '../types/hero.types';
+import { Hero } from '../types/game.types';
 import { api } from './api';
 
 export const heroApi = api.injectEndpoints({

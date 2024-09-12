@@ -13,6 +13,8 @@ export const HeroAvatarList = () => {
     }));
   }, []);
   return (
+  
+   
     <ScrollArea className="h-[40vh] w-[300px] ">
       <ul className="flex  flex-wrap gap-2 ">
         {avatars.map((item) => (
@@ -21,9 +23,11 @@ export const HeroAvatarList = () => {
             onClick={() => setAvatar(item.src)}
             src={item.src}
             isSelected={avatar === item.src}
+            classname='hover:border-primary hover:opacity-80 cursor-pointer   opacity-50'
           />
         ))}
       </ul>
     </ScrollArea>
+    
   );
 };
