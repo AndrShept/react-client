@@ -6,18 +6,18 @@ import { IStats } from './CreateHeroPage';
 
 interface HeroStatsBlockProps {
   stats: IStats[];
-  statPoint: { value: number; baseValue: number };
+  statPoints: { value: number; baseValue: number };
   setStats: React.Dispatch<React.SetStateAction<IStats[]>>;
-  setStatPoint: React.Dispatch<
+  setStatPoints: React.Dispatch<
     React.SetStateAction<{ value: number; baseValue: number }>
   >;
 }
 
 export const HeroStatsBlock = ({
-  setStatPoint,
+  setStatPoints,
   setStats,
   stats,
-  statPoint,
+  statPoints,
 }: HeroStatsBlockProps) => {
   const incrementStat = (stat: {
     name: string;
@@ -26,8 +26,8 @@ export const HeroStatsBlock = ({
   }) => {
     setStats((items: IStats[]) =>
       items.map((item) => {
-        if (item.name === stat.name && statPoint.value > 0) {
-          setStatPoint((prev) => ({ ...prev, value: prev.value - 1 }));
+        if (item.name === stat.name && statPoints.value > 0) {
+          setStatPoints((prev) => ({ ...prev, value: prev.value - 1 }));
           return {
             ...item,
             value: item.value + 1,
@@ -43,7 +43,7 @@ export const HeroStatsBlock = ({
     setStats((items) =>
       items.map((item) => {
         if (item.name === stat.name) {
-          setStatPoint((prev) => ({ ...prev, value: prev.value + 1 }));
+          setStatPoints((prev) => ({ ...prev, value: prev.value + 1 }));
           return {
             ...item,
             value: item.value - 1,
@@ -54,12 +54,12 @@ export const HeroStatsBlock = ({
     );
   };
   return (
-    <div className="text-muted-foreground border p-4 rounded-lg  flex flex-col flex-1 ">
+    <div className="text-muted-foreground border p-4 rounded-lg  flex flex-col  ">
       <h5 className="text-xl text-primary mb-2 ">Stats:</h5>
       <h5 className=" text-muted-foreground  ">LEVEL 1</h5>
       <ul className="flex  flex-col">
         {stats.map((stat) => (
-          <div key={stat.name} className="flex ">
+          <div key={stat.name} className="flex gap-2 ">
             <p className={`  ${stat.color}`}>{stat.name}</p>
 
             <div className="flex gap-2 ml-auto">
@@ -84,7 +84,7 @@ export const HeroStatsBlock = ({
 
                 <Button
                   className={cn('size-5 text-[17px]', {
-                    ' opacity-0 cursor-default': statPoint.value <= 0,
+                    ' opacity-0 cursor-default': statPoints.value <= 0,
                   })}
                   variant={'ghost'}
                   size={'icon'}
@@ -98,7 +98,7 @@ export const HeroStatsBlock = ({
         ))}
         <div className="flex justify-between text-amber-500 mt-2">
           <p>Stat Points</p>
-          <p> {statPoint.value}</p>
+          <p> {statPoints.value}</p>
         </div>
       </ul>
     </div>

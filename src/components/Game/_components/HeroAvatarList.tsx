@@ -4,8 +4,12 @@ import React, { useMemo, useState } from 'react';
 
 import { HeroAvatar } from './HeroAvatar';
 
-export const HeroAvatarList = () => {
-  const [avatar, setAvatar] = useState('');
+interface HeroAvatarList {
+  avatar: string;
+  setAvatar: (str: string) => void;
+}
+
+export const HeroAvatarList = ({ avatar, setAvatar }: HeroAvatarList) => {
   const avatars = useMemo(() => {
     return [...Array(30)].map((_, idx) => ({
       name: Date.now(),
@@ -13,9 +17,7 @@ export const HeroAvatarList = () => {
     }));
   }, []);
   return (
-  
-   
-    <ScrollArea className="h-[40vh] w-[300px] ">
+    <ScrollArea className="h-[40vh] max-w-[300px] ">
       <ul className="flex  flex-wrap gap-2 ">
         {avatars.map((item) => (
           <HeroAvatar
@@ -23,11 +25,10 @@ export const HeroAvatarList = () => {
             onClick={() => setAvatar(item.src)}
             src={item.src}
             isSelected={avatar === item.src}
-            classname='hover:border-primary hover:opacity-80 cursor-pointer   opacity-50'
+            classname="hover:border-primary hover:opacity-80 cursor-pointer   opacity-50"
           />
         ))}
       </ul>
     </ScrollArea>
-    
   );
 };

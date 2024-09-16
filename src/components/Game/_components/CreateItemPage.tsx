@@ -1,35 +1,67 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ItemType, WeaponType } from '@/lib/types/game.types';
+import { useCreateItemMutation } from '@/lib/services/game/ItemApi';
+import {
+  ItemTag,
+  ItemType,
+  Modifier,
+  WeaponType,
+} from '@/lib/types/game.types';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 export const CreateItemPage = () => {
   const itemTypeArray = Object.values(ItemType);
-  const [modifier, setModifier] = useState({
-    minDamage: undefined,
-    maxDamage: undefined,
-  });
-  const [itemType, setItemType] = useState({
-    type: '',
-    weaponType: '',
+  const [createItem, { isLoading }] = useCreateItemMutation();
+  const [modifier, setModifier] = useState<Partial<Modifier> | null>(null);
+  const [itemType, setItemType] = useState<{
+    type: string | null;
+    weaponType: string | null;
+  }>({
+    type: null,
+    weaponType: null,
   });
   const [imageUrl, setImageUrl] = useState('');
+  const [name, setName] = useState('');
+  const [tag, setTag] = useState('ALL');
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setImageUrl(`/sprites/weapons/${file.name}`);
+    setImageUrl(`/sprites/armor/${file.name}`);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setModifier((prev) => ({ ...prev, [name]: Number(value) }));
+    setModifier((prev) => ({
+      ...prev,
+      [name]: name === 'name' ? value : Number(value),
+    }));
   };
-  const onCreate = () => {
-    console.log({ ...itemType, imageUrl, modifier });
+  const onCreate = async () => {
+    console.log({
+      ...itemType,
+      imageUrl,
+      name,
+      tag,
+      modifier,
+    });
+    try {
+      await createItem({
+        ...itemType,
+        imageUrl,
+        name,
+        tag,
+        modifier,
+      }).unwrap();
+      toast.success('GODDDD');
+
+    } catch (error) {
+      console.log(error);
+      toast.error('Something went wrong!');
+    }
   };
 
-  useEffect(() => {}, [modifier, itemType.type, itemType.weaponType]);
   return (
     <section className=" h-full flex flex-col max-w-4xl mx-auto p-10">
       <div className="flex border p-8 gap-4 ">
@@ -58,7 +90,7 @@ export const CreateItemPage = () => {
               setItemType((prev) => ({ ...prev, type: e.target.value }))
             }
           >
-            <option value={''}>undefined</option>
+            <option value={undefined}>undefined</option>
             {itemTypeArray.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -66,155 +98,119 @@ export const CreateItemPage = () => {
             ))}
           </select>
           <select
-            value={itemType.weaponType}
+            value={undefined}
             className="bg-secondary"
             onChange={(e) =>
               setItemType((prev) => ({ ...prev, weaponType: e.target.value }))
             }
           >
-            <option value={''}>undefined</option>
+            <option value={undefined}>null</option>
             <option value={WeaponType.ONE_HAND}>{WeaponType.ONE_HAND}</option>
             <option value={WeaponType.TWO_HAND}>{WeaponType.TWO_HAND}</option>
+          </select>
+
+          <select
+            className="bg-secondary"
+            onChange={(e) => setTag(e.target.value)}
+            value={tag}
+          >
+            <option value={ItemTag.ALL}>{ItemTag.ALL}</option>
+            <option value={ItemTag.NOVICE}>{ItemTag.NOVICE}</option>
           </select>
         </div>
 
         <div className="space-y-2 max-w-[200px]">
-          <div className="flex gap-2 items-center">
+          <div>
+            <p className="text-sm text-muted-foreground">name</p>
+            <Input name="name" onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="flex gap-2 items-center mt-5">
             <p>min</p>
-            <Input
-              name="minDamage"
-              onChange={handleChange}
-              placeholder="minDamage"
-            />
+            <Input name="minDamage" onChange={handleChange} />
             <p>max</p>
-            <Input
-              name="maxDamage"
-              onChange={handleChange}
-              placeholder="maxDamage"
-            />
+            <Input name="maxDamage" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="strength"
-              onChange={handleChange}
-              placeholder="strength"
-            />
+            <p className="text-sm text-muted-foreground">strength</p>
+            <Input name="strength" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="dexterity"
-              onChange={handleChange}
-              placeholder="dexterity"
-            />
+            <p className="text-sm text-muted-foreground">dexterity</p>
+            <Input name="dexterity" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="intelligence"
-              onChange={handleChange}
-              placeholder="intelligence"
-            />
+            <p className="text-sm text-muted-foreground">intelligence</p>
+            <Input name="intelligence" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="constitution"
-              onChange={handleChange}
-              placeholder="constitution"
-            />
+            <p className="text-sm text-muted-foreground">constitution</p>
+            <Input name="constitution" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input name="luck" onChange={handleChange} placeholder="luck" />
+            <p className="text-sm text-muted-foreground">luck</p>
+            <Input name="luck" onChange={handleChange} />
           </div>
         </div>
 
         <div onChange={handleChange} className="space-y-2 max-w-[200px]">
           <div>
-            <p></p>
-            <Input name="armor" onChange={handleChange} placeholder="armor" />
+            <p className="text-sm text-muted-foreground">armor</p>
+            <Input name="armor" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="magicResistances"
-              onChange={handleChange}
-              placeholder="magicResistances"
-            />
+            <p className="text-sm text-muted-foreground">magicResistances</p>
+            <Input name="magicResistances" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="evasion"
-              onChange={handleChange}
-              placeholder="evasion"
-            />
+            <p className="text-sm text-muted-foreground">evasion</p>
+            <Input name="evasion" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="spellDamage"
-              onChange={handleChange}
-              placeholder="spellDamage"
-            />
+            <p className="text-sm text-muted-foreground">spellDamage</p>
+            <Input name="spellDamage" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="spellDamageCritPower"
-              onChange={handleChange}
-              placeholder="spellDamageCritPower"
-            />
+            <p className="text-sm text-muted-foreground">
+              spellDamageCritPower
+            </p>
+            <Input name="spellDamageCritPower" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="spellDamageCritChance"
-              onChange={handleChange}
-              placeholder="spellDamageCritChance"
-            />
+            <p className="text-sm text-muted-foreground">
+              spellDamageCritChance
+            </p>
+            <Input name="spellDamageCritChance" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="meleeDamage"
-              onChange={handleChange}
-              placeholder="meleeDamage"
-            />
+            <p className="text-sm text-muted-foreground">meleeDamage</p>
+            <Input name="meleeDamage" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="meleeDamageCritPower"
-              onChange={handleChange}
-              placeholder="meleeDamageCritPower"
-            />
+            <p className="text-sm text-muted-foreground">
+              meleeDamageCritPower
+            </p>
+            <Input name="meleeDamageCritPower" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="meleeDamageCritChance"
-              onChange={handleChange}
-              placeholder="meleeDamageCritChance"
-            />
+            <p className="text-sm text-muted-foreground">
+              meleeDamageCritChance
+            </p>
+            <Input name="meleeDamageCritChance" onChange={handleChange} />
           </div>
           <div>
-            <p></p>
-            <Input
-              name="duration"
-              onChange={handleChange}
-              placeholder="duration"
-            />
+            <p className="text-sm text-muted-foreground">duration</p>
+            <Input name="duration" onChange={handleChange} />
           </div>
         </div>
       </div>
       <div className="mx-auto space-x-4 mt-2">
+  
         <Button asChild>
           <Link to={'/create-hero'}>Back</Link>
         </Button>
-        <Button onClick={onCreate}>Create</Button>
+        <Button disabled={isLoading} onClick={onCreate}>
+          Create
+        </Button>
       </div>
     </section>
   );

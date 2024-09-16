@@ -53,12 +53,12 @@ export interface InventoryItem {
   name: string;
   type: ItemType;
   weaponType?: WeaponType;
-  imageUrl: String;
+  imageUrl: string;
 
   isEquipped: boolean;
   isCanEquipped: boolean;
 
-  itemModifier?: Modifier;
+  modifier?: Modifier;
 
   hero?: Hero;
   heroId?: string;
@@ -76,7 +76,7 @@ export interface InventoryItem {
   updatedAt: Date;
 }
 
-interface Modifier {
+export interface Modifier {
   id: string;
 
   minDamage?: number;
@@ -134,6 +134,11 @@ export enum ItemType {
   RING = 'RING',
   AMULET = 'AMULET',
   MISC = 'MISC',
+}
+
+export enum ItemTag {
+  ALL = 'ALL',
+  NOVICE = 'NOVICE',
 }
 
 export enum WeaponType {
