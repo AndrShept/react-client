@@ -1,4 +1,4 @@
-import { Hero, InventoryItem, Modifier } from '@/lib/types/game.types';
+import { GameItem, Hero, InventoryItem, Modifier } from '@/lib/types/game.types';
 
 import { api } from '../api';
 
@@ -14,8 +14,8 @@ export const heroApi = api.injectEndpoints({
       Hero,
       Record<string, unknown> & {
         modifier: Modifier
-        weapon: InventoryItem;
-        breastplate: InventoryItem;
+        weapon: GameItem;
+        breastplate: GameItem;
       }
     >({
       query: (dataHero) => ({

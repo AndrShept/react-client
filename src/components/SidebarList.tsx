@@ -19,14 +19,14 @@ const sidebarData = [
   {
     name: 'Home',
     to: '/',
-    id: 1,
+    id: 231,
     icon: HomeIcon,
   },
 
   {
     name: 'Messages',
     to: '/conversations',
-    id: 2,
+    id: 21332,
     icon: MessageCircleIcon,
   },
 
@@ -34,13 +34,13 @@ const sidebarData = [
     name: 'Favorite',
     to: '/favorite-posts',
     icon: BookmarkIcon,
-    id: 5,
+    id: 23134,
   },
   {
     name: 'Game',
     to: '/game',
     icon: Gamepad2Icon,
-    id: 5,
+    id: 123213,
   },
 ];
 

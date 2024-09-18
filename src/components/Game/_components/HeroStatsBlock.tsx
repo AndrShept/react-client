@@ -7,7 +7,7 @@ import { IStats } from './CreateHeroPage';
 interface HeroStatsBlockProps {
   stats: IStats[];
   statPoints: { value: number; baseValue: number };
-  setStats: React.Dispatch<React.SetStateAction<IStats[]>>;
+  setStats: React.Dispatch<React.SetStateAction<IStats[] >>;
   setStatPoints: React.Dispatch<
     React.SetStateAction<{ value: number; baseValue: number }>
   >;
@@ -21,7 +21,7 @@ export const HeroStatsBlock = ({
 }: HeroStatsBlockProps) => {
   const incrementStat = (stat: {
     name: string;
-    value: number;
+    value: number ;
     baseValue: number;
   }) => {
     setStats((items: IStats[]) =>

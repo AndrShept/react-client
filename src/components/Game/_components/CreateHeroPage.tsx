@@ -1,13 +1,14 @@
 import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useGetStats } from '@/hooks/useGetStats';
 import { useGetNoviceItemsQuery } from '@/lib/services/game/ItemApi';
 import {
   useCreateHeroMutation,
   useGetMyHeroQuery,
 } from '@/lib/services/game/heroApi';
 import { ErrorMessage } from '@/lib/types';
-import { InventoryItem } from '@/lib/types/game.types';
+import { GameItem, InventoryItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { color } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -15,9 +16,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { Background } from './Background';
+import { GameItemCard } from './GameItemCard';
 import { HeroAvatarList } from './HeroAvatarList';
 import { HeroStatsBlock } from './HeroStatsBlock';
-import { InventoryItemCard } from './InventoryItemCard';
 
 export interface IStats {
   name: string;
@@ -29,50 +30,15 @@ export interface IStats {
 export const CreateHeroPage = () => {
   const { data: hero } = useGetMyHeroQuery();
   const [nickname, setNickname] = useState('');
-  const [stats, setStats] = useState([
-    {
-      name: 'Strength',
-      value: 10,
-      baseValue: 10,
-      color: 'text-red-500',
-    },
-    {
-      name: 'Dexterity',
-      value: 10,
-      baseValue: 10,
-      color: 'text-green-500',
-    },
-    {
-      name: 'Intelligence',
-      value: 10,
-      baseValue: 10,
-      color: `text-sky-500`,
-    },
-    {
-      name: 'Constitution',
-      value: 10,
-      baseValue: 10,
-      color: 'text-stone-500',
-    },
-    {
-      name: 'Luck',
-      value: 5,
-      baseValue: 5,
-      color: 'text-purple-500',
-    },
-  ]);
-  const [heroWeapon, setHeroWeapon] = useState<null | InventoryItem>(null);
-  const [heroArmor, setHeroArmor] = useState<null | InventoryItem>(null);
-  const [statPoints, setStatPoints] = useState({
-    value: 10,
-    baseValue: 10,
-  });
+  const [heroWeapon, setHeroWeapon] = useState<null | GameItem>(null);
+  const [heroArmor, setHeroArmor] = useState<null | GameItem>(null);
   const [errorMessage, setErrorMessage] = useState('');
   const { data: items, isLoading, isError } = useGetNoviceItemsQuery();
   const armors = items?.filter((item) => item.type === 'BREASTPLATE');
   const weapons = items?.filter((item) => item.type === 'WEAPON');
-  const [avatar, setAvatar] = useState('');
+  const [avatarUrl, setAvatarUrl] = useState('');
   const navigate = useNavigate();
+  const { setStatPoints, setStats, statPoints, stats } = useGetStats({});
   const [createHero, { isLoading: isLoadingCreateHero }] =
     useCreateHeroMutation();
   const onCreateHero = async () => {
@@ -84,7 +50,7 @@ export const CreateHeroPage = () => {
       setErrorMessage('The nickname must be no more than 15 characters long.');
       return;
     }
-    if (!avatar) {
+    if (!avatarUrl) {
       setErrorMessage('Select hero avatar');
       return;
     }
@@ -97,7 +63,7 @@ export const CreateHeroPage = () => {
       return;
     }
     const name = nickname;
-    const statPoint = statPoints.value;
+    const statsPoints = statPoints.value;
     const newStat = stats.reduce((acc: any, item) => {
       acc[item.name.toLowerCase()] = item.value;
       return acc;
@@ -106,7 +72,8 @@ export const CreateHeroPage = () => {
     try {
       const res = await createHero({
         name,
-        statPoint,
+        statsPoints,
+        avatarUrl,
         modifier: newStat,
         breastplate: heroArmor,
         weapon: heroWeapon,
@@ -145,7 +112,7 @@ export const CreateHeroPage = () => {
       </Button>
       <div className="  flex bg-black/70 border  backdrop-blur-md rounded-lg     md:flex-row flex-col  md:p-10 p-4 max-w-5xl m-auto text-[15px] gap-4 ">
         <div className="mx-auto">
-          <HeroAvatarList avatar={avatar} setAvatar={setAvatar} />
+          <HeroAvatarList avatar={avatarUrl} setAvatar={setAvatarUrl} />
         </div>
 
         <div className="flex flex-col gap-4 mx-auto max-w-[220px]">
@@ -190,7 +157,8 @@ export const CreateHeroPage = () => {
                   <p className="w-16">Weapon</p>
                   <ul className="flex gap-2">
                     {weapons?.map((weapon) => (
-                      <InventoryItemCard
+                      <GameItemCard
+                        classname="lg:size-16 size-14 rounded "
                         setHeroItem={() => setHeroWeapon(weapon)}
                         item={weapon}
                         isSelected={weapon.id === heroWeapon?.id}
@@ -202,7 +170,8 @@ export const CreateHeroPage = () => {
                   <p className="w-16">Armor</p>
                   <ul className="flex gap-2">
                     {armors?.map((armor) => (
-                      <InventoryItemCard
+                      <GameItemCard
+                        classname="lg:size-16 size-14 rounded "
                         setHeroItem={() => setHeroArmor(armor)}
                         item={armor}
                         isSelected={armor.id === heroArmor?.id}

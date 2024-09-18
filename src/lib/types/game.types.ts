@@ -2,47 +2,47 @@ import { User } from '.';
 
 export interface Hero {
   id: string;
+  avatarUrl: string;
   name: string;
   level: number;
-
-  strength: number;
-  dexterity: number;
-  intelligence: number;
-  constitution: number;
-  luck: number;
-
-  health?: number;
-  maxHealth?: number;
-  mana?: number;
-  maxMana?: number;
-
+  gold: number;
+  premCoin: number;
+  isBattle: boolean;
   experience: number;
-
-  statPoints: number;
-
-  weapon?: InventoryItem;
-  shield?: InventoryItem;
-  breastplate?: InventoryItem;
-  ring?: InventoryItem;
-  amulet?: InventoryItem;
-  belt?: InventoryItem;
-  shoes?: InventoryItem;
-  helmet?: InventoryItem;
-
+  statsPoints: number;
+  freeStatsPoints: number;
+  inventorySlots: number;
+  modifierId: string;
+  modifier: Modifier;
+  userId: string;
+  user?: User;
   buffs: Buff[];
   inventorys: InventoryItem[];
+  equipments: Equipment[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+interface Equipment {
+  id: string;
+  heroId: string;
+  hero: Hero;
 
-  user: User;
-  userId: string;
-
-  weaponId?: string;
-  shieldId?: string;
-  breastplateId?: string;
-  ringId?: string;
-  amuletId?: string;
-  beltId?: string;
-  shoesId?: string;
-  helmetId?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+export interface GameItem {
+  id: string;
+  name: string;
+  quantity?: number;
+  type: ItemType;
+  weaponType?: WeaponType;
+  tag: ItemTag;
+  imageUrl: string;
+  inventory: InventoryItem[];
+  isEquipped: boolean;
+  isCanEquipped: boolean;
+  modifierId: string;
+  modifier: Modifier;
 
   createdAt: Date;
   updatedAt: Date;
@@ -50,27 +50,10 @@ export interface Hero {
 
 export interface InventoryItem {
   id: string;
-  name: string;
-  type: ItemType;
-  weaponType?: WeaponType;
-  imageUrl: string;
-
-  isEquipped: boolean;
-  isCanEquipped: boolean;
-
-  modifier?: Modifier;
-
+  heroId: string;
   hero?: Hero;
-  heroId?: string;
-
-  heroWeapon?: Hero;
-  heroShield?: Hero;
-  heroBreastplate?: Hero;
-  heroBelt?: Hero;
-  heroShoes?: Hero;
-  heroHelmet?: Hero;
-  heroRing?: Hero;
-  heroAmulet?: Hero;
+  gameItemId: string;
+  gameItem: GameItem;
 
   createdAt: Date;
   updatedAt: Date;
@@ -78,45 +61,39 @@ export interface InventoryItem {
 
 export interface Modifier {
   id: string;
-
   minDamage?: number;
   maxDamage?: number;
-
   strength?: number;
   dexterity?: number;
   intelligence?: number;
   constitution?: number;
   luck?: number;
-
+  health: number;
+  mana: number;
+  maxHealth: number;
+  maxMana: number;
   armor?: number;
   magicResistances?: number;
   evasion?: number;
-
   spellDamage?: number;
   spellDamageCritPower?: number;
   spellDamageCritChance?: number;
-
   meleeDamage?: number;
   meleeDamageCritPower?: number;
   meleeDamageCritChance?: number;
-
   duration?: number;
-
-  inventoryItem?: InventoryItem;
-  inventoryItemId?: string;
-
   buffs: Buff[];
+  inventoryItems: InventoryItem[];
+  hero: Hero[];
 }
 
 interface Buff {
   id: string;
   name: string;
-
-  hero?: Hero;
-  heroId?: string;
-
-  buffModifier?: Modifier;
-  modifierId?: string;
+  modifierId: string;
+  modifier: Modifier;
+  heroId: string;
+  hero: Hero;
 
   createdAt: Date;
   updatedAt: Date;

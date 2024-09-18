@@ -1,23 +1,23 @@
-import { InventoryItem, Modifier } from '@/lib/types/game.types';
+import { GameItem, InventoryItem, Modifier } from '@/lib/types/game.types';
 
 import { api } from '../api';
 
 export const itemApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllItems: builder.query<InventoryItem[], void>({
+    getAllItems: builder.query<GameItem[], void>({
       query: () => ({
         url: `/items`,
         method: 'GET',
       }),
     }),
-    getNoviceItems: builder.query<InventoryItem[], void>({
+    getNoviceItems: builder.query<GameItem[], void>({
       query: () => ({
         url: `/novice-items`,
         method: 'GET',
       }),
     }),
     createItem: builder.mutation<
-      InventoryItem,
+    GameItem,
       {
         name: string;
         type: string | null;

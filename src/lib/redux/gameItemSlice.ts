@@ -1,22 +1,22 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { InventoryItem } from '../types/game.types';
+import { GameItem } from '../types/game.types';
 
 interface initialState {
-  inventoryItem: null | InventoryItem;
+  gameItem: null | GameItem;
 }
 
 // Define the initial state using that type
 const initialState: initialState = {
-  inventoryItem: null,
+  gameItem: null,
 };
 
-export const inventoryItemSlice = createSlice({
-  name: 'inventoryItem',
+export const gameItemSlice = createSlice({
+  name: 'gameItem',
   initialState,
   reducers: {
-    setInventoryItem: (state, action: PayloadAction<InventoryItem>) => {
-      state.inventoryItem = action.payload;
+    setGameItem: (state, action: PayloadAction<GameItem>) => {
+      state.gameItem = action.payload;
     },
   },
   // extraReducers: (builder) => {
@@ -29,6 +29,6 @@ export const inventoryItemSlice = createSlice({
   // },
 });
 
-export const { setInventoryItem } = inventoryItemSlice.actions;
+export const { setGameItem } = gameItemSlice.actions;
 
-export default inventoryItemSlice.reducer;
+export default gameItemSlice.reducer;

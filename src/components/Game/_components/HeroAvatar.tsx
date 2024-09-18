@@ -2,8 +2,8 @@ import { cn } from '@/lib/utils';
 import React from 'react';
 
 interface HeroAvatarProps {
-  src: string;
-  isSelected: boolean;
+  src: string | undefined;
+  isSelected?: boolean;
   classname?: string;
   onClick?: () => void;
 }

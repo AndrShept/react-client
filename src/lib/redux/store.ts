@@ -3,7 +3,8 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '../services/api';
 import conversationSlice from './conversationSlice';
-import inventoryItemSlice from './inventoryItemSlice';
+import gameItemSlice from './gameItemSlice';
+import heroSlice from './heroSlice';
 import photoSlice from './photoSlice';
 import searchSlice from './searchSlice';
 import userSlice from './userSlice';
@@ -14,7 +15,8 @@ export const store = configureStore({
     conversation: conversationSlice,
     search: searchSlice,
     photo: photoSlice,
-    inventoryItem: inventoryItemSlice,
+    gameItem: gameItemSlice,
+    hero: heroSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

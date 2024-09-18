@@ -1,4 +1,4 @@
-import { InventoryItem, Modifier } from '@/lib/types/game.types';
+import { GameItem, InventoryItem, Modifier } from '@/lib/types/game.types';
 
 export const getRandomValue = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -8,7 +8,7 @@ export const rand = (num: number) => {
   return Math.floor(Math.random() * num);
 };
 
-export const getModifiers = (item: InventoryItem | null) => {
+export const getModifiers = (item: GameItem | null) => {
   const modifiersArr = [
     {
       name: 'strength',
@@ -58,3 +58,5 @@ export const getModifiers = (item: InventoryItem | null) => {
   ];
   return modifiersArr;
 };
+
+
