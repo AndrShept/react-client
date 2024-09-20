@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { heroApi } from '../services/game/heroApi';
-import { Hero } from '../types/game.types';
+import { Hero, Modifier } from '../types/game.types';
 
 interface initialState {
   hero: Hero | null;
@@ -15,8 +15,11 @@ export const heroSlice = createSlice({
   name: 'hero',
   initialState,
   reducers: {
-    // setGameItem: (state, action: PayloadAction<GameItem>) => {
-    // },
+    setHeroModifier: (state, action: PayloadAction<Partial<Modifier>>) => {
+      if (state.hero) {
+        state.hero.modifier = {...state.hero.modifier, ...action.payload};
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -28,6 +31,6 @@ export const heroSlice = createSlice({
   },
 });
 
-export const {} = heroSlice.actions;
+export const { setHeroModifier } = heroSlice.actions;
 
 export default heroSlice.reducer;

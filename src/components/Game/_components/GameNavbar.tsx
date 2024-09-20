@@ -1,53 +1,55 @@
-import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/store';
-import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-import { getRandomValue } from '../utils';
 import { FillBar } from './FillBar';
+import { HeroAvatar } from './HeroAvatar';
+import { AbilityGameIcon } from './game-icons/AbilityGameIcon';
+import { BackpackGameIcon } from './game-icons/BackpackGameIcon';
+import { ShopGameIcon } from './game-icons/ShopGameIcon';
+import { useEffect } from 'react';
 
 export const GameNavbar = () => {
-  const [currentHp, setCurrentHp] = useState(100);
-  const [maxHp, setMaxHp] = useState(120);
-  const [isBattle, setIsBattle] = useState(false);
   const hero = useAppSelector((state) => state.hero.hero);
+  const { pathname } = useLocation();
 
-  useEffect(() => {
-    const hpRegenerate = setInterval(() => {
-      if (currentHp < maxHp && !isBattle) {
-        setCurrentHp((prev) => prev + 1);
-      }
-    }, 1000);
-    if (currentHp < 0) {
-      setCurrentHp(0);
-    }
-    return () => clearInterval(hpRegenerate);
-  }, [currentHp]);
   return (
     <section className="">
-      <div className="h-14 border-b p-2 flex gap-2">
+      <div className=" border-b flex gap-2 p-3 items-center ">
+        <div>
+          {pathname !== '/game' && (
+            <article className="flex items-center  gap-2">
+              <div>
+                <Link to={'/game'}>
+                  <HeroAvatar src={hero?.avatarUrl} />
+                </Link>
+              </div>
+              <div className="md:w-[200px] w-[100px]">
+                <FillBar
+                  color="green"
+                  value={hero?.modifier.health ?? 0}
+                  maxValue={hero?.modifier.maxHealth ?? 0}
+                />
+                <FillBar
+                  color="blue"
+                  value={hero?.modifier.mana ?? 0}
+                  maxValue={hero?.modifier.maxMana ?? 0}
+                />
+              </div>
+            </article>
+          )}
+        </div>
         <div className="flex gap-1 ml-auto">
-          <Button className="relative" size={'icon'} variant={'outline'}>
-            <img
-              className="size-8"
-              src="sprites/icons/backpack.png"
-              alt="backpack-image"
-            />
+          <Link to={'shop'}>
+            <ShopGameIcon />
+          </Link>
+          <AbilityGameIcon />
+          <BackpackGameIcon wrapperClassname=" relative">
             <div className="absolute text-[10px] -bottom-1">
               {hero?.inventorys.length}/{hero?.inventorySlots}
             </div>
-          </Button>
-          <Button size={'icon'} variant={'outline'}>
-            <img
-              className="size-8"
-              src="sprites/icons/skills.png"
-              alt="backpack-image"
-            />
-          </Button>
+          </BackpackGameIcon>
         </div>
-
-        <FillBar color="green" value={currentHp} maxValue={maxHp} />
       </div>
-      <div className="flex-1"></div>
     </section>
   );
 };

@@ -3,6 +3,7 @@ import { ConversationsSidebar } from '@/components/ConversationsSidebar';
 import { Game } from '@/components/Game/Game';
 import { CreateHeroPage } from '@/components/Game/_components/CreateHeroPage';
 import { CreateItemPage } from '@/components/Game/_components/CreateItemPage';
+import { ShopPage } from '@/components/Game/_components/ShopPage';
 import MainLayout from '@/components/MainLayout';
 import { UserProfilePhoto } from '@/components/UserProfilePhoto';
 import { UserProfilePost } from '@/components/UserProfilePost';
@@ -56,10 +57,7 @@ export const appRoutes = [
         path: '/favorite-posts',
         element: <FavoritePostsPage />,
       },
-      {
-        path: '/game',
-        element: <Game />,
-      },
+
       {
         path: '/users/:username',
         element: <UserProfilePage />,
@@ -71,6 +69,17 @@ export const appRoutes = [
           {
             path: 'posts',
             element: <UserProfilePost />,
+          },
+        ],
+      },
+
+      {
+        path: '/game',
+        element: <Game />,
+        children: [
+          {
+            path: 'shop',
+            element: <ShopPage />,
           },
         ],
       },
@@ -108,7 +117,7 @@ export const appRoutes = [
   },
   {
     path: '/create-item',
-    element: <CreateItemPage/>,
+    element: <CreateItemPage />,
   },
   {
     path: '*',

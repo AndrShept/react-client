@@ -59,4 +59,65 @@ export const getModifiers = (item: GameItem | null) => {
   return modifiersArr;
 };
 
+export const shopNavList = [
+  {
+    label: 'sword',
+    id: 14,
+  },
+  {
+    label: 'axe',
+    id: 2,
+  },
+  {
+    label: 'dagger',
+    id: 6,
+  },
+  {
+    label: 'staff',
+    id: 13,
+  },
+  {
+    label: 'shield',
+    id: 12,
+  },
+  {
+    label: 'helmet',
+    id: 8,
+  },
+  {
+    label: 'breastplate',
+    id: 5,
+  },
+  {
+    label: 'leg',
+    id: 9,
+  },
+  {
+    label: 'belt',
+    id: 3,
+  },
+  {
+    label: 'boot',
+    id: 4,
+  },
 
+  {
+    label: 'glover',
+    id: 7,
+  },
+
+  {
+    label: 'amulet',
+    id: 1,
+  },
+
+  {
+    label: 'ring',
+    id: 11,
+  },
+
+  {
+    label: 'potion',
+    id: 10,
+  },
+];

@@ -1,4 +1,9 @@
-import { GameItem, Hero, InventoryItem, Modifier } from '@/lib/types/game.types';
+import {
+  GameItem,
+  Hero,
+  InventoryItem,
+  Modifier,
+} from '@/lib/types/game.types';
 
 import { api } from '../api';
 
@@ -13,7 +18,7 @@ export const heroApi = api.injectEndpoints({
     createHero: builder.mutation<
       Hero,
       Record<string, unknown> & {
-        modifier: Modifier
+        modifier: Modifier;
         weapon: GameItem;
         breastplate: GameItem;
       }
@@ -24,6 +29,13 @@ export const heroApi = api.injectEndpoints({
         body: dataHero,
       }),
     }),
+    equipHeroItem: builder.mutation<InventoryItem, Record<string, string>>({
+      query: (data) => ({
+        url: '/hero-equip',
+        method: 'POST',
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -31,6 +43,7 @@ export const {
   useGetMyHeroQuery,
   useLazyGetMyHeroQuery,
   useCreateHeroMutation,
+  useEquipHeroItemMutation,
 } = heroApi;
 
 export const {} = heroApi.endpoints;

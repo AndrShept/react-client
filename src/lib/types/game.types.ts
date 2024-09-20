@@ -8,7 +8,8 @@ export interface Hero {
   gold: number;
   premCoin: number;
   isBattle: boolean;
-  experience: number;
+  currentExperience: number;
+  maxExperience: number;
   statsPoints: number;
   freeStatsPoints: number;
   inventorySlots: number;
@@ -26,6 +27,11 @@ interface Equipment {
   id: string;
   heroId: string;
   hero: Hero;
+
+  inventoryItem: InventoryItem;
+  inventoryItemId: string;
+  gameItem: GameItem;
+  gameItemId: string;
 
   createdAt: Date;
   updatedAt: Date;
@@ -105,6 +111,7 @@ export enum ItemType {
   WEAPON = 'WEAPON',
   BREASTPLATE = 'BREASTPLATE',
   BELT = 'BELT',
+  LEGS = 'LEGS',
   SHOES = 'SHOES',
   HELMET = 'HELMET',
   SHIELD = 'SHIELD',

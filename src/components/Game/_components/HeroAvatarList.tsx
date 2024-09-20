@@ -13,7 +13,7 @@ export const HeroAvatarList = ({ avatar, setAvatar }: HeroAvatarList) => {
   const avatars = useMemo(() => {
     return [...Array(30)].map((_, idx) => ({
       name: Date.now(),
-      src: `sprites/avatar/Icon${idx + 1}.png`,
+      src: `/sprites/avatar/Icon${idx + 1}.png`,
     }));
   }, []);
   return (

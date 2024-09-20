@@ -1,21 +1,15 @@
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppSelector } from '@/hooks/store';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
+import { useEquipHeroItemMutation } from '@/lib/services/game/heroApi';
 import { GameItem, InventoryItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
-import React, { Fragment, useRef, useState } from 'react';
+import { stat } from 'fs';
+import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { getModifiers } from '../utils';
@@ -25,6 +19,7 @@ interface InventoryItemCardProps {
   setHeroItem?: (gameItem: GameItem) => void;
   isSelected?: boolean;
   classname?: string;
+  inventoryItemId?: string;
 }
 
 export const GameItemCard = ({
@@ -32,38 +27,50 @@ export const GameItemCard = ({
   setHeroItem,
   isSelected,
   classname,
+  inventoryItemId,
 }: InventoryItemCardProps) => {
   const dispatch = useDispatch();
+  const heroId = useAppSelector((state) => state.hero.hero?.id);
   const gameItem = useAppSelector((state) => state.gameItem.gameItem);
+  const [equipHero] = useEquipHeroItemMutation();
   const onMouseEnter = () => {
     dispatch(setGameItem(item));
   };
   const modifiersArr = getModifiers(gameItem);
+
+  const onClick = async () => {
+    setHeroItem && setHeroItem(item);
+    try {
+      await equipHero({
+        heroId: heroId!,
+        inventoryItemId: inventoryItemId!,
+        gameItemId: item.id,
+        slot: item.type,
+      }).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <HoverCard openDelay={0} closeDelay={0}>
         <div className="relative">
-       
-           
-              <HoverCardTrigger>
-                <img
-                  onClick={() => setHeroItem && setHeroItem(item)}
-                  onMouseEnter={onMouseEnter}
-                  key={item.id}
-                  className={cn(
-                    ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer  ',
-                    classname,
-                    {
-                      'border-primary': isSelected,
-                    },
-                  )}
-                  src={item.imageUrl}
-                  alt="weapon-image"
-                />
-              </HoverCardTrigger>
-         
-
-        
+          <HoverCardTrigger>
+            <img
+              onClick={onClick}
+              onMouseEnter={onMouseEnter}
+              key={item.id}
+              className={cn(
+                ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer  ',
+                classname,
+                {
+                  'border-primary': isSelected,
+                },
+              )}
+              src={item.imageUrl}
+              alt="weapon-image"
+            />
+          </HoverCardTrigger>
         </div>
 
         <HoverCardContent className="w-fit text-[15px]">
