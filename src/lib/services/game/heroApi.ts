@@ -36,6 +36,16 @@ export const heroApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    addHeroItemInventory: builder.mutation<
+      InventoryItem,
+      { gameItemId: string }
+    >({
+      query: (gameItemId) => ({
+        url: '/add-inventory',
+        method: 'POST',
+        body: gameItemId,
+      }),
+    }),
   }),
 });
 
@@ -44,6 +54,7 @@ export const {
   useLazyGetMyHeroQuery,
   useCreateHeroMutation,
   useEquipHeroItemMutation,
+  useAddHeroItemInventoryMutation
 } = heroApi;
 
 export const {} = heroApi.endpoints;

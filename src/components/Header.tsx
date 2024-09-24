@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth';
 import { MenuIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { ProfileAvatar } from './ProfileAvatar';
@@ -37,7 +37,7 @@ export const Navbar = () => {
       </div>
 
       <div className="flex items-center ">
-        <UsersBarIcon />
+       <UsersBarIcon />
         <NotificationIcon />
         {isAuthenticated && <ProfileAvatar />}
       </div>

@@ -2,25 +2,37 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCreateItemMutation } from '@/lib/services/game/ItemApi';
 import {
+  EquipmentSlot,
   ItemTag,
   ItemType,
   Modifier,
+  RarityType,
   WeaponType,
 } from '@/lib/types/game.types';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { GoldIcon } from '../game-icons/GoldIcon';
+
 export const CreateItemPage = () => {
   const itemTypeArray = Object.values(ItemType);
+  const itemSlotArray = Object.values(EquipmentSlot);
+  const rarityType = Object.values(RarityType);
   const [createItem, { isLoading }] = useCreateItemMutation();
   const [modifier, setModifier] = useState<Partial<Modifier> | null>(null);
   const [itemType, setItemType] = useState<{
     type: string | null;
     weaponType: string | null;
+    slot: string | null;
+    rarity: string;
+    price: number | null;
   }>({
     type: null,
     weaponType: null,
+    slot: null,
+    rarity: 'COMMON',
+    price: null,
   });
   const [imageUrl, setImageUrl] = useState('');
   const [name, setName] = useState('');
@@ -55,7 +67,6 @@ export const CreateItemPage = () => {
         modifier,
       }).unwrap();
       toast.success('GODDDD');
-
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong!');
@@ -98,6 +109,19 @@ export const CreateItemPage = () => {
             ))}
           </select>
           <select
+            className="bg-secondary"
+            onChange={(e) =>
+              setItemType((prev) => ({ ...prev, slot: e.target.value }))
+            }
+          >
+            <option value={undefined}>undefined</option>
+            {itemSlotArray.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          <select
             value={undefined}
             className="bg-secondary"
             onChange={(e) =>
@@ -117,6 +141,32 @@ export const CreateItemPage = () => {
             <option value={ItemTag.ALL}>{ItemTag.ALL}</option>
             <option value={ItemTag.NOVICE}>{ItemTag.NOVICE}</option>
           </select>
+
+          <select
+            className="bg-secondary"
+            onChange={(e) =>
+              setItemType((prev) => ({ ...prev, rarity: e.target.value }))
+            }
+          >
+            {rarityType.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+          <div className="flex items-center gap-2">
+            <GoldIcon classname="size-6" />
+            <Input
+              className="max-w-[70px]"
+              name="price"
+              onChange={(e) =>
+                setItemType((prev) => ({
+                  ...prev,
+                  price: Number(e.target.value),
+                }))
+              }
+            />
+          </div>
         </div>
 
         <div className="space-y-2 max-w-[200px]">
@@ -149,6 +199,22 @@ export const CreateItemPage = () => {
           <div>
             <p className="text-sm text-muted-foreground">luck</p>
             <Input name="luck" onChange={handleChange} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">health</p>
+            <Input name="maxHealth" onChange={handleChange} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">mana</p>
+            <Input name="maxMana" onChange={handleChange} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">healthRegeneration</p>
+            <Input name="healthRegeneration" onChange={handleChange} />
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground">manaRegeneration</p>
+            <Input name="manaRegeneration" onChange={handleChange} />
           </div>
         </div>
 
@@ -204,7 +270,6 @@ export const CreateItemPage = () => {
         </div>
       </div>
       <div className="mx-auto space-x-4 mt-2">
-  
         <Button asChild>
           <Link to={'/create-hero'}>Back</Link>
         </Button>

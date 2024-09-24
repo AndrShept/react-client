@@ -15,10 +15,10 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { Background } from './Background';
-import { GameItemCard } from './GameItemCard';
-import { HeroAvatarList } from './HeroAvatarList';
-import { HeroStatsBlock } from './HeroStatsBlock';
+import { Background } from '../Background';
+import { GameItemCard } from '../GameItemCard';
+import { HeroAvatarList } from '../HeroAvatarList';
+import { HeroStatsBlock } from '../HeroStatsBlock';
 
 export interface IStats {
   name: string;
@@ -35,7 +35,7 @@ export const CreateHeroPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { data: items, isLoading, isError } = useGetNoviceItemsQuery();
   const armors = items?.filter((item) => item.type === 'BREASTPLATE');
-  const weapons = items?.filter((item) => item.type === 'WEAPON');
+  const weapons = items?.filter((item) => item.type === 'STAFF'   );
   const [avatarUrl, setAvatarUrl] = useState('');
   const navigate = useNavigate();
   const { setStatPoints, setStats, statPoints, stats } = useGetStats({});

@@ -1,12 +1,15 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
 import { Users2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { UsersBar } from './UsersBar';
 import { Button } from './ui/button';
 
 export const UsersBarIcon = () => {
+  const { pathname } = useLocation();
   const isMobile = useMediaQuery('(min-width: 1024px)');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,7 +23,9 @@ export const UsersBarIcon = () => {
       <SheetTrigger>
         {' '}
         <Button
-          className="size-9 lg:hidden flex"
+          className={cn('size-9 ', {
+            'lg:hidden flex': !pathname.includes('game'),
+          })}
           variant={'ghost'}
           size={'icon'}
         >

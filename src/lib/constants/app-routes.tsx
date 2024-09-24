@@ -1,9 +1,5 @@
 import { AuthGuard } from '@/components/AuthGuard';
 import { ConversationsSidebar } from '@/components/ConversationsSidebar';
-import { Game } from '@/components/Game/Game';
-import { CreateHeroPage } from '@/components/Game/_components/CreateHeroPage';
-import { CreateItemPage } from '@/components/Game/_components/CreateItemPage';
-import { ShopPage } from '@/components/Game/_components/ShopPage';
 import MainLayout from '@/components/MainLayout';
 import { UserProfilePhoto } from '@/components/UserProfilePhoto';
 import { UserProfilePost } from '@/components/UserProfilePost';
@@ -20,6 +16,11 @@ import { RegisterPage } from '@/components/pages/RegisterPage';
 import { SuccessResetPassPage } from '@/components/pages/SuccessResetPassPage';
 import { UserProfilePage } from '@/components/pages/UserProfilePage';
 import { SocketProvider } from '@/components/providers/SocketProvider';
+import { Game } from '@/game/Game';
+import { CreateHeroPage } from '@/game/_components/pages/CreateHeroPage';
+import { CreateItemPage } from '@/game/_components/pages/CreateItemPage';
+import { InventoryPage } from '@/game/_components/pages/InventoryPage';
+import { ShopPage } from '@/game/_components/pages/ShopPage';
 
 export const appRoutes = [
   {
@@ -80,6 +81,10 @@ export const appRoutes = [
           {
             path: 'shop',
             element: <ShopPage />,
+          },
+          {
+            path: 'inventory',
+            element: <InventoryPage />,
           },
         ],
       },

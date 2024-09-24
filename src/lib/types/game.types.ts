@@ -33,14 +33,19 @@ interface Equipment {
   gameItem: GameItem;
   gameItemId: string;
 
+  slot: EquipmentSlot;
+
   createdAt: Date;
   updatedAt: Date;
 }
 export interface GameItem {
   id: string;
   name: string;
+  price?: number;
   quantity?: number;
   type: ItemType;
+  slot: EquipmentSlot;
+  rarity: RarityType;
   weaponType?: WeaponType;
   tag: ItemTag;
   imageUrl: string;
@@ -59,7 +64,9 @@ export interface InventoryItem {
   heroId: string;
   hero?: Hero;
   gameItemId: string;
-  gameItem: GameItem;
+  gameItem?: GameItem;
+
+  equipments: Equipment[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -74,10 +81,12 @@ export interface Modifier {
   intelligence?: number;
   constitution?: number;
   luck?: number;
-  health: number;
-  mana: number;
-  maxHealth: number;
-  maxMana: number;
+  health?: number;
+  mana?: number;
+  maxHealth?: number;
+  maxMana?: number;
+  manaRegeneration?: number;
+  healthRegeneration?: number;
   armor?: number;
   magicResistances?: number;
   evasion?: number;
@@ -105,10 +114,31 @@ interface Buff {
   updatedAt: Date;
 }
 
+export enum EquipmentSlot {
+  WEAPON = 'WEAPON',
+  SHIELD = 'SHIELD',
+  HELMET = 'HELMET',
+  BREASTPLATE = 'BREASTPLATE',
+  LEGS = 'LEGS',
+  BOOTS = 'BOOTS',
+  AMULET = 'AMULET',
+  RING = 'RING',
+}
+
+export enum RarityType {
+  COMMON = 'COMMON',
+  MAGIC = 'MAGIC',
+  EPIC = 'EPIC',
+  RARE = 'RARE',
+}
+
 export enum ItemType {
   POTION = 'POTION',
   BOOK = 'BOOK',
-  WEAPON = 'WEAPON',
+  SWORD = 'SWORD',
+  AXE = 'AXE',
+  DAGGER = 'DAGGER',
+  STAFF = 'STAFF',
   BREASTPLATE = 'BREASTPLATE',
   BELT = 'BELT',
   LEGS = 'LEGS',

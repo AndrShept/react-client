@@ -10,21 +10,21 @@ import { useGetMyHeroQuery } from '@/lib/services/game/heroApi';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { useSocket } from '../providers/SocketProvider';
-import { ScrollArea } from '../ui/scroll-area';
+
 import { GameItemCard } from './_components/GameItemCard';
 import { GameNavbar } from './_components/GameNavbar';
+import { HeroInventory } from './_components/HeroInventory';
 import { Paperdoll } from './_components/Paperdoll';
+import { useSocket } from '@/components/providers/SocketProvider';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export const Game = () => {
   const navigate = useNavigate();
   const { username } = useAuth();
   const { pathname } = useLocation();
   const { socket } = useSocket();
-  const { data: hero, isLoading } = useGetMyHeroQuery();
+  const { data: hero, isLoading, isError } = useGetMyHeroQuery();
   const dispatch = useAppDispatch();
-
-  console.log(hero);
 
   useEffect(() => {
     if (!isLoading && !hero) {
@@ -33,6 +33,7 @@ export const Game = () => {
   }, [hero, isLoading]);
 
   useEffect(() => {
+    console.log(hero);
     const socketListener = (data: Record<string, number>) => {
       console.log(data);
       dispatch(setHeroModifier(data));
@@ -44,6 +45,9 @@ export const Game = () => {
   }, [socket, username, hero]);
   if (isLoading) {
     return 'loading...';
+  }
+  if (isError) {
+    return <div>Error loading data</div>;
   }
   return (
     <section className="flex flex-col h-full ">
@@ -58,19 +62,7 @@ export const Game = () => {
 
               {/* //INVENTORY */}
               <div className=" flex-1">
-                <ul className="flex flex-wrap gap-1">
-                  {[...Array(hero?.inventorySlots)].map((_, idx) => (
-                    <div key={idx} className="size-12 border ">
-                      {hero?.inventorys[idx] && (
-                        <GameItemCard
-                          isSelected={false}
-                          item={hero?.inventorys[idx].gameItem!}
-                          inventoryItemId={hero?.inventorys[idx].id}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </ul>
+                <HeroInventory />
               </div>
             </section>
           </ResizablePanel>
@@ -84,9 +76,7 @@ export const Game = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       ) : (
-        <section className="size-full">
-          <Outlet />
-        </section>
+        <Outlet />
       )}
     </section>
   );

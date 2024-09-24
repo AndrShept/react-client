@@ -74,9 +74,11 @@ function App() {
           {pathname === '/' && <HomePage />}
           {pathname !== '/' && <Outlet />}
         </div>
-        <aside className="h-[calc(100vh-56px)] w-[260px] lg:flex hidden bg-secondary/50 sticky top-[56px] border-l p-2">
-          <UsersBar />
-        </aside>
+        {!pathname.includes('game') && (
+          <aside className="h-[calc(100vh-56px)] w-[260px] lg:flex hidden bg-secondary/50 sticky top-[56px] border-l p-2">
+            <UsersBar />
+          </aside>
+        )}
       </div>
       {state?.mode === 'post' && <PostModal />}
       {state?.mode === 'photo' && <PhotoModal />}

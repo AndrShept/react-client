@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
-import { IStats } from './CreateHeroPage';
+import { IStats } from './pages/CreateHeroPage';
 
 interface HeroStatsBlockProps {
   stats: IStats[];
