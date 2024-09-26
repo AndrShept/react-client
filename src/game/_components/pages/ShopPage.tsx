@@ -8,10 +8,9 @@ import { useMediaQuery } from 'usehooks-ts';
 
 import { shopNavList } from '../../utils';
 import { HeroInventory } from '../HeroInventory';
-import { ShopItemCard } from '../ShopItemCard';
+import { ItemCardInfo } from '../ItemCardInfo';
 
 export const ShopPage = () => {
-  const hero = useAppSelector((state) => state.hero.hero);
   const [filterType, setFilterType] = useState('sword');
   const shopItems = useAppSelector((state) =>
     state.gameItem.shopItems?.filter(
@@ -20,8 +19,7 @@ export const ShopPage = () => {
   );
   const { data: gameItems, isLoading, isError } = useGetAllItemsQuery();
   const isMobile = useMediaQuery('(min-width: 768px)');
-  console.log(shopItems);
-  console.log(hero);
+
 
   if (isLoading) {
     return <Spinner />;
@@ -58,7 +56,9 @@ export const ShopPage = () => {
       <div className="flex-1">
         <ScrollArea className="h-[99%] pr-2.5">
           <ul className="flex sm:flex-row flex-col gap-3">
-            {shopItems?.map((item) => <ShopItemCard item={item} />)}
+            {shopItems?.map((item) => (
+              <ItemCardInfo isShowBuyButton={true} item={item} />
+            ))}
           </ul>
         </ScrollArea>
       </div>

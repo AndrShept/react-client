@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/hooks/store';
-import { ItemType } from '@/lib/types/game.types';
+import { EquipmentSlot, ItemType } from '@/lib/types/game.types';
 import React from 'react';
 
 import { FillBar } from './FillBar';
@@ -8,11 +8,18 @@ import { HeroAvatar } from './HeroAvatar';
 
 export const Paperdoll = () => {
   const hero = useAppSelector((state) => state.hero.hero);
-  console.log(hero)
+  console.log(hero);
   const equipWeapon = hero?.equipments.find(
-    (equip) => equip.gameItem?.type === 'WEAPON',
+    (equip) => equip.slot === 'RIGHT_HAND',
+  );
+  const equipRing = hero?.equipments.find(
+    (equip) => equip.slot === 'RING',
+  );
+  const equipBreastplate = hero?.equipments.find(
+    (equip) => equip.slot === 'BREASTPLATE',
   );
   console.log(equipWeapon);
+  console.log(equipRing);
   return (
     <section className="  flex flex-col gap-4 border p-6 rounded-xl">
       <div className="flex items-center gap-2 ">
@@ -55,16 +62,16 @@ export const Paperdoll = () => {
         </section>
         <section className="mx-auto mt-4 flex ">
           <div className="space-y-2 mt-2">
-            <div id={ItemType.WEAPON} className="border size-14 mt-auto ">
-              {!equipWeapon?.gameItem && (
+            <div id={EquipmentSlot.RIGHT_HAND} className="border size-14 mt-auto ">
+              {!equipWeapon && (
                 <img
                   className="size-full object-cover opacity-10 grayscale"
                   src="/sprites/icons/weapon.png"
                   alt=""
                 />
               )}
-              {equipWeapon?.gameItem && (
-                <GameItemCard item={equipWeapon?.gameItem} />
+              {equipWeapon && (
+                <GameItemCard inventoryItemId={equipWeapon.inventoryItemId} isEquipped={equipWeapon.isEquipped}  item={equipWeapon?.inventoryItem?.gameItem} />
               )}
             </div>
             <div id={ItemType.RING} className="border size-6 ml-auto"></div>
@@ -73,7 +80,12 @@ export const Paperdoll = () => {
           <div
             id={ItemType.BREASTPLATE}
             className="border  w-[70px] h-20 mx-2"
-          ></div>
+          >
+
+            {equipBreastplate && (
+                <GameItemCard inventoryItemId={equipBreastplate.inventoryItemId} isEquipped={equipBreastplate.isEquipped}  item={equipBreastplate?.inventoryItem?.gameItem} />
+            )}
+          </div>
           <div className="space-y-2 mt-2">
             <div id={ItemType.SHIELD} className="border size-14 mt-auto "></div>
             <div id={ItemType.RING} className="border size-6 mr-auto"></div>

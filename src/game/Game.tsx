@@ -1,22 +1,23 @@
+import { useSocket } from '@/components/providers/SocketProvider';
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { useAppDispatch } from '@/hooks/store';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
 import { setHeroModifier } from '@/lib/redux/heroSlice';
 import { useGetMyHeroQuery } from '@/lib/services/game/heroApi';
+import { cn, dateNowFns, getTimeFns } from '@/lib/utils';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-
 
 import { GameItemCard } from './_components/GameItemCard';
 import { GameNavbar } from './_components/GameNavbar';
 import { HeroInventory } from './_components/HeroInventory';
 import { Paperdoll } from './_components/Paperdoll';
-import { useSocket } from '@/components/providers/SocketProvider';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { getRarityText } from './utils';
 
 export const Game = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ export const Game = () => {
   const { pathname } = useLocation();
   const { socket } = useSocket();
   const { data: hero, isLoading, isError } = useGetMyHeroQuery();
+  const sysMessages = useAppSelector((state) => state.hero.sysMessages);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -33,7 +35,6 @@ export const Game = () => {
   }, [hero, isLoading]);
 
   useEffect(() => {
-    console.log(hero);
     const socketListener = (data: Record<string, number>) => {
       console.log(data);
       dispatch(setHeroModifier(data));
@@ -67,12 +68,38 @@ export const Game = () => {
             </section>
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={30}>
-            <ScrollArea className="h-full ">
-              <section className="flex flex-col h-full   p-6 ">
-                <span className="font-semibold mx-auto">CHAT</span>
-              </section>
-            </ScrollArea>
+          <ResizablePanel defaultSize={30} className="flex ">
+            <section className="flex flex-col flex-1   p-6 ">
+              <span className="font-semibold mx-auto">CHAT</span>
+            </section>
+            <section className="flex-1 flex-col  border-l p-2  ">
+              <ScrollArea className="h-full">
+                <ul className="">
+                  {sysMessages.map((sysMessage) => (
+                    <li
+                      className={cn('text-sm space-x-1 text-green-400', {
+                        'text-red-400': !sysMessage.success,
+                      })}
+                    >
+                      <time className="text-muted-foreground">
+                        {getTimeFns(sysMessage.createdAt)}
+                      </time>
+                      <span>{sysMessage.message}</span>
+                      <span
+                        className={cn(
+                          '',
+                          sysMessage.success && {
+                            ...getRarityText(sysMessage.data?.gameItem),
+                          },
+                        )}
+                      >
+                        {sysMessage.data?.gameItem?.name}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </ScrollArea>
+            </section>
           </ResizablePanel>
         </ResizablePanelGroup>
       ) : (

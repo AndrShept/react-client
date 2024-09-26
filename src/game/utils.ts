@@ -121,3 +121,22 @@ export const shopNavList = [
     id: 10,
   },
 ];
+
+export const getRarity = (gameItem: GameItem) => {
+  if(!gameItem) return
+  return {
+    'border-blue-700': gameItem.rarity === 'MAGIC',
+    'border-purple-500': gameItem.rarity === 'EPIC',
+    'border-orange-500 ': gameItem.rarity === 'RARE',
+    'border-red-600 ': gameItem.rarity === 'LEGENDARY',
+  };
+};
+export const getRarityText = (gameItem: GameItem) => {
+  return {
+    'text-primary': gameItem.rarity === 'COMMON',
+    'text-blue-600': gameItem.rarity === 'MAGIC',
+    'text-purple-500': gameItem.rarity === 'EPIC',
+    'text-orange-400': gameItem.rarity === 'RARE',
+    'text-red-500 ': gameItem.rarity === 'LEGENDARY',
+  };
+};

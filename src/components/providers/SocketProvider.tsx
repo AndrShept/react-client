@@ -31,7 +31,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [socket, setSocket] = useState<null | Socket>(null);
   const { username, userId } = useAuth();
-  const [userOnline] = useUserOnlineMutation();
+  // const [userOnline] = useUserOnlineMutation();
 
   const sendMessage = (dataMsg: Message) => {
     socket?.emit('msg', dataMsg);
@@ -51,7 +51,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     const onConnect = async () => {
       setIsConnected(true);
       setSocket(socketInstance);
-      await userOnline();
+      // await userOnline();
     };
     const onDisconnect = async () => {
       setIsConnected(false);

@@ -2,21 +2,19 @@ import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
+import { getRarityText } from '../utils';
+
 interface Props {
   item: GameItem;
 }
 
 export const ItemModifiers = ({ item }: Props) => {
-  const rarity = {
-    'text-primary': item.rarity === 'COMMON',
-    'text-blue-600': item.rarity === 'MAGIC',
-    'text-purple-500': item.rarity === 'EPIC',
-    'text-orange-400': item.rarity === 'RARE',
-  };
   return (
     <div className="flex flex-col ">
       <div className="mb-2">
-        <h3 className={cn('text-base ', { ...rarity })}>{item.name}</h3>
+        <h3 className={cn('text-base ', { ...getRarityText(item) })}>
+          {item.name}
+        </h3>
         <p className="text-zinc-600 ">
           rarity : <span>{item.rarity.toLowerCase()}</span>
         </p>

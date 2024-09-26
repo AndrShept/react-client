@@ -22,6 +22,9 @@ export const dateFnsLessTime = (timestamp: Date) => {
     addSuffix: true,
   });
 };
+export const getTimeFns = (timestamp: Date) => {
+  return format(new Date(timestamp), 'HH:mm:ss');
+};
 
 export function hasErrorField(
   err: unknown,

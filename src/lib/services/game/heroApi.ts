@@ -1,4 +1,5 @@
 import {
+  EquipmentSlot,
   GameItem,
   Hero,
   InventoryItem,
@@ -29,21 +30,34 @@ export const heroApi = api.injectEndpoints({
         body: dataHero,
       }),
     }),
-    equipHeroItem: builder.mutation<InventoryItem, Record<string, string>>({
+    equipHeroItem: builder.mutation<
+      { success: boolean; message: string; data: InventoryItem },
+      { inventoryItemId: string; slot: EquipmentSlot }
+    >({
       query: (data) => ({
         url: '/hero-equip',
         method: 'POST',
         body: data,
       }),
     }),
+    unEquipHeroItem: builder.mutation<
+      { success: boolean; message: string; data: InventoryItem },
+      { inventoryItemId: string; slot: EquipmentSlot }
+    >({
+      query: (data) => ({
+        url: '/hero-unEquip',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     addHeroItemInventory: builder.mutation<
       InventoryItem,
-      { gameItemId: string }
+      { gameItemId: string; heroId?: string }
     >({
-      query: (gameItemId) => ({
+      query: (itemData) => ({
         url: '/add-inventory',
         method: 'POST',
-        body: gameItemId,
+        body: itemData,
       }),
     }),
   }),
@@ -54,7 +68,8 @@ export const {
   useLazyGetMyHeroQuery,
   useCreateHeroMutation,
   useEquipHeroItemMutation,
-  useAddHeroItemInventoryMutation
+  useAddHeroItemInventoryMutation,
+  useUnEquipHeroItemMutation,
 } = heroApi;
 
 export const {} = heroApi.endpoints;

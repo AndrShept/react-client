@@ -1,25 +1,39 @@
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu';
+import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppSelector } from '@/hooks/store';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
-import { useEquipHeroItemMutation } from '@/lib/services/game/heroApi';
-import { GameItem, InventoryItem } from '@/lib/types/game.types';
+import { setSysMessages } from '@/lib/redux/heroSlice';
+import {
+  useEquipHeroItemMutation,
+  useGetMyHeroQuery,
+  useLazyGetMyHeroQuery,
+  useUnEquipHeroItemMutation,
+} from '@/lib/services/game/heroApi';
+import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
-import { stat } from 'fs';
-import React, { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'sonner';
 
-import { getModifiers } from '../utils';
+import { getRarity } from '../utils';
+import { ItemCardInfo } from './ItemCardInfo';
 
-interface InventoryItemCardProps {
-  item: GameItem;
+interface Props {
+  item: GameItem | undefined;
   setHeroItem?: (gameItem: GameItem) => void;
   isSelected?: boolean;
   classname?: string;
   inventoryItemId?: string;
+  isContextMenuShow?: boolean;
+  isEquipped?: boolean;
 }
 
 export const GameItemCard = ({
@@ -28,90 +42,114 @@ export const GameItemCard = ({
   isSelected,
   classname,
   inventoryItemId,
-}: InventoryItemCardProps) => {
+  isEquipped,
+  isContextMenuShow = true,
+}: Props) => {
+  if (!item) {
+    return;
+  }
   const dispatch = useDispatch();
-  const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const gameItem = useAppSelector((state) => state.gameItem.gameItem);
   const [equipHero] = useEquipHeroItemMutation();
+  const [unEquipHero] = useUnEquipHeroItemMutation();
+  const [refetchHero] = useLazyGetMyHeroQuery();
   const onMouseEnter = () => {
     dispatch(setGameItem(item));
   };
-  const modifiersArr = getModifiers(gameItem);
 
-  const onClick = async () => {
+  const onClick = () => {
     setHeroItem && setHeroItem(item);
+  };
+  const onEquip = async () => {
     try {
-      await equipHero({
-        heroId: heroId!,
+      const res = await equipHero({
         inventoryItemId: inventoryItemId!,
-        gameItemId: item.id,
-        slot: item.type,
+        slot: item.slot,
       }).unwrap();
+      console.log(res);
+      await refetchHero().unwrap();
+      if (res.message) {
+        dispatch(setSysMessages({ ...res, createdAt: new Date() }));
+      }
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong');
+    }
+  };
+
+  const onUnEquipHero = async () => {
+    console.log(item);
+    try {
+      await unEquipHero({
+        inventoryItemId: inventoryItemId!,
+        slot: item.slot,
+      }).unwrap();
+      await refetchHero().unwrap();
+    } catch (error) {
+      console.log(error);
+      toast.error('Something went wrong');
     }
   };
   return (
     <>
       <HoverCard openDelay={0} closeDelay={0}>
-        <div className="relative">
-          <HoverCardTrigger>
-            <img
-              onClick={onClick}
-              onMouseEnter={onMouseEnter}
-              key={item.id}
-              className={cn(
-                ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer  ',
-                classname,
-                {
-                  'border-primary': isSelected,
-                },
-              )}
-              src={item.imageUrl}
-              alt="weapon-image"
-            />
-          </HoverCardTrigger>
-        </div>
-
-        <HoverCardContent className="w-fit text-[15px]">
-          <section className="flex gap-4">
-            <img
-              className="object-cover shrink-0  lg:size-16 size-14 border  shadow rounded "
-              src={gameItem?.imageUrl}
-              alt="weapon-image"
-            />
-
-            <div className="flex flex-col">
-              <h3 className="font-medium text-base mb-2">{gameItem?.name}</h3>
-              <div className="">
-                {gameItem?.modifier?.minDamage &&
-                  gameItem?.modifier?.maxDamage && (
-                    <p className="text-yellow-100">
-                      damage <span>{gameItem?.modifier?.minDamage}</span> -
-                      <span> {gameItem?.modifier?.maxDamage}</span>
-                    </p>
+        <ContextMenu>
+          <div className="relative">
+            <ContextMenuTrigger>
+              <HoverCardTrigger>
+                <img
+                  onClick={onClick}
+                  onMouseEnter={onMouseEnter}
+                  key={item.id}
+                  className={cn(
+                    ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer  ',
+                    classname,
+                    {
+                      'border-primary': isSelected,
+                    },
+                    // {...getRarity(item)}
                   )}
+                  src={item.imageUrl}
+                  alt="weapon-image"
+                />
+              </HoverCardTrigger>
+            </ContextMenuTrigger>
+          </div>
 
-                {modifiersArr.map((modifier) => (
-                  <Fragment key={modifier.name}>
-                    {modifier.value && (
-                      <p className="text-primary ">
-                        +{modifier.value}
-                        <span
-                          className={cn(
-                            'text-muted-foreground ml-2',
-                            modifier.color,
-                          )}
-                        >
-                          {modifier.name}
-                        </span>
-                      </p>
-                    )}
-                  </Fragment>
-                ))}
-              </div>
-            </div>
-          </section>
+          {isContextMenuShow && (
+            <ContextMenuContent>
+              {!isEquipped && (
+                <ContextMenuItem
+                  onClick={onEquip}
+                  className="text-xs space-x-1"
+                >
+                  <img
+                    className="size-5"
+                    src={'/sprites/icons/equip.png'}
+                    alt="equip-image"
+                  />
+                  <span>Equip</span>
+                </ContextMenuItem>
+              )}
+
+              {isEquipped && (
+                <ContextMenuItem
+                  onClick={onUnEquipHero}
+                  className="text-xs space-x-1"
+                >
+                  <img
+                    className="size-5"
+                    src={'/sprites/icons/equip.png'}
+                    alt="equip-image"
+                  />
+                  <span className="text-yellow-200">Unequip </span>
+                </ContextMenuItem>
+              )}
+            </ContextMenuContent>
+          )}
+        </ContextMenu>
+
+        <HoverCardContent className="p-0 border-none">
+          <ItemCardInfo item={item} />
         </HoverCardContent>
       </HoverCard>
     </>

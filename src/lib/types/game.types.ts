@@ -23,35 +23,21 @@ export interface Hero {
   createdAt: Date;
   updatedAt: Date;
 }
-interface Equipment {
-  id: string;
-  heroId: string;
-  hero: Hero;
 
-  inventoryItem: InventoryItem;
-  inventoryItemId: string;
-  gameItem: GameItem;
-  gameItemId: string;
-
-  slot: EquipmentSlot;
-
-  createdAt: Date;
-  updatedAt: Date;
-}
 export interface GameItem {
   id: string;
   name: string;
-  price?: number;
-  quantity?: number;
+  price: number;
+
   type: ItemType;
   slot: EquipmentSlot;
   rarity: RarityType;
   weaponType?: WeaponType;
   tag: ItemTag;
   imageUrl: string;
+
   inventory: InventoryItem[];
-  isEquipped: boolean;
-  isCanEquipped: boolean;
+
   modifierId: string;
   modifier: Modifier;
 
@@ -59,12 +45,35 @@ export interface GameItem {
   updatedAt: Date;
 }
 
+interface Equipment {
+  id: string;
+
+  isEquipped: boolean;
+  isCanEquipped: boolean;
+
+  heroId: string;
+  hero: Hero;
+
+  inventoryItem: InventoryItem;
+  inventoryItemId: string;
+
+  slot: EquipmentSlot;
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface InventoryItem {
   id: string;
+  quantity: number;
+  isEquipped: boolean;
+  isCanEquipped: boolean;
+
   heroId: string;
-  hero?: Hero;
+  hero: Hero;
+
   gameItemId: string;
-  gameItem?: GameItem;
+  gameItem: GameItem;
 
   equipments: Equipment[];
 
@@ -115,7 +124,8 @@ interface Buff {
 }
 
 export enum EquipmentSlot {
-  WEAPON = 'WEAPON',
+  RIGHT_HAND = 'RIGHT_HAND',
+  LEFT_HAND = ' LEFT_HAND',
   SHIELD = 'SHIELD',
   HELMET = 'HELMET',
   BREASTPLATE = 'BREASTPLATE',
@@ -130,6 +140,7 @@ export enum RarityType {
   MAGIC = 'MAGIC',
   EPIC = 'EPIC',
   RARE = 'RARE',
+  LEGENDARY = 'LEGENDARY',
 }
 
 export enum ItemType {
