@@ -45,7 +45,7 @@ export interface GameItem {
   updatedAt: Date;
 }
 
-interface Equipment {
+export interface Equipment {
   id: string;
 
   isEquipped: boolean;
@@ -132,7 +132,9 @@ export enum EquipmentSlot {
   LEGS = 'LEGS',
   BOOTS = 'BOOTS',
   AMULET = 'AMULET',
-  RING = 'RING',
+  RING_LEFT = 'RING_LEFT',
+  RING_RIGHT = 'RING_RIGHT',
+  BELT = 'BELT',
 }
 
 export enum RarityType {

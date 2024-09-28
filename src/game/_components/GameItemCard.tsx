@@ -34,6 +34,7 @@ interface Props {
   inventoryItemId?: string;
   isContextMenuShow?: boolean;
   isEquipped?: boolean;
+  isDoubleCLick?: boolean;
 }
 
 export const GameItemCard = ({
@@ -44,6 +45,7 @@ export const GameItemCard = ({
   inventoryItemId,
   isEquipped,
   isContextMenuShow = true,
+  isDoubleCLick = true,
 }: Props) => {
   if (!item) {
     return;
@@ -89,6 +91,14 @@ export const GameItemCard = ({
       toast.error('Something went wrong');
     }
   };
+
+  const onDoubleClick = async () => {
+    if (isDoubleCLick && !isEquipped) {
+      await onEquip();
+    } else {
+      await onUnEquipHero();
+    }
+  };
   return (
     <>
       <HoverCard openDelay={0} closeDelay={0}>
@@ -97,6 +107,7 @@ export const GameItemCard = ({
             <ContextMenuTrigger>
               <HoverCardTrigger>
                 <img
+                  onDoubleClick={onDoubleClick}
                   onClick={onClick}
                   onMouseEnter={onMouseEnter}
                   key={item.id}

@@ -35,7 +35,7 @@ export const CreateHeroPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const { data: items, isLoading, isError } = useGetNoviceItemsQuery();
   const armors = items?.filter((item) => item.type === 'BREASTPLATE');
-  const weapons = items?.filter((item) => item.type === 'STAFF'   );
+  const weapons = items?.filter((item) => item.type === 'STAFF');
   const [avatarUrl, setAvatarUrl] = useState('');
   const navigate = useNavigate();
   const { setStatPoints, setStats, statPoints, stats } = useGetStats({});
@@ -99,12 +99,14 @@ export const CreateHeroPage = () => {
     }
   }, [errorMessage]);
 
-  useEffect(() => {
-    if (hero) {
-      navigate('/game');
-    }
-  }, [hero]);
-
+  // useEffect(() => {
+  //   if (hero) {
+  //     navigate('/game');
+  //   }
+  // }, [hero]);
+  if (hero) {
+    navigate('/game');
+  }
   return (
     <Background imageUrl="/sprites/shrine6.png">
       <Button asChild variant={'outline'} className="">

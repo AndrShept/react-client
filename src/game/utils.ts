@@ -1,4 +1,9 @@
-import { GameItem, InventoryItem, Modifier } from '@/lib/types/game.types';
+import {
+  EquipmentSlot,
+  GameItem,
+  InventoryItem,
+  Modifier,
+} from '@/lib/types/game.types';
 
 export const getRandomValue = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -59,6 +64,78 @@ export const getModifiers = (item: GameItem | null) => {
   return modifiersArr;
 };
 
+export const getRarity = (gameItem: GameItem) => {
+  if (!gameItem) return;
+  return {
+    'border-blue-700': gameItem.rarity === 'MAGIC',
+    'border-purple-500': gameItem.rarity === 'EPIC',
+    'border-orange-500 ': gameItem.rarity === 'RARE',
+    'border-red-600 ': gameItem.rarity === 'LEGENDARY',
+  };
+};
+export const getRarityText = (gameItem: GameItem) => {
+  return {
+    'text-primary': gameItem.rarity === 'COMMON',
+    'text-blue-600': gameItem.rarity === 'MAGIC',
+    'text-purple-500': gameItem.rarity === 'EPIC',
+    'text-orange-400': gameItem.rarity === 'RARE',
+    'text-red-500 ': gameItem.rarity === 'LEGENDARY',
+  };
+};
+
+export const equipmentsHeroList = [
+  {
+    id: 1,
+    slot: EquipmentSlot.HELMET,
+    imageUrl: '/sprites/icons/helmet.png',
+  },
+  {
+    id: 2,
+    slot: EquipmentSlot.BREASTPLATE,
+    imageUrl: '/sprites/icons/armor.png',
+  },
+  {
+    id: 3,
+    slot: EquipmentSlot.BELT,
+    imageUrl: '/sprites/icons/belt.png',
+  },
+  {
+    id: 4,
+    slot: EquipmentSlot.LEGS,
+    imageUrl: '/sprites/icons/legs.png',
+  },
+  {
+    id: 5,
+    slot: EquipmentSlot.BOOTS,
+    imageUrl: '/sprites/icons/boots.png',
+  },
+
+  {
+    id: 8,
+    slot: EquipmentSlot.AMULET,
+    imageUrl: '/sprites/icons/amulet.png',
+  },
+  {
+    id: 9,
+    slot: EquipmentSlot.RING_LEFT,
+    imageUrl: '/sprites/icons/ring.png',
+  },
+  {
+    id: 10,
+    slot: EquipmentSlot.RING_RIGHT,
+    imageUrl: '/sprites/icons/ring.png',
+  },
+  {
+    id: 6,
+    slot: EquipmentSlot.RIGHT_HAND,
+    imageUrl: '/sprites/icons/weapon.png',
+  },
+  {
+    id: 7,
+    slot: EquipmentSlot.LEFT_HAND,
+    imageUrl: '/sprites/icons/shield.png',
+  },
+];
 export const shopNavList = [
   {
     label: 'sword',
@@ -121,22 +198,3 @@ export const shopNavList = [
     id: 10,
   },
 ];
-
-export const getRarity = (gameItem: GameItem) => {
-  if(!gameItem) return
-  return {
-    'border-blue-700': gameItem.rarity === 'MAGIC',
-    'border-purple-500': gameItem.rarity === 'EPIC',
-    'border-orange-500 ': gameItem.rarity === 'RARE',
-    'border-red-600 ': gameItem.rarity === 'LEGENDARY',
-  };
-};
-export const getRarityText = (gameItem: GameItem) => {
-  return {
-    'text-primary': gameItem.rarity === 'COMMON',
-    'text-blue-600': gameItem.rarity === 'MAGIC',
-    'text-purple-500': gameItem.rarity === 'EPIC',
-    'text-orange-400': gameItem.rarity === 'RARE',
-    'text-red-500 ': gameItem.rarity === 'LEGENDARY',
-  };
-};
