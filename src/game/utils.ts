@@ -106,7 +106,7 @@ export const equipmentsHeroList = [
   },
   {
     id: 5,
-    slot: EquipmentSlot.BOOTS,
+    slot: EquipmentSlot.SHOES,
     imageUrl: '/sprites/icons/boots.png',
   },
 
@@ -166,7 +166,7 @@ export const shopNavList = [
     id: 5,
   },
   {
-    label: 'leg',
+    label: 'legs',
     id: 9,
   },
   {
@@ -174,7 +174,7 @@ export const shopNavList = [
     id: 3,
   },
   {
-    label: 'boot',
+    label: 'shoes',
     id: 4,
   },
 

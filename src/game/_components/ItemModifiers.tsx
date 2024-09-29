@@ -27,103 +27,103 @@ export const ItemModifiers = ({ item }: Props) => {
         )}
       </div>
 
-      {item.modifier.minDamage && (
+      {!!item.modifier.minDamage && item.modifier.maxDamage && (
         <p className="text-yellow-300">
           {item.modifier.minDamage} - {item.modifier.maxDamage} damage
         </p>
       )}
-      {item.modifier.strength && (
+      {!!item.modifier.strength && (
         <p>
           + {item.modifier.strength}
           <span> strength </span>
         </p>
       )}
-      {item.modifier.dexterity && (
+      {!!item.modifier.dexterity && (
         <p>
           + {item.modifier.dexterity}
           <span> dexterity </span>
         </p>
       )}
-      {item.modifier.constitution && (
+      {!!item.modifier.constitution && (
         <p>
           + {item.modifier.constitution}
           <span> constitution </span>
         </p>
       )}
 
-      {item.modifier.intelligence && (
+      {!!item.modifier.intelligence && (
         <p>
           + {item.modifier.intelligence}
           <span> intelligence </span>
         </p>
       )}
-      {item.modifier.luck && (
+      {!!item.modifier.luck && (
         <p>
           + {item.modifier.luck}
           <span> luck </span>
         </p>
       )}
-      {item.modifier.armor && (
+      {!!item.modifier.armor && (
         <p>
           + {item.modifier.armor}
           <span> armor </span>
         </p>
       )}
-      {item.modifier.evasion && (
+      {!!item.modifier.evasion && (
         <p>
           + {item.modifier.evasion}
           <span> evasion </span>
         </p>
       )}
-      {item.modifier.maxHealth && (
+      {!!item.modifier.maxHealth && (
         <p>
           + {item.modifier.maxHealth}
           <span> health </span>
         </p>
       )}
-      {item.modifier.maxMana && (
+      {!!item.modifier.maxMana && (
         <p>
           + {item.modifier.maxMana}
           <span> mana</span>
         </p>
       )}
-      {item.modifier.magicResistances && (
+      {!!item.modifier.magicResistances && (
         <p>
           + {item.modifier.magicResistances}
           <span> magic resistances </span>
         </p>
       )}
-      {item.modifier.meleeDamage && (
+      {!!item.modifier.meleeDamage && (
         <p>
           + {item.modifier.meleeDamage}
           <span> melee damage </span>
         </p>
       )}
-      {item.modifier.meleeDamageCritChance && (
+      {!!item.modifier.meleeDamageCritChance && (
         <p>
           + {item.modifier.meleeDamageCritChance}
           <span> melee damage CC </span>
         </p>
       )}
-      {item.modifier.meleeDamageCritPower && (
+      {!!item.modifier.meleeDamageCritPower && (
         <p>
           + {item.modifier.meleeDamageCritPower}
           <span> melee damage CP </span>
         </p>
       )}
-      {item.modifier.spellDamage && (
+      {!!item.modifier.spellDamage && (
         <p>
           + {item.modifier.spellDamage}
           <span> spell damage </span>
         </p>
       )}
-      {item.modifier.meleeDamageCritChance && (
+      {!!item.modifier.meleeDamageCritChance && (
         <p>
           + {item.modifier.meleeDamageCritChance}
           <span> spell damage CC </span>
         </p>
       )}
-      {item.modifier.spellDamageCritPower && (
+      {!!item.modifier.spellDamageCritPower && (
         <p>
           + {item.modifier.spellDamageCritPower}
           <span> spell damage CP </span>

@@ -15,7 +15,7 @@ interface Props {
 export const ItemCardInfo = ({ item, isShowBuyButton = false }: Props) => {
   return (
     <article
-      className={cn('flex flex-col p-4 border rounded gap-4 text-sm ', {
+      className={cn('flex flex-col p-4 border rounded gap-4 text-sm   ', {
         ...getRarity(item),
       })}
     >

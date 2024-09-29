@@ -7,7 +7,7 @@ interface ISysMessages {
   message: string;
   data: InventoryItem;
   success: boolean
-  createdAt: Date
+  createdAt: number
 }
 
 interface initialState {

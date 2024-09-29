@@ -58,9 +58,9 @@ export const Game = () => {
     <section className="flex flex-col h-full font-roboto  ">
       <GameNavbar />
 
-      {pathname === '/game' ? (
-        <ResizablePanelGroup direction="vertical" className="   ">
-          <ResizablePanel defaultSize={70}>
+      <ResizablePanelGroup direction="vertical" className="   ">
+        <ResizablePanel defaultSize={70}>
+          {pathname === '/game' ? (
             <section className="flex md:p-5 p-3 gap-3">
               {/* //HERO BLOCK */}
               <Paperdoll hero={hero} />
@@ -70,16 +70,16 @@ export const Game = () => {
                 <HeroInventory />
               </div>
             </section>
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={30} className="flex">
-            <Chat />
-            <SysMessage />
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      ) : (
-        <Outlet />
-      )}
+          ) : (
+            <Outlet />
+          )}
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={30} className="flex">
+          <Chat />
+          <SysMessage />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </section>
   );
 };

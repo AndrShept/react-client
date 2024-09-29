@@ -164,6 +164,11 @@ export const CreateHeroPage = () => {
                         setHeroItem={() => setHeroWeapon(weapon)}
                         item={weapon}
                         isSelected={weapon.id === heroWeapon?.id}
+                        equipmentHeroId=""
+                        inventoryItemId=""
+                        isDoubleCLick={false}
+                        isEquipped={false}
+                        isCanEquipped={false}
                       />
                     ))}
                   </ul>
@@ -173,10 +178,15 @@ export const CreateHeroPage = () => {
                   <ul className="flex gap-2">
                     {armors?.map((armor) => (
                       <GameItemCard
-                        classname="lg:size-16 size-14 rounded "
+                        classname=" size-14 rounded "
                         setHeroItem={() => setHeroArmor(armor)}
                         item={armor}
                         isSelected={armor.id === heroArmor?.id}
+                        equipmentHeroId=""
+                        inventoryItemId=""
+                        isDoubleCLick={false}
+                        isEquipped={false}
+                        isCanEquipped={false}
                       />
                     ))}
                   </ul>

@@ -40,7 +40,7 @@ export const CreateItemPage = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setImageUrl(`/sprites/armor/${file.name}`);
+    setImageUrl(`/sprites/equipments/amulets/${file.name}`);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +108,7 @@ export const CreateItemPage = () => {
               </option>
             ))}
           </select>
-          <select
+          {/* <select
             className="bg-secondary"
             onChange={(e) =>
               setItemType((prev) => ({ ...prev, slot: e.target.value }))
@@ -120,15 +120,15 @@ export const CreateItemPage = () => {
                 {item}
               </option>
             ))}
-          </select>
+          </select> */}
           <select
-            value={undefined}
+       
             className="bg-secondary"
             onChange={(e) =>
               setItemType((prev) => ({ ...prev, weaponType: e.target.value }))
             }
           >
-            <option value={undefined}>null</option>
+            <option value={undefined}>undefined</option>
             <option value={WeaponType.ONE_HAND}>{WeaponType.ONE_HAND}</option>
             <option value={WeaponType.TWO_HAND}>{WeaponType.TWO_HAND}</option>
           </select>

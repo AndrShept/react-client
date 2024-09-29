@@ -125,12 +125,11 @@ interface Buff {
 
 export enum EquipmentSlot {
   RIGHT_HAND = 'RIGHT_HAND',
-  LEFT_HAND = ' LEFT_HAND',
-  SHIELD = 'SHIELD',
+  LEFT_HAND = 'LEFT_HAND',
   HELMET = 'HELMET',
   BREASTPLATE = 'BREASTPLATE',
   LEGS = 'LEGS',
-  BOOTS = 'BOOTS',
+  SHOES = 'SHOES',
   AMULET = 'AMULET',
   RING_LEFT = 'RING_LEFT',
   RING_RIGHT = 'RING_RIGHT',

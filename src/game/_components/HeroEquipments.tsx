@@ -16,6 +16,7 @@ export const HeroEquipments = ({ equipments }: Props) => {
     },
     {} as Record<EquipmentSlot, Equipment>,
   );
+
   return (
     <div className="flex">
       <ul className="flex flex-col gap-0.5">
@@ -28,6 +29,9 @@ export const HeroEquipments = ({ equipments }: Props) => {
                 inventoryItemId={
                   equipmentBySlot[equipment.slot].inventoryItemId
                 }
+                equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
+                isDoubleCLick={true}
+                isCanEquipped={false}
               />
             ) : (
               <img
@@ -62,6 +66,9 @@ export const HeroEquipments = ({ equipments }: Props) => {
                 inventoryItemId={
                   equipmentBySlot[equipment.slot].inventoryItemId
                 }
+                equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
+                isDoubleCLick={true}
+                isCanEquipped={false}
               />
             ) : (
               <img

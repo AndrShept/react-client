@@ -31,10 +31,12 @@ interface Props {
   setHeroItem?: (gameItem: GameItem) => void;
   isSelected?: boolean;
   classname?: string;
-  inventoryItemId?: string;
+  inventoryItemId: string;
+  equipmentHeroId: string;
   isContextMenuShow?: boolean;
-  isEquipped?: boolean;
-  isDoubleCLick?: boolean;
+  isEquipped: boolean;
+  isCanEquipped: boolean;
+  isDoubleCLick: boolean;
 }
 
 export const GameItemCard = ({
@@ -43,17 +45,21 @@ export const GameItemCard = ({
   isSelected,
   classname,
   inventoryItemId,
+  equipmentHeroId,
   isEquipped,
   isContextMenuShow = true,
-  isDoubleCLick = true,
+  isDoubleCLick,
+  isCanEquipped,
 }: Props) => {
   if (!item) {
     return;
   }
   const dispatch = useDispatch();
+  const heroId = useAppSelector((state) => state.hero.hero?.id);
   const [equipHero] = useEquipHeroItemMutation();
   const [unEquipHero] = useUnEquipHeroItemMutation();
   const [refetchHero] = useLazyGetMyHeroQuery();
+  const isSelf = equipmentHeroId === heroId;
   const onMouseEnter = () => {
     dispatch(setGameItem(item));
   };
@@ -67,10 +73,9 @@ export const GameItemCard = ({
         inventoryItemId: inventoryItemId!,
         slot: item.slot,
       }).unwrap();
-      console.log(res);
       await refetchHero().unwrap();
       if (res.message) {
-        dispatch(setSysMessages({ ...res, createdAt: new Date() }));
+        dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
       }
     } catch (error) {
       console.log(error);
@@ -79,7 +84,6 @@ export const GameItemCard = ({
   };
 
   const onUnEquipHero = async () => {
-    console.log(item);
     try {
       await unEquipHero({
         inventoryItemId: inventoryItemId!,
@@ -93,7 +97,7 @@ export const GameItemCard = ({
   };
 
   const onDoubleClick = async () => {
-    if (isDoubleCLick && !isEquipped) {
+    if (isDoubleCLick && !isEquipped && isSelf && isCanEquipped) {
       await onEquip();
     } else {
       await onUnEquipHero();
@@ -112,7 +116,7 @@ export const GameItemCard = ({
                   onMouseEnter={onMouseEnter}
                   key={item.id}
                   className={cn(
-                    ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer  ',
+                    ' hover:opacity-100 transition-opacity opacity-75 border  shadow cursor-pointer size-full  ',
                     classname,
                     {
                       'border-primary': isSelected,
@@ -126,9 +130,9 @@ export const GameItemCard = ({
             </ContextMenuTrigger>
           </div>
 
-          {isContextMenuShow && (
+          {isContextMenuShow && isSelf && (
             <ContextMenuContent>
-              {!isEquipped && (
+              {!isEquipped && isCanEquipped && (
                 <ContextMenuItem
                   onClick={onEquip}
                   className="text-xs space-x-1"
