@@ -18,6 +18,7 @@ import {
   useLazyGetMyHeroQuery,
   useUnEquipHeroItemMutation,
 } from '@/lib/services/game/heroApi';
+import { ErrorMessage } from '@/lib/types';
 import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { useDispatch } from 'react-redux';
@@ -78,8 +79,13 @@ export const GameItemCard = ({
         dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
       }
     } catch (error) {
-      console.log(error);
-      toast.error('Something went wrong');
+      const err = error as ErrorMessage;
+      if (err.data.message) {
+        dispatch(setSysMessages({ ...err.data, createdAt: Date.now() }));
+      } else {
+        console.log(error);
+        toast.error('Something went wrong');
+      }
     }
   };
 
@@ -91,8 +97,13 @@ export const GameItemCard = ({
       }).unwrap();
       await refetchHero().unwrap();
     } catch (error) {
-      console.log(error);
-      toast.error('Something went wrong');
+      const err = error as ErrorMessage;
+      if (err.data.message) {
+        dispatch(setSysMessages({ ...err.data, createdAt: Date.now() }));
+      } else {
+        console.log(error);
+        toast.error('Something went wrong');
+      }
     }
   };
 

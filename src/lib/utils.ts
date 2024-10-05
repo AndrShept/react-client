@@ -22,7 +22,7 @@ export const dateFnsLessTime = (timestamp: Date) => {
     addSuffix: true,
   });
 };
-export const getTimeFns = (timestamp: Date) => {
+export const getTimeFns = (timestamp:number) => {
   return format(new Date(timestamp), 'HH:mm:ss');
 };
 

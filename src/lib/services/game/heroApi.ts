@@ -1,3 +1,4 @@
+import { ServerResponse } from '@/lib/types';
 import {
   EquipmentSlot,
   GameItem,
@@ -30,8 +31,21 @@ export const heroApi = api.injectEndpoints({
         body: dataHero,
       }),
     }),
+    updateHero: builder.mutation<Hero, Partial<Hero >>({
+      query: (data) => ({
+        url: '/hero-update',
+        method: 'PUT',
+        body: data,
+      }),
+    }),
+    resetStats: builder.mutation<ServerResponse<null>, void>({
+      query: () => ({
+        url: '/reset-stats',
+        method: 'PUT',
+      }),
+    }),
     equipHeroItem: builder.mutation<
-      { success: boolean; message: string; data: InventoryItem },
+      ServerResponse<InventoryItem>,
       { inventoryItemId: string; slot: EquipmentSlot }
     >({
       query: (data) => ({
@@ -41,7 +55,7 @@ export const heroApi = api.injectEndpoints({
       }),
     }),
     unEquipHeroItem: builder.mutation<
-      { success: boolean; message: string; data: InventoryItem },
+      ServerResponse<InventoryItem>,
       { inventoryItemId: string; slot: EquipmentSlot }
     >({
       query: (data) => ({
@@ -70,6 +84,8 @@ export const {
   useEquipHeroItemMutation,
   useAddHeroItemInventoryMutation,
   useUnEquipHeroItemMutation,
+  useUpdateHeroMutation,
+  useResetStatsMutation,
 } = heroApi;
 
 export const {} = heroApi.endpoints;

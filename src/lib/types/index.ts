@@ -1,3 +1,5 @@
+import { InventoryItem } from './game.types';
+
 export type User = {
   id: string;
   email: string;
@@ -200,12 +202,19 @@ export type ErrorMessage = {
   data: {
     message: string;
     success: boolean;
+    data: InventoryItem;
   };
 };
 
 export interface LocationState {
   post: Post;
   mode: 'post';
+}
+
+export interface ServerResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
 }
 
 export type LikeType = 'post' | 'comment' | 'photo';

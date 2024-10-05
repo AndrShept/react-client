@@ -19,7 +19,6 @@ export const ShopPage = () => {
   );
   const { data: gameItems, isLoading, isError } = useGetAllItemsQuery();
   const isMobile = useMediaQuery('(min-width: 768px)');
-console.log(filterType)
   if (isLoading) {
     return <Spinner />;
   }

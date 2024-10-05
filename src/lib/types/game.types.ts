@@ -82,7 +82,7 @@ export interface InventoryItem {
 }
 
 export interface Modifier {
-  id: string;
+  id?: string;
   minDamage?: number;
   maxDamage?: number;
   strength?: number;
@@ -106,9 +106,9 @@ export interface Modifier {
   meleeDamageCritPower?: number;
   meleeDamageCritChance?: number;
   duration?: number;
-  buffs: Buff[];
-  inventoryItems: InventoryItem[];
-  hero: Hero[];
+  buffs?: Buff[];
+  inventoryItems?: InventoryItem[];
+  hero?: Hero[];
 }
 
 interface Buff {

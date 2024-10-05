@@ -4,7 +4,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { Separator } from '@/components/ui/separator';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
 import { setHeroModifier } from '@/lib/redux/heroSlice';
@@ -15,6 +14,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Chat } from './_components/Chat';
 import { GameNavbar } from './_components/GameNavbar';
 import { HeroInventory } from './_components/HeroInventory';
+import { HeroModifiers } from './_components/HeroModifiers';
 import { Paperdoll } from './_components/Paperdoll';
 import { SysMessage } from './_components/SysMessage';
 
@@ -23,16 +23,9 @@ export const Game = () => {
   const { username } = useAuth();
   const { pathname } = useLocation();
   const { socket } = useSocket();
-  const { data, isLoading, isError } = useGetMyHeroQuery();
-  const hero = useAppSelector((state) => state.hero.hero);
-
+  const { data: hero, isLoading, isError } = useGetMyHeroQuery();
+  const heroState = useAppSelector((state) => state.hero.hero);
   const dispatch = useAppDispatch();
-
-  // useEffect(() => {
-  //   if (!hero) {
-  //     navigate('/create-hero');
-  //   }
-  // }, [hero]);
 
   useEffect(() => {
     const socketListener = (data: Record<string, number>) => {
@@ -43,14 +36,14 @@ export const Game = () => {
     return () => {
       socket?.off(username, socketListener);
     };
-  }, [socket, username, hero]);
+  }, [socket, username, heroState]);
   if (isLoading) {
     return 'loading...';
   }
   if (isError) {
     return <div>Error loading data</div>;
   }
-  if (!hero) {
+  if (!heroState) {
     navigate('/create-hero');
     return;
   }
@@ -61,9 +54,14 @@ export const Game = () => {
       <ResizablePanelGroup direction="vertical" className="   ">
         <ResizablePanel defaultSize={70}>
           {pathname === '/game' ? (
-            <section className="flex md:p-5 p-3 gap-3">
+            <section className="flex sm:flex-row flex-col md:p-5 p-3 gap-3">
               {/* //HERO BLOCK */}
-              <Paperdoll hero={hero} />
+              <Paperdoll hero={heroState} />
+
+              <HeroModifiers
+                freeStatsPoints={hero?.freeStatsPoints ?? 0}
+                modifiers={hero?.modifier}
+              />
 
               {/* //INVENTORY */}
               <div className=" flex-1">

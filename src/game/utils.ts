@@ -73,13 +73,13 @@ export const getRarity = (gameItem: GameItem) => {
     'border-red-600 ': gameItem.rarity === 'LEGENDARY',
   };
 };
-export const getRarityText = (gameItem: GameItem) => {
+export const getRarityText = (gameItem: GameItem | undefined) => {
   return {
-    'text-primary': gameItem.rarity === 'COMMON',
-    'text-blue-600': gameItem.rarity === 'MAGIC',
-    'text-purple-500': gameItem.rarity === 'EPIC',
-    'text-orange-400': gameItem.rarity === 'RARE',
-    'text-red-500 ': gameItem.rarity === 'LEGENDARY',
+    'text-primary': gameItem?.rarity === 'COMMON',
+    'text-blue-600': gameItem?.rarity === 'MAGIC',
+    'text-purple-500': gameItem?.rarity === 'EPIC',
+    'text-orange-400': gameItem?.rarity === 'RARE',
+    'text-red-500 ': gameItem?.rarity === 'LEGENDARY',
   };
 };
 

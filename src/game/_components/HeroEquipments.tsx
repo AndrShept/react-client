@@ -51,8 +51,8 @@ export const HeroEquipments = ({ equipments }: Props) => {
       </ul>
       <div className="mx-auto">
         <img
-          className="opacity-15 grayscale"
-          src={'sprites/hero-image/hero-1.png'}
+          className=" "
+          src={'sprites/hero-image/hero-2.jpg'}
           alt="hero-image"
         />
       </div>
