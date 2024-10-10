@@ -16,11 +16,13 @@ export const HeroModifiers = ({ modifiers, freeStatsPoints }: Props) => {
     <section className=" md:flex hidden flex-col border p-4 h-fit rounded gap-2 text-sm  ">
       <StatsBlock
         freeStatsPoints={freeStatsPoints}
-        constitution={modifiers?.constitution}
-        dexterity={modifiers?.dexterity}
-        strength={modifiers?.strength}
-        intelligence={modifiers?.intelligence}
-        luck={modifiers?.luck}
+        statsObj={{
+          constitution: modifiers?.constitution ?? 0,
+          dexterity: modifiers?.dexterity ?? 0,
+          strength: modifiers?.strength ?? 0,
+          intelligence: modifiers?.intelligence ?? 0,
+          luck: modifiers?.luck ?? 0,
+        }}
       />
       <Separator />
       <div className="text-muted-foreground">
