@@ -1,8 +1,5 @@
-import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Modifier } from '@/lib/types/game.types';
-import React, { useMemo } from 'react';
-import { toast } from 'sonner';
 
 import { StatsBlock } from './StatsBlock';
 

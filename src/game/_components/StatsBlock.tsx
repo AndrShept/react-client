@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { CheckIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { ConfirmPopover } from './ConfirmPopover';
 import { GoldIcon } from './game-icons/GoldIcon';
 
 interface Props {
@@ -134,15 +135,27 @@ export const StatsBlock = ({ freeStatsPoints, statsObj }: Props) => {
         )}
       </div>
 
-      <Button
-        className="mt-1"
-        disabled={isLoading || isLoadingUpdateHero}
-        variant={'secondary'}
-        size={'sm'}
-        onClick={onReset}
-      >
-        <GoldIcon classname="size-5 mr-1" /> reset
-      </Button>
+      <ConfirmPopover onConfirm={onReset}>
+        <ConfirmPopover.Trigger>
+          <Button
+            className="mt-1 w-full"
+            disabled={isLoading || isLoadingUpdateHero}
+            variant={'secondary'}
+            size={'sm'}
+          >
+            <GoldIcon classname="size-5 mr-1" /> reset
+          </Button>
+        </ConfirmPopover.Trigger>
+        <ConfirmPopover.Content>
+          <ConfirmPopover.Title>
+            Are you sure you want to reset your hero stats?
+          </ConfirmPopover.Title>
+          <ConfirmPopover.Message className="inline-flex text-yellow-500">
+            This will cost 100
+            <GoldIcon classname="size-5 ml-1" />
+          </ConfirmPopover.Message>
+        </ConfirmPopover.Content>
+      </ConfirmPopover>
     </div>
   );
 };

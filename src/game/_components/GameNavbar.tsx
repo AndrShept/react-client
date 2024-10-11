@@ -1,11 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/store';
-import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { FillBar } from './FillBar';
 import { HeroAvatar } from './HeroAvatar';
 import { GoldIcon } from './game-icons/GoldIcon';
+import { PremIcon } from './game-icons/PremIcon';
 import { ShopGameIcon } from './game-icons/ShopGameIcon';
 
 export const GameNavbar = () => {
@@ -38,10 +38,15 @@ export const GameNavbar = () => {
         )}
       </div>
       <div className="flex gap-1 ml-auto  ">
-        <div className="my-auto flex  items-center">
-          <GoldIcon classname="size-6 " />
-          <span className="text-xs">{hero?.gold}</span>
-          
+        <div className="my-auto flex  items-center gap-1 mr-4">
+          <div className="flex  items-center">
+            <GoldIcon classname="size-6  " />
+            <span className="text-xs">{hero?.gold}</span>
+          </div>
+          <div className="flex  items-center">
+            <PremIcon classname="size-6 " />
+            <span className="text-xs">{hero?.premCoin}</span>
+          </div>
         </div>
 
         <Link to={'shop'}>
