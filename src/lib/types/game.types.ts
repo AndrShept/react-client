@@ -8,6 +8,8 @@ export interface Hero {
   gold: number;
   premCoin: number;
   isBattle: boolean;
+  health: number;
+  mana: number;
   currentExperience: number;
   maxExperience: number;
   statsPoints: number;
@@ -17,11 +19,23 @@ export interface Hero {
   modifier: Modifier;
   userId: string;
   user?: User;
+  baseStats: BaseStats;
+  baseStatsId: string;
   buffs: Buff[];
   inventorys: InventoryItem[];
   equipments: Equipment[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface BaseStats {
+  id?: string;
+  strength: number;
+  dexterity: number;
+  intelligence: number;
+  constitution: number;
+  luck: number;
+  Hero?: Hero[];
 }
 
 export interface GameItem {
@@ -90,8 +104,7 @@ export interface Modifier {
   intelligence?: number;
   constitution?: number;
   luck?: number;
-  health?: number;
-  mana?: number;
+
   maxHealth?: number;
   maxMana?: number;
   manaRegeneration?: number;

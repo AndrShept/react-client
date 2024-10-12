@@ -1,12 +1,19 @@
 import { StatsUnion } from '@/lib/redux/heroSlice';
-import { useEffect, useState } from 'react';
+import { BaseStats } from '@/lib/types/game.types';
+import { useEffect, useRef, useState } from 'react';
+
 
 interface Props {
   freeStatsPoints: number | undefined;
   statsObj: Record<StatsUnion, number>;
+  baseStatsObj: BaseStats;
 }
 
-export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
+export const useHeroStats = ({
+  freeStatsPoints,
+  statsObj,
+  baseStatsObj,
+}: Props) => {
   const [statsState, setStatsState] = useState<
     {
       name: StatsUnion;
@@ -14,6 +21,7 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
       id: number;
     }[]
   >([]);
+  const baseStats = useRef<null | BaseStats>(null);
   const [freePointsState, setFreePointsState] = useState(freeStatsPoints);
   const hasUnsavedChanges = freePointsState !== freeStatsPoints;
   const onDecrement = (statName: StatsUnion) => {
@@ -21,6 +29,13 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
     setStatsState((prev) =>
       prev.map((item) => {
         if (item.name === statName && item.value > statsObj[statName]) {
+          if (baseStats.current) {
+            baseStats.current = {
+              ...baseStats.current,
+              [statName]: baseStats.current[statName] - 1,
+            };
+          }
+
           setFreePointsState((prev) => prev! + 1);
           return { ...item, value: item.value - 1 };
         }
@@ -32,6 +47,13 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
   };
   const onIncrement = (statName: StatsUnion) => {
     if (freePointsState === 0) return;
+    if (baseStats.current) {
+      baseStats.current = {
+        ...baseStats.current,
+        [statName]: baseStats.current[statName] + 1,
+      };
+    }
+
     setStatsState((prev) =>
       prev.map((item) =>
         item.name === statName
@@ -43,6 +65,7 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
     setFreePointsState((prev) => prev! - 1);
   };
   useEffect(() => {
+    baseStats.current = baseStatsObj
     setFreePointsState(freeStatsPoints);
     setStatsState([
       {
@@ -71,7 +94,8 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
         id: 5,
       },
     ]);
-  }, [freeStatsPoints, statsObj]);
+
+  }, [freeStatsPoints, statsObj, baseStatsObj]);
 
   return {
     statsState,
@@ -79,5 +103,6 @@ export const useHeroStats = ({ freeStatsPoints, statsObj }: Props) => {
     hasUnsavedChanges,
     onDecrement,
     onIncrement,
+    baseStats,
   };
 };

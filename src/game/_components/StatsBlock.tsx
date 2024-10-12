@@ -8,8 +8,10 @@ import {
   useUpdateHeroMutation,
 } from '@/lib/services/game/heroApi';
 import { ErrorMessage } from '@/lib/types';
+import { BaseStats } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { CheckIcon } from 'lucide-react';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 import { ConfirmPopover } from './ConfirmPopover';
@@ -18,9 +20,14 @@ import { GoldIcon } from './game-icons/GoldIcon';
 interface Props {
   freeStatsPoints?: number;
   statsObj: Record<StatsUnion, number>;
+  baseStatsObj: BaseStats;
 }
 
-export const StatsBlock = ({ freeStatsPoints, statsObj }: Props) => {
+export const StatsBlock = ({
+  freeStatsPoints,
+  statsObj,
+  baseStatsObj,
+}: Props) => {
   const [resetStats, { isLoading }] = useResetStatsMutation();
   const [refetchHero] = useLazyGetMyHeroQuery();
   const [updateHero, { isLoading: isLoadingUpdateHero }] =
@@ -32,16 +39,18 @@ export const StatsBlock = ({ freeStatsPoints, statsObj }: Props) => {
     onDecrement,
     onIncrement,
     statsState,
+    baseStats,
   } = useHeroStats({
     freeStatsPoints,
     statsObj,
+    baseStatsObj,
   });
 
   const onReset = async () => {
     try {
       const res = await resetStats().unwrap();
-      await refetchHero().unwrap();
 
+      await refetchHero().unwrap();
       if (res.success) {
         dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
       }
@@ -56,18 +65,12 @@ export const StatsBlock = ({ freeStatsPoints, statsObj }: Props) => {
     }
   };
   const onApply = async () => {
-    const stats = statsState.reduce(
-      (acc, item) => {
-        acc[item.name] = item.value;
-        return acc;
-      },
-      {} as Record<StatsUnion, number>,
-    );
     try {
       await updateHero({
         freeStatsPoints: freePointsState,
-        modifier: {
-          ...stats,
+        baseStats: {
+          ...baseStats.current!,
+          id: undefined,
         },
       });
       await refetchHero().unwrap();

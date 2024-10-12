@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { stat } from 'fs';
 
 import { heroApi } from '../services/game/heroApi';
 import { Hero, InventoryItem, Modifier } from '../types/game.types';
@@ -38,41 +39,12 @@ export const heroSlice = createSlice({
     setSysMessages: (state, action: PayloadAction<ISysMessages>) => {
       state.sysMessages = [...state.sysMessages, action.payload];
     },
-    incrementStat: (state, action: PayloadAction<StatsUnion>) => {
-      if (
-        state.hero?.modifier &&
-        state.hero?.modifier[action.payload] !== undefined &&
-        !!state.hero.freeStatsPoints
-      ) {
-        state.hero.modifier = {
-          ...state.hero.modifier,
-          [action.payload]: state.hero.modifier[action.payload]! + 1,
-        };
-        state.hero = {
-          ...state.hero,
-          freeStatsPoints: state.hero.freeStatsPoints - 1,
-        };
-      }
-    },
-    decrementStat: (
+    setRegenHealthMana: (
       state,
-      action: PayloadAction<
-      StatsUnion
-      >,
+      action: PayloadAction<Record<string, number>>,
     ) => {
-      if (!state.hero) return;
-      const currentStatValue = state.hero.modifier[action.payload]!;
-      const minStatValue = action.payload === 'luck' ? 5 : 10;
-
-      if (currentStatValue > minStatValue) {
-        state.hero.modifier = {
-          ...state.hero.modifier,
-          [action.payload]: state.hero.modifier[action.payload]! - 1,
-        };
-        state.hero = {
-          ...state.hero,
-          freeStatsPoints: state.hero.freeStatsPoints + 1,
-        };
+      if (state.hero) {
+        state.hero = { ...state.hero, ...action.payload };
       }
     },
   },
@@ -86,7 +58,6 @@ export const heroSlice = createSlice({
   },
 });
 
-export const { setHeroModifier, setSysMessages, decrementStat, incrementStat } =
-  heroSlice.actions;
+export const { setHeroModifier, setSysMessages, setRegenHealthMana } = heroSlice.actions;
 
 export default heroSlice.reducer;

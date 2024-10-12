@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { setHeroModifier } from '@/lib/redux/heroSlice';
+import { setHeroModifier, setRegenHealthMana } from '@/lib/redux/heroSlice';
 import { useGetMyHeroQuery } from '@/lib/services/game/heroApi';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ export const Game = () => {
   useEffect(() => {
     const socketListener = (data: Record<string, number>) => {
       console.log(data);
-      dispatch(setHeroModifier(data));
+      dispatch(setRegenHealthMana(data));
     };
     socket?.on(username!, socketListener);
     return () => {
@@ -58,10 +58,7 @@ export const Game = () => {
               {/* //HERO BLOCK */}
               <Paperdoll hero={heroState} />
 
-              <HeroModifiers
-                freeStatsPoints={hero?.freeStatsPoints ?? 0}
-                modifiers={hero?.modifier}
-              />
+              <HeroModifiers />
 
               {/* //INVENTORY */}
               <div className=" flex-1">

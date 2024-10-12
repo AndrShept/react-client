@@ -25,12 +25,12 @@ export const GameNavbar = () => {
             <div className="md:w-[200px] w-[100px]">
               <FillBar
                 color="green"
-                value={hero?.modifier.health ?? 0}
+                value={hero?.health ?? 0}
                 maxValue={hero?.modifier.maxHealth ?? 0}
               />
               <FillBar
                 color="blue"
-                value={hero?.modifier.mana ?? 0}
+                value={hero?.mana ?? 0}
                 maxValue={hero?.modifier.maxMana ?? 0}
               />
             </div>

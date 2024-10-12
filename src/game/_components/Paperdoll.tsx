@@ -9,15 +9,14 @@ interface Props {
 }
 
 export const Paperdoll = ({ hero }: Props) => {
-  console.log(hero);
 
   return (
     <section className="flex flex-col mx-auto max-w-fit gap-6 border p-6 rounded-xl min-w-[240px] h-fit">
       <HeroStatus
         avatarUrl={hero.avatarUrl}
-        health={hero.modifier.health}
+        health={hero.health}
         maxHealth={hero.modifier.maxHealth}
-        mana={hero.modifier.mana}
+        mana={hero.mana}
         maxMana={hero.modifier.maxMana}
         name={hero.name}
         level={hero.level}

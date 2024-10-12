@@ -1,4 +1,5 @@
 import { Separator } from '@/components/ui/separator';
+import { useAppSelector } from '@/hooks/store';
 import { Modifier } from '@/lib/types/game.types';
 
 import { StatsBlock } from './StatsBlock';
@@ -8,11 +9,17 @@ interface Props {
   freeStatsPoints: number;
 }
 
-export const HeroModifiers = ({ modifiers, freeStatsPoints }: Props) => {
+export const HeroModifiers = () => {
+  const baseStats = useAppSelector((state) => state.hero.hero?.baseStats);
+  const freeStatsPoints = useAppSelector(
+    (state) => state.hero.hero?.freeStatsPoints ?? 0,
+  );
+  const modifiers = useAppSelector((state) => state.hero.hero?.modifier);
   return (
     <section className=" md:flex hidden flex-col border p-4 h-fit rounded gap-2 text-sm  ">
       <StatsBlock
         freeStatsPoints={freeStatsPoints}
+        baseStatsObj={baseStats!}
         statsObj={{
           constitution: modifiers?.constitution ?? 0,
           dexterity: modifiers?.dexterity ?? 0,
@@ -23,21 +30,25 @@ export const HeroModifiers = ({ modifiers, freeStatsPoints }: Props) => {
       />
       <Separator />
       <div className="text-muted-foreground">
-        <p className="text-primary">DEF</p>
+        <p className="text-primary mb-1">DEF</p>
         <p>
           <span>armor:</span> {modifiers?.armor ? modifiers.armor : 0}
         </p>
         <p>
-          <span>evasion:</span> {modifiers?.armor ? modifiers.evasion : 0}
+          <span>evasion:</span> {modifiers?.evasion ? modifiers.evasion : 0}
         </p>
         <p>
           <span>magic resistances:</span>{' '}
-          {modifiers?.armor ? modifiers.magicResistances : 0}
+          {modifiers?.magicResistances ? modifiers.magicResistances : 0}
         </p>
       </div>
       <Separator />
       <div className="text-muted-foreground">
-        <p className="text-primary">PHYS DAMAGE</p>
+        <p className="text-primary mb-1">PHYS DAMAGE</p>
+        <p>
+          <span>damage:</span> {modifiers?.minDamage ? modifiers.minDamage : 0}{' '}
+          - {modifiers?.maxDamage ? modifiers.maxDamage : 0}
+        </p>
         <p>
           <span>melee damage:</span>{' '}
           {modifiers?.meleeDamage ? modifiers.meleeDamage : 0}
@@ -55,7 +66,7 @@ export const HeroModifiers = ({ modifiers, freeStatsPoints }: Props) => {
       </div>
       <Separator />
       <div className="text-muted-foreground">
-        <p className="text-primary">MAGIC DAMAGE</p>
+        <p className="text-primary mb-1">MAGIC DAMAGE</p>
 
         <p>
           <span>spell damage:</span>{' '}
