@@ -40,7 +40,7 @@ export const CreateItemPage = () => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setImageUrl(`/sprites/equipments/amulets/${file.name}`);
+    setImageUrl(`/sprites/potions/${file.name}`);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

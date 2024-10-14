@@ -27,6 +27,8 @@ export const HeroInventory = () => {
                   isCanEquipped={inventoryItem.isCanEquipped}
                   isDoubleCLick={true}
                   equipmentHeroId={inventoryItem.heroId}
+                  isCanDrink={inventoryItem.gameItem.type === 'POTION'}
+                  quantity={inventoryItem.quantity}
                 />
               ) : null}
             </li>

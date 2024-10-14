@@ -32,6 +32,7 @@ export const HeroEquipments = ({ equipments }: Props) => {
                 equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
                 isDoubleCLick={true}
                 isCanEquipped={false}
+                isCanDrink={false}
               />
             ) : (
               <img
@@ -69,6 +70,7 @@ export const HeroEquipments = ({ equipments }: Props) => {
                 equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
                 isDoubleCLick={true}
                 isCanEquipped={false}
+                isCanDrink={false}
               />
             ) : (
               <img

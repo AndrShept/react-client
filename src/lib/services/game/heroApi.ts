@@ -31,7 +31,7 @@ export const heroApi = api.injectEndpoints({
         body: dataHero,
       }),
     }),
-    updateHero: builder.mutation<Hero, Partial<Hero >>({
+    updateHero: builder.mutation<Hero, Partial<Hero>>({
       query: (data) => ({
         url: '/hero-update',
         method: 'PUT',
@@ -65,7 +65,7 @@ export const heroApi = api.injectEndpoints({
       }),
     }),
     addHeroItemInventory: builder.mutation<
-      InventoryItem,
+      ServerResponse<InventoryItem>,
       { gameItemId: string; heroId?: string }
     >({
       query: (itemData) => ({

@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -21,6 +22,7 @@ import {
 import { ErrorMessage } from '@/lib/types';
 import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 
@@ -34,10 +36,12 @@ interface Props {
   classname?: string;
   inventoryItemId: string;
   equipmentHeroId: string;
+  quantity?: number | undefined;
   isContextMenuShow?: boolean;
   isEquipped: boolean;
   isCanEquipped: boolean;
   isDoubleCLick: boolean;
+  isCanDrink: boolean;
 }
 
 export const GameItemCard = ({
@@ -51,15 +55,19 @@ export const GameItemCard = ({
   isContextMenuShow = true,
   isDoubleCLick,
   isCanEquipped,
+  isCanDrink,
+  quantity,
 }: Props) => {
   if (!item) {
     return;
   }
   const dispatch = useDispatch();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
+  const [isLoading, setIsLoading] = useState(false);
   const [equipHero] = useEquipHeroItemMutation();
   const [unEquipHero] = useUnEquipHeroItemMutation();
   const [refetchHero] = useLazyGetMyHeroQuery();
+
   const isSelf = equipmentHeroId === heroId;
   const onMouseEnter = () => {
     dispatch(setGameItem(item));
@@ -70,11 +78,13 @@ export const GameItemCard = ({
   };
   const onEquip = async () => {
     try {
+      setIsLoading(true);
       const res = await equipHero({
         inventoryItemId: inventoryItemId!,
         slot: item.slot,
       }).unwrap();
       await refetchHero().unwrap();
+      setIsLoading(false);
       if (res.message) {
         dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
       }
@@ -86,6 +96,8 @@ export const GameItemCard = ({
         console.log(error);
         toast.error('Something went wrong');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,20 +119,33 @@ export const GameItemCard = ({
     }
   };
 
+  const onDrink = () => {
+    console.log('DRINKKKKKKKKKKKKKKKKK');
+  };
+
   const onDoubleClick = async () => {
-    if (isDoubleCLick && !isEquipped && isSelf && isCanEquipped) {
-      await onEquip();
-    } else {
-      await onUnEquipHero();
+    const canEquip =
+      isDoubleCLick && isSelf && isCanEquipped && !isEquipped && !isLoading;
+    const canUnEquip = isDoubleCLick && isSelf && isEquipped;
+    console.log(canEquip);
+    if (canEquip) {
+      onEquip();
+    }
+    if (canUnEquip) {
+      onUnEquipHero();
     }
   };
+  useEffect(() => {
+    console.log(isLoading);
+  }, [isLoading]);
+
   return (
     <>
       <HoverCard openDelay={0} closeDelay={0}>
         <ContextMenu>
           <div className="relative">
             <ContextMenuTrigger>
-              <HoverCardTrigger>
+              <HoverCardTrigger className="relative">
                 <img
                   onDoubleClick={onDoubleClick}
                   onClick={onClick}
@@ -137,6 +162,18 @@ export const GameItemCard = ({
                   src={item.imageUrl}
                   alt="weapon-image"
                 />
+                {!!quantity && quantity > 1 && (
+                  <div className="size-4 absolute -right-0 -bottom-0 flex  rounded-full  border bg-background">
+                    <p className=" text-[9px] m-auto">{quantity}</p>
+                  </div>
+                )}
+                <Button
+                  disabled={isLoading}
+                  onClick={onEquip}
+                  className="absolute size-4 z-10 top-0"
+                >
+                  eq
+                </Button>
               </HoverCardTrigger>
             </ContextMenuTrigger>
           </div>
@@ -145,6 +182,7 @@ export const GameItemCard = ({
             <ContextMenuContent>
               {!isEquipped && isCanEquipped && (
                 <ContextMenuItem
+                  disabled={isLoading}
                   onClick={onEquip}
                   className="text-xs space-x-1"
                 >
@@ -154,6 +192,19 @@ export const GameItemCard = ({
                     alt="equip-image"
                   />
                   <span>Equip</span>
+                </ContextMenuItem>
+              )}
+              {isCanDrink && (
+                <ContextMenuItem
+                  onClick={onDrink}
+                  className="text-xs space-x-1"
+                >
+                  <img
+                    className="size-5"
+                    src={'/sprites/icons/health-potion.png'}
+                    alt="equip-image"
+                  />
+                  <span>Drink</span>
                 </ContextMenuItem>
               )}
 

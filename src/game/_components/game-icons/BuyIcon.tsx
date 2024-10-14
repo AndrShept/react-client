@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { useAppSelector } from '@/hooks/store';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useAddHeroItemInventoryMutation,
   useLazyGetMyHeroQuery,
 } from '@/lib/services/game/heroApi';
+import { ErrorMessage } from '@/lib/types';
 import React from 'react';
 import { toast } from 'sonner';
 
@@ -16,13 +18,23 @@ export const BuyIcon = ({ isLabel = true, gameItemId }: Props) => {
   const [addHeroItemInventory, { isLoading }] =
     useAddHeroItemInventoryMutation();
   const [refreshMyHero] = useLazyGetMyHeroQuery();
-
+  const dispatch = useAppDispatch();
   const onAddHeroItemInventory = async () => {
     try {
-      await addHeroItemInventory({ gameItemId }).unwrap();
+      const res = await addHeroItemInventory({ gameItemId }).unwrap();
+      console.log(res);
       await refreshMyHero();
+      if (res.success) {
+        dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
+      }
     } catch (error) {
-      toast.error('Something went wrong');
+      const err = error as ErrorMessage;
+      if (!err.data.success) {
+        dispatch(setSysMessages({ ...err.data, createdAt: Date.now() }));
+      } else {
+        console.log(err);
+        toast.error('Something went wrong');
+      }
     }
   };
   return (
