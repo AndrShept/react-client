@@ -9,6 +9,7 @@ interface Props {
 }
 
 export const HeroEquipments = ({ equipments }: Props) => {
+  console.log(equipments)
   const equipmentBySlot = equipments.reduce(
     (acc, equip) => {
       acc[equip.slot] = equip;

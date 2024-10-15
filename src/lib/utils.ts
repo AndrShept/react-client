@@ -22,7 +22,7 @@ export const dateFnsLessTime = (timestamp: Date) => {
     addSuffix: true,
   });
 };
-export const getTimeFns = (timestamp:number) => {
+export const getTimeFns = (timestamp: number) => {
   return format(new Date(timestamp), 'HH:mm:ss');
 };
 
@@ -51,3 +51,41 @@ export const compactNumberFormatter = (num: number) => {
     maximumFractionDigits: 1,
   }).format(num);
 };
+interface Modifier {
+  [key: string]: number;
+}
+export function subtractModifiers(
+  firstModifier: Modifier,
+  ...modifiers: Modifier[]
+) {
+  const result = { ...firstModifier };
+
+  modifiers.forEach((modifier) => {
+    Object.keys(modifier).forEach((key) => {
+      const value = modifier[key as keyof Modifier];
+      if (typeof value === 'number') {
+        result[key as keyof Modifier] =
+          (result[key as keyof Modifier] || 0) - value;
+      }
+    });
+  });
+
+  return result;
+}
+
+export function sumModifiers(...modifiers: Modifier[]) {
+  const result: { [key: string]: number | any } = {};
+
+  modifiers.forEach((modifier) => {
+    for (const key in modifier) {
+      const value = modifier[key as keyof Modifier];
+      if (typeof value === 'number') {
+        result[key] = (result[key] || 0) + value;
+      } else if (result[key] === undefined) {
+        result[key] = value;
+      }
+    }
+  });
+
+  return result;
+}

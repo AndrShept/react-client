@@ -8,7 +8,7 @@ export const HeroInventory = () => {
     (state) => state.hero.hero?.inventorySlots,
   );
   const inventorys = useAppSelector(
-    (state) => state.hero.hero?.inventorys ?? [],
+    (state) => state.hero.hero?.inventorys.filter(item => !item.isEquipped) ?? [],
   );
   return (
     <ScrollArea className="h-full ">

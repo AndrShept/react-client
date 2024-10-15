@@ -19,6 +19,7 @@ export const BuyIcon = ({ isLabel = true, gameItemId }: Props) => {
     useAddHeroItemInventoryMutation();
   const [refreshMyHero] = useLazyGetMyHeroQuery();
   const dispatch = useAppDispatch();
+  console.log(gameItemId)
   const onAddHeroItemInventory = async () => {
     try {
       const res = await addHeroItemInventory({ gameItemId }).unwrap();

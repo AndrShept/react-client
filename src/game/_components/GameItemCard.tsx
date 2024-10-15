@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/hover-card';
 import { useAppSelector } from '@/hooks/store';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
-import { setSysMessages } from '@/lib/redux/heroSlice';
+import { equipItem, equipItemNew, setSysMessages, unEquipItem } from '@/lib/redux/heroSlice';
 import {
   useEquipHeroItemMutation,
   useGetMyHeroQuery,
@@ -63,7 +63,6 @@ export const GameItemCard = ({
   }
   const dispatch = useDispatch();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const [isLoading, setIsLoading] = useState(false);
   const [equipHero] = useEquipHeroItemMutation();
   const [unEquipHero] = useUnEquipHeroItemMutation();
   const [refetchHero] = useLazyGetMyHeroQuery();
@@ -77,46 +76,12 @@ export const GameItemCard = ({
     setHeroItem && setHeroItem(item);
   };
   const onEquip = async () => {
-    try {
-      setIsLoading(true);
-      const res = await equipHero({
-        inventoryItemId: inventoryItemId!,
-        slot: item.slot,
-      }).unwrap();
-      await refetchHero().unwrap();
-      setIsLoading(false);
-      if (res.message) {
-        dispatch(setSysMessages({ ...res, createdAt: Date.now() }));
-      }
-    } catch (error) {
-      const err = error as ErrorMessage;
-      if (err.data.message) {
-        dispatch(setSysMessages({ ...err.data, createdAt: Date.now() }));
-      } else {
-        console.log(error);
-        toast.error('Something went wrong');
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    dispatch(equipItemNew({ id: inventoryItemId, type: item.type }));
+    // dispatch(equipItem({ id: inventoryItemId, type: item.type }));
   };
 
   const onUnEquipHero = async () => {
-    try {
-      await unEquipHero({
-        inventoryItemId: inventoryItemId!,
-        slot: item.slot,
-      }).unwrap();
-      await refetchHero().unwrap();
-    } catch (error) {
-      const err = error as ErrorMessage;
-      if (err.data.message) {
-        dispatch(setSysMessages({ ...err.data, createdAt: Date.now() }));
-      } else {
-        console.log(error);
-        toast.error('Something went wrong');
-      }
-    }
+    dispatch(unEquipItem({ id: inventoryItemId, type: item.type }));
   };
 
   const onDrink = () => {
@@ -124,20 +89,14 @@ export const GameItemCard = ({
   };
 
   const onDoubleClick = async () => {
-    const canEquip =
-      isDoubleCLick && isSelf && isCanEquipped && !isEquipped && !isLoading;
+    const canEquip = isDoubleCLick && isSelf && isCanEquipped && !isEquipped;
     const canUnEquip = isDoubleCLick && isSelf && isEquipped;
-    console.log(canEquip);
+
     if (canEquip) {
-      onEquip();
     }
     if (canUnEquip) {
-      onUnEquipHero();
     }
   };
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
 
   return (
     <>
@@ -167,13 +126,6 @@ export const GameItemCard = ({
                     <p className=" text-[9px] m-auto">{quantity}</p>
                   </div>
                 )}
-                <Button
-                  disabled={isLoading}
-                  onClick={onEquip}
-                  className="absolute size-4 z-10 top-0"
-                >
-                  eq
-                </Button>
               </HoverCardTrigger>
             </ContextMenuTrigger>
           </div>
@@ -182,7 +134,6 @@ export const GameItemCard = ({
             <ContextMenuContent>
               {!isEquipped && isCanEquipped && (
                 <ContextMenuItem
-                  disabled={isLoading}
                   onClick={onEquip}
                   className="text-xs space-x-1"
                 >

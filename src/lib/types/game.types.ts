@@ -82,7 +82,7 @@ export interface InventoryItem {
   quantity: number;
   isEquipped: boolean;
   isCanEquipped: boolean;
-
+  slot: EquipmentSlot;
   heroId: string;
   hero: Hero;
 
