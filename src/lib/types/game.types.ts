@@ -60,21 +60,21 @@ export interface GameItem {
 }
 
 export interface Equipment {
-  id: string;
+  id?: string;
 
   isEquipped: boolean;
-  isCanEquipped: boolean;
+  isCanEquipped?: boolean;
 
   heroId: string;
-  hero: Hero;
+  hero?: Hero;
 
   inventoryItem: InventoryItem;
   inventoryItemId: string;
 
   slot: EquipmentSlot;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface InventoryItem {

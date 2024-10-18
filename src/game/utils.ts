@@ -2,7 +2,9 @@ import {
   EquipmentSlot,
   GameItem,
   InventoryItem,
+  ItemType,
   Modifier,
+  WeaponType,
 } from '@/lib/types/game.types';
 
 export const getRandomValue = (min: number, max: number) => {
@@ -12,6 +14,8 @@ export const getRandomValue = (min: number, max: number) => {
 export const rand = (num: number) => {
   return Math.floor(Math.random() * num);
 };
+
+
 
 export const getModifiers = (item: GameItem | null) => {
   const modifiersArr = [

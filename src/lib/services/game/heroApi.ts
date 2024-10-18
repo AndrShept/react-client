@@ -56,7 +56,7 @@ export const heroApi = api.injectEndpoints({
     }),
     unEquipHeroItem: builder.mutation<
       ServerResponse<InventoryItem>,
-      { inventoryItemId: string; slot: EquipmentSlot }
+      { inventoryItemId: string }
     >({
       query: (data) => ({
         url: '/hero-unEquip',

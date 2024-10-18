@@ -8,7 +8,8 @@ export const HeroInventory = () => {
     (state) => state.hero.hero?.inventorySlots,
   );
   const inventorys = useAppSelector(
-    (state) => state.hero.hero?.inventorys.filter(item => !item.isEquipped) ?? [],
+    (state) =>
+      state.hero.hero?.inventorys.filter((item) => !item.isEquipped) ?? [],
   );
   return (
     <ScrollArea className="h-full ">
@@ -21,14 +22,14 @@ export const HeroInventory = () => {
               {inventoryItem ? (
                 <GameItemCard
                   isSelected={false}
-                  item={inventoryItem.gameItem}
+                  inventoryItem={inventoryItem}
                   inventoryItemId={inventoryItem.id}
-                  isEquipped={inventoryItem.isEquipped}
-                  isCanEquipped={inventoryItem.isCanEquipped}
                   isDoubleCLick={true}
-                  equipmentHeroId={inventoryItem.heroId}
                   isCanDrink={inventoryItem.gameItem.type === 'POTION'}
-                  quantity={inventoryItem.quantity}
+                  isCanEquipped={
+                    inventoryItem.gameItem.type !== 'POTION' &&
+                    inventoryItem.gameItem.type !== 'MISC'
+                  }
                 />
               ) : null}
             </li>

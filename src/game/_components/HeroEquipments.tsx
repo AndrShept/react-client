@@ -2,6 +2,7 @@ import { Equipment, EquipmentSlot } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 
 import { equipmentsHeroList } from '../utils';
+import { EquipmentItemCard } from './EquipmentItemCard';
 import { GameItemCard } from './GameItemCard';
 
 interface Props {
@@ -9,7 +10,6 @@ interface Props {
 }
 
 export const HeroEquipments = ({ equipments }: Props) => {
-  console.log(equipments)
   const equipmentBySlot = equipments.reduce(
     (acc, equip) => {
       acc[equip.slot] = equip;
@@ -24,16 +24,10 @@ export const HeroEquipments = ({ equipments }: Props) => {
         {equipmentsHeroList.slice(0, 5).map((equipment) => (
           <li className="size-12 border flex" key={equipment.id}>
             {equipmentBySlot?.[equipment.slot] ? (
-              <GameItemCard
-                item={equipmentBySlot[equipment.slot].inventoryItem.gameItem}
-                isEquipped={equipmentBySlot[equipment.slot].isEquipped}
-                inventoryItemId={
-                  equipmentBySlot[equipment.slot].inventoryItemId
-                }
-                equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
+              <EquipmentItemCard
+                equipment={equipmentBySlot[equipment.slot]}
+                isContextMenuShow={true}
                 isDoubleCLick={true}
-                isCanEquipped={false}
-                isCanDrink={false}
               />
             ) : (
               <img
@@ -62,16 +56,10 @@ export const HeroEquipments = ({ equipments }: Props) => {
         {equipmentsHeroList.slice(5, 10).map((equipment) => (
           <li className="size-12 border flex" key={equipment.id}>
             {equipmentBySlot?.[equipment.slot] ? (
-              <GameItemCard
-                item={equipmentBySlot[equipment.slot].inventoryItem.gameItem}
-                isEquipped={equipmentBySlot[equipment.slot].isEquipped}
-                inventoryItemId={
-                  equipmentBySlot[equipment.slot].inventoryItemId
-                }
-                equipmentHeroId={equipmentBySlot[equipment.slot].heroId}
+              <EquipmentItemCard
+                equipment={equipmentBySlot[equipment.slot]}
+                isContextMenuShow={true}
                 isDoubleCLick={true}
-                isCanEquipped={false}
-                isCanDrink={false}
               />
             ) : (
               <img

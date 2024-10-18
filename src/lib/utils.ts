@@ -3,6 +3,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { format, formatDistanceToNow } from 'date-fns';
 import { io } from 'socket.io-client';
 import { twMerge } from 'tailwind-merge';
+import { Modifier as IModifier } from './types/game.types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -54,6 +55,12 @@ export const compactNumberFormatter = (num: number) => {
 interface Modifier {
   [key: string]: number;
 }
+
+export const filterModifierFields = (modifier: Partial<IModifier>) => {
+  const { id, buffs, inventoryItems, hero, ...validModifier } = modifier;
+  return validModifier;
+};
+
 export function subtractModifiers(
   firstModifier: Modifier,
   ...modifiers: Modifier[]
@@ -66,6 +73,24 @@ export function subtractModifiers(
       if (typeof value === 'number') {
         result[key as keyof Modifier] =
           (result[key as keyof Modifier] || 0) - value;
+      }
+    });
+  });
+
+  return result;
+}
+export function addModifiers(
+  firstModifier: Modifier,
+  ...modifiers: Modifier[]
+) {
+  const result = { ...firstModifier };
+
+  modifiers.forEach((modifier) => {
+    Object.keys(modifier).forEach((key) => {
+      const value = modifier[key as keyof Modifier];
+      if (typeof value === 'number') {
+        result[key as keyof Modifier] =
+          (result[key as keyof Modifier] || 0) + value;
       }
     });
   });

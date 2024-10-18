@@ -1,9 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { stat } from 'fs';
 
 import { heroApi } from '../services/game/heroApi';
-import { Hero, InventoryItem, Modifier } from '../types/game.types';
-import { subtractModifiers, sumModifiers } from '../utils';
+import { Equipment, Hero, InventoryItem, Modifier } from '../types/game.types';
+import {
+  addModifiers,
+  filterModifierFields,
+  subtractModifiers,
+  sumModifiers,
+} from '../utils';
 
 interface ISysMessages {
   message: string;
@@ -48,126 +52,57 @@ export const heroSlice = createSlice({
         state.hero = { ...state.hero, ...action.payload };
       }
     },
-    equipItem: (state, action: PayloadAction<{ id: string; type: string }>) => {
+
+    equipItemNew: (state, action: PayloadAction<Equipment>) => {
       if (state.hero) {
-        const equippedItems = state.hero.inventorys.filter(
-          (item) => item.isEquipped,
-        );
-
-        // Функція для видалення зайвих полів з модифікатора
-        const filterModifierFields = (modifier: Partial<Modifier>) => {
-          const { id, buffs, inventoryItems, hero, ...validModifier } =
-            modifier;
-          return validModifier;
-        };
-
+        state.hero.equipments = [...state.hero?.equipments, action.payload];
         state.hero.inventorys = state.hero.inventorys.map((item) => {
-          const equippedItem = equippedItems.find(
-            (equipped) => equipped.gameItem.type === action.payload.type,
-          );
-          const oneHandCount = equippedItems.filter(
-            (equipped) => equipped.gameItem.weaponType === 'ONE_HAND',
-          ).length;
-          const ringCount = equippedItems.filter(
-            (equipped) => equipped.gameItem.type === 'RING',
-          ).length;
-          if (
-            equippedItem &&
-            item.id === equippedItem.id &&
-            equippedItem.isEquipped &&
-            state.hero &&
-            equippedItem.gameItem.type !== 'RING' &&
-            ringCount < 3 &&
-            oneHandCount < 3 &&
-            equippedItem.gameItem.weaponType !== 'ONE_HAND'
-          ) {
-            const validItemModifier = filterModifierFields(
-              equippedItem.gameItem.modifier,
-            );
-            const validHeroModifier = filterModifierFields(state.hero.modifier);
-            const subtractedModifier = subtractModifiers(
-              validHeroModifier,
-              validItemModifier,
-            );
-
-            state.hero.modifier = subtractedModifier;
-
-            return { ...item, isEquipped: false };
-          }
-
-          // Якщо це новий предмет і слот вільний, одягаємо його
-          if (item.id === action.payload.id && !item.isEquipped && state.hero) {
-            if (ringCount === 2 && action.payload.type === 'RING') {
-              state.sysMessages = [
-                ...state.sysMessages,
-                { success: false, createdAt: Date.now(), message: 'sdads' },
-              ];
-              return { ...item };
-            }
-            if (oneHandCount === 2 && item.gameItem.weaponType === 'ONE_HAND') {
-              state.sysMessages = [
-                ...state.sysMessages,
-                { success: false, createdAt: Date.now(), message: 'sdads' },
-              ];
-              return { ...item };
-            }
-            if (item.gameItem.weaponType === 'TWO_HAND') {
-              state.sysMessages = [
-                ...state.sysMessages,
-                {
-                  success: false,
-                  createdAt: Date.now(),
-                  message: 'Realease weapon slots',
-                },
-              ];
-              return { ...item };
-            }
-            const validItemModifier = filterModifierFields(
-              item.gameItem.modifier,
-            );
-            const validHeroModifier = filterModifierFields(state.hero.modifier);
-            const sumModifier = sumModifiers(
-              validHeroModifier,
-              validItemModifier,
-            );
-            state.hero.modifier = sumModifier;
-
+          if (item.id === action.payload.inventoryItemId) {
             return { ...item, isEquipped: true };
           }
+
           return { ...item };
         });
+
+        const validHeroModifier = filterModifierFields(state.hero.modifier);
+        const validEquipModifier = filterModifierFields(
+          action.payload.inventoryItem.gameItem.modifier,
+        );
+        state.hero.modifier = addModifiers(
+          validHeroModifier,
+          validEquipModifier,
+        );
       }
     },
 
-    equipItemNew: (
+    unEquipItemNew: (
       state,
-      action: PayloadAction<{ id: string; type: string }>,
-    ) => {
-          console.log(state.hero?.equipments)
-    },
-
-    unEquipItem: (
-      state,
-      action: PayloadAction<{ id: string; type: string }>,
+      action: PayloadAction<{ inventoryItemId: string }>,
     ) => {
       if (state.hero) {
-        state.hero.inventorys = state.hero?.inventorys.map((item) => {
-          const { id, buffs, inventoryItems, hero, ...validModifier } =
-            item.gameItem.modifier;
-          if (item.id === action.payload.id && state.hero) {
-            const { id, buffs, hero, inventoryItems, ...validHeroModifier } =
-              state.hero.modifier;
-
-            const sumModifier = subtractModifiers(
-              validHeroModifier,
-              validModifier,
-            );
-            state.hero.modifier = sumModifier;
-
-            return { ...item, isEquipped: false };
+        const findEquipItem = state.hero.equipments.find(
+          (equip) => equip.inventoryItemId === action.payload.inventoryItemId,
+        );
+        console.log(findEquipItem?.inventoryItemId);
+        state.hero.equipments = state.hero.equipments.filter(
+          (equip) => equip.inventoryItemId !== findEquipItem?.inventoryItemId,
+        );
+        state.hero.inventorys = state.hero.inventorys.map((inventoryItem) => {
+          if (inventoryItem.id === findEquipItem?.inventoryItemId) {
+            return { ...inventoryItem, isEquipped: false };
           }
-          return { ...item };
+
+          return { ...inventoryItem };
         });
+
+        const validHeroModifier = filterModifierFields(state.hero.modifier);
+        const validEquipModifier = filterModifierFields(
+          findEquipItem?.inventoryItem.gameItem.modifier!,
+        );
+        state.hero.modifier = subtractModifiers(
+          validHeroModifier,
+          validEquipModifier,
+        );
       }
     },
   },
@@ -185,9 +120,8 @@ export const {
   setHeroModifier,
   setSysMessages,
   setRegenHealthMana,
-  equipItem,
-  unEquipItem,
   equipItemNew,
+  unEquipItemNew,
 } = heroSlice.actions;
 
 export default heroSlice.reducer;

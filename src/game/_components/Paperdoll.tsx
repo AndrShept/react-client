@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Paperdoll = ({ hero }: Props) => {
-
+console.log(hero.equipments.map(item => item.inventoryItem.gameItem.name))
   return (
     <section className="flex flex-col mx-auto max-w-fit gap-6 border p-6 rounded-xl min-w-[240px] h-fit">
       <HeroStatus
