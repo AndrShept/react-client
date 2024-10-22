@@ -34,7 +34,7 @@ export const useEquipItem = ({
   );
   const [equipHero] = useEquipHeroItemMutation();
   const [unEquipHero] = useUnEquipHeroItemMutation();
-  const equipItem = (inventoryItem: InventoryItem, slot: EquipmentSlot) => {
+  const equipItem =async (inventoryItem: InventoryItem, slot: EquipmentSlot) => {
     if (!hero) return;
     dispatch(
       equipItemNew({
@@ -45,20 +45,43 @@ export const useEquipItem = ({
         slot,
       }),
     );
-    equipHero({ inventoryItemId, slot }).unwrap();
-    dispatch(
-      setSysMessages({
-        success: true,
-        message: 'You have successfully equipped the item.',
-        createdAt: Date.now(),
-        data: inventoryItem,
-      }),
-    );
+    try {
+      equipHero({ inventoryItemId, slot }).unwrap();
+      dispatch(
+        setSysMessages({
+          success: true,
+          message: 'You have successfully equipped the item.',
+          createdAt: Date.now(),
+          data: inventoryItem,
+        }),
+      );
+    } catch (error) {
+      dispatch(
+        setSysMessages({
+          success: false,
+          message: 'Failed to equip the item. Please try again.',
+          createdAt: Date.now(),
+        }),
+      );
+    }
+   
   };
 
   const unEquipItem = (inventoryItemId: string) => {
-    dispatch(unEquipItemNew({ inventoryItemId }));
-    unEquipHero({ inventoryItemId });
+    try {
+      dispatch(unEquipItemNew({ inventoryItemId }));
+      unEquipHero({ inventoryItemId });
+    } catch (error) {
+      dispatch(
+        setSysMessages({
+          success: false,
+          message: 'Failed to unEquip the item. Please try again.',
+          createdAt: Date.now(),
+        }),
+      );
+    }
+    
+   
   };
 
   const onEquip = async () => {

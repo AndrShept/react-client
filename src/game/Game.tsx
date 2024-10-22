@@ -28,6 +28,7 @@ export const Game = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    console.log('GOGOGOGO')
     const socketListener = (data: Record<string, number>) => {
       console.log(data);
       dispatch(setRegenHealthMana(data));

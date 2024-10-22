@@ -3,6 +3,8 @@ import { type ClassValue, clsx } from 'clsx';
 import { format, formatDistanceToNow } from 'date-fns';
 import { io } from 'socket.io-client';
 import { twMerge } from 'tailwind-merge';
+
+import { HP_MULTIPLIER_COST, MANA_MULTIPLIER_INT } from './constants';
 import { Modifier as IModifier } from './types/game.types';
 
 export function cn(...inputs: ClassValue[]) {
@@ -70,6 +72,13 @@ export function subtractModifiers(
   modifiers.forEach((modifier) => {
     Object.keys(modifier).forEach((key) => {
       const value = modifier[key as keyof Modifier];
+
+      if (key === 'constitution' && typeof value === 'number') {
+        result['maxHealth'] = (result['maxHealth'] || 0) - value * HP_MULTIPLIER_COST;
+      }
+      if (key === 'intelligence' && typeof value === 'number') {
+        result['maxMana'] = (result['maxMana'] || 0) - value * MANA_MULTIPLIER_INT;
+      }
       if (typeof value === 'number') {
         result[key as keyof Modifier] =
           (result[key as keyof Modifier] || 0) - value;
@@ -88,6 +97,12 @@ export function addModifiers(
   modifiers.forEach((modifier) => {
     Object.keys(modifier).forEach((key) => {
       const value = modifier[key as keyof Modifier];
+      if (key === 'constitution' && typeof value === 'number') {
+        result['maxHealth'] = (result['maxHealth'] || 0) + value * HP_MULTIPLIER_COST;
+      }
+      if (key === 'intelligence' && typeof value === 'number') {
+        result['maxMana'] = (result['maxMana'] || 0) + value * MANA_MULTIPLIER_INT;
+      }
       if (typeof value === 'number') {
         result[key as keyof Modifier] =
           (result[key as keyof Modifier] || 0) + value;
@@ -114,3 +129,11 @@ export function sumModifiers(...modifiers: Modifier[]) {
 
   return result;
 }
+export const calculateHpAndMana = (modifier: IModifier) => {
+  console.log(modifier)
+  return {
+    ...modifier,
+    maxHealth: (modifier.maxHealth ?? 0) +  modifier.constitution! * HP_MULTIPLIER_COST,
+    maxMana: modifier.intelligence! * MANA_MULTIPLIER_INT,
+  };
+};

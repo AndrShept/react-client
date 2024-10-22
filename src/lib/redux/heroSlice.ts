@@ -4,6 +4,7 @@ import { heroApi } from '../services/game/heroApi';
 import { Equipment, Hero, InventoryItem, Modifier } from '../types/game.types';
 import {
   addModifiers,
+  calculateHpAndMana,
   filterModifierFields,
   subtractModifiers,
   sumModifiers,
@@ -72,6 +73,10 @@ export const heroSlice = createSlice({
           validHeroModifier,
           validEquipModifier,
         );
+        state.hero.health = Math.min(state.hero.health ,state.hero.modifier.maxHealth! )
+        state.hero.mana = Math.min(state.hero.mana ,state.hero.modifier.maxMana! )
+ 
+     
       }
     },
 
@@ -83,7 +88,6 @@ export const heroSlice = createSlice({
         const findEquipItem = state.hero.equipments.find(
           (equip) => equip.inventoryItemId === action.payload.inventoryItemId,
         );
-        console.log(findEquipItem?.inventoryItemId);
         state.hero.equipments = state.hero.equipments.filter(
           (equip) => equip.inventoryItemId !== findEquipItem?.inventoryItemId,
         );
@@ -94,6 +98,7 @@ export const heroSlice = createSlice({
 
           return { ...inventoryItem };
         });
+    
 
         const validHeroModifier = filterModifierFields(state.hero.modifier);
         const validEquipModifier = filterModifierFields(
@@ -103,6 +108,10 @@ export const heroSlice = createSlice({
           validHeroModifier,
           validEquipModifier,
         );
+      
+        state.hero.health = Math.min(state.hero.health ,state.hero.modifier.maxHealth! )
+        state.hero.mana = Math.min(state.hero.mana ,state.hero.modifier.maxMana! )
+
       }
     },
   },

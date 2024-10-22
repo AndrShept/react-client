@@ -13,8 +13,6 @@ import { useAppSelector } from '@/hooks/store';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
 import { unEquipItemNew } from '@/lib/redux/heroSlice';
 import {
-  useEquipHeroItemMutation,
-  useLazyGetMyHeroQuery,
   useUnEquipHeroItemMutation,
 } from '@/lib/services/game/heroApi';
 import { ErrorMessage } from '@/lib/types';
@@ -38,12 +36,10 @@ export const EquipmentItemCard = ({
   isDoubleCLick,
   equipment,
 }: Props) => {
-  console.log(equipment);
   const dispatch = useDispatch();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const [equipHero] = useEquipHeroItemMutation();
   const [unEquipHero] = useUnEquipHeroItemMutation();
-  const [refetchHero] = useLazyGetMyHeroQuery();
+
 
   const isSelf = equipment.inventoryItem.heroId === heroId;
   const onMouseEnter = () => {
