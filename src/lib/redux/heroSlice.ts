@@ -73,10 +73,14 @@ export const heroSlice = createSlice({
           validHeroModifier,
           validEquipModifier,
         );
-        state.hero.health = Math.min(state.hero.health ,state.hero.modifier.maxHealth! )
-        state.hero.mana = Math.min(state.hero.mana ,state.hero.modifier.maxMana! )
- 
-     
+        state.hero.health = Math.min(
+          state.hero.health,
+          state.hero.modifier.maxHealth!,
+        );
+        state.hero.mana = Math.min(
+          state.hero.mana,
+          state.hero.modifier.maxMana!,
+        );
       }
     },
 
@@ -98,7 +102,6 @@ export const heroSlice = createSlice({
 
           return { ...inventoryItem };
         });
-    
 
         const validHeroModifier = filterModifierFields(state.hero.modifier);
         const validEquipModifier = filterModifierFields(
@@ -108,10 +111,67 @@ export const heroSlice = createSlice({
           validHeroModifier,
           validEquipModifier,
         );
-      
-        state.hero.health = Math.min(state.hero.health ,state.hero.modifier.maxHealth! )
-        state.hero.mana = Math.min(state.hero.mana ,state.hero.modifier.maxMana! )
 
+        state.hero.health = Math.min(
+          state.hero.health,
+          state.hero.modifier.maxHealth!,
+        );
+        state.hero.mana = Math.min(
+          state.hero.mana,
+          state.hero.modifier.maxMana!,
+        );
+      }
+    },
+    drinkPotion: (state, action: PayloadAction<InventoryItem>) => {
+      if (state.hero) {
+        const { maxHealth, maxMana } = action.payload.gameItem.modifier;
+        const isHealthFull =
+          state.hero.health === state.hero.modifier.maxHealth;
+        const isManaFull = state.hero.mana === state.hero.modifier.maxMana;
+
+        if ((isHealthFull && !maxMana) || (isManaFull && !maxHealth)) {
+          state.sysMessages = [
+            ...state.sysMessages,
+            {
+              success: false,
+              message: `Your ${maxMana ? 'mana' : 'health'} is already full. Nothing to restore.`,
+              createdAt: Date.now(),
+            },
+          ];
+          return;
+        }
+        if (!action.payload.gameItem.modifier.duration) {
+          state.hero.health = Math.min(
+            state.hero.health + (maxHealth ?? 0),
+            state.hero.modifier.maxHealth!,
+          );
+          state.hero.mana = Math.min(
+            state.hero.mana + (maxMana ?? 0),
+            state.hero.modifier.maxMana!,
+          );
+        }
+
+        if (action.payload.quantity > 1) {
+          state.hero.inventorys = state.hero.inventorys.map((item) =>
+            item.id === action.payload.id
+              ? { ...item, quantity: item.quantity - 1 }
+              : item,
+          );
+        } else {
+          state.hero.inventorys = state.hero.inventorys.filter(
+            (item) => item.id !== action.payload.id,
+          );
+        }
+
+        state.sysMessages = [
+          ...state.sysMessages,
+          {
+            success: true,
+            message: `You successfully drank `,
+            createdAt: Date.now(),
+            data: action.payload,
+          },
+        ];
       }
     },
   },
@@ -131,6 +191,7 @@ export const {
   setRegenHealthMana,
   equipItemNew,
   unEquipItemNew,
+  drinkPotion,
 } = heroSlice.actions;
 
 export default heroSlice.reducer;

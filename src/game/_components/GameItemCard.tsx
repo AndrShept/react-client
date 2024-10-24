@@ -1,4 +1,3 @@
-
 import {
   ContextMenu,
   ContextMenuContent,
@@ -11,33 +10,14 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppSelector } from '@/hooks/store';
-import { useFindSlot } from '@/hooks/useFindSlot';
+import { useEquipItem } from '@/hooks/useEquipItem';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
-import {
-  equipItemNew,
-  setSysMessages,
-  unEquipItemNew,
-} from '@/lib/redux/heroSlice';
-import {
-  useEquipHeroItemMutation,
-  useUnEquipHeroItemMutation,
-} from '@/lib/services/game/heroApi';
-
-import {
-  EquipmentSlot,
-  GameItem,
-  InventoryItem,
-  ItemType,
-  WeaponType,
-} from '@/lib/types/game.types';
+import { GameItem, InventoryItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
-import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { toast } from 'sonner';
 
 import { ItemCardInfo } from './ItemCardInfo';
-import { useEquipItem } from '@/hooks/useEquipItem';
-
+import { drinkPotion } from '@/lib/redux/heroSlice';
 
 interface Props {
   inventoryItem: InventoryItem;
@@ -66,13 +46,12 @@ export const GameItemCard = ({
 }: Props) => {
   const dispatch = useDispatch();
   const hero = useAppSelector((state) => state.hero.hero);
-  const {onEquip} = useEquipItem({
+  const { onEquip } = useEquipItem({
     hero,
     inventoryItem,
-    inventoryItemId
-  })
+    inventoryItemId,
+  });
   const isSelf = inventoryItem?.heroId === hero?.id;
-
 
   const onMouseEnter = () => {
     dispatch(setGameItem(inventoryItem.gameItem));
@@ -81,275 +60,13 @@ export const GameItemCard = ({
   const onClick = () => {
     setHeroItem && setHeroItem(inventoryItem.gameItem);
   };
-  
-
-  // const onEquip = async () => {
-    // if (!hero) return;
-    // const findItem = equipments.find(
-    //   (equip) => equip.slot === inventoryItem.gameItem.type,
-    // );
-    // const findRightHand = equipments.find(
-    //   (equip) => equip.slot === EquipmentSlot.RIGHT_HAND,
-    // );
-    // const findLeftHand = equipments.find(
-    //   (equip) => equip.slot === EquipmentSlot.LEFT_HAND,
-    // );
-    // const findLeftRing = equipments.find(
-    //   (equip) => equip.slot === EquipmentSlot.RING_LEFT,
-    // );
-    // const findRightRing = equipments.find(
-    //   (equip) => equip.slot === EquipmentSlot.RING_RIGHT,
-    // );
-    // if (
-    //   findItem &&
-    //   inventoryItem.gameItem.weaponType !== WeaponType.ONE_HAND &&
-    //   inventoryItem.gameItem.weaponType !== WeaponType.TWO_HAND &&
-    //   inventoryItem.gameItem.type !== ItemType.SHIELD &&
-    //   inventoryItem.gameItem.type !== ItemType.RING
-    // ) {
-    //   dispatch(unEquipItemNew({ inventoryItemId: findItem.inventoryItemId }));
-    //   unEquipHero({ inventoryItemId: findItem.inventoryItemId });
-    // }
-
-    // if (
-    //   (inventoryItem.gameItem.weaponType === WeaponType.TWO_HAND &&
-    //     findRightHand &&
-    //     findLeftHand) ||
-    //   (inventoryItem.gameItem.weaponType === WeaponType.TWO_HAND &&
-    //     findRightHand) ||
-    //   (inventoryItem.gameItem.weaponType === WeaponType.TWO_HAND &&
-    //     findLeftHand)
-    // ) {
-    //   dispatch(
-    //     setSysMessages({
-    //       success: false,
-    //       message:
-    //         'Your hands are occupied. Unequip your current gear to equip the new weapon',
-    //       createdAt: Date.now(),
-    //     }),
-    //   );
-    //   return;
-    // }
-    // if (
-    //   inventoryItem.gameItem.weaponType === WeaponType.TWO_HAND &&
-    //   !findRightHand &&
-    //   !findLeftHand
-    // ) {
-    //   dispatch(
-    //     equipItemNew({
-    //       heroId: hero?.id,
-    //       inventoryItem,
-    //       inventoryItemId,
-    //       isEquipped: true,
-    //       slot: EquipmentSlot.RIGHT_HAND,
-    //     }),
-    //   );
-    //   equipHero({ inventoryItemId, slot: EquipmentSlot.RIGHT_HAND }).unwrap();
-    //   return;
-    // }
-
-    // if (
-    //   (inventoryItem.gameItem.weaponType === WeaponType.ONE_HAND &&
-    //     findRightHand &&
-    //     findLeftHand) ||
-    //   (inventoryItem.gameItem.weaponType === WeaponType.ONE_HAND &&
-    //     findRightHand?.inventoryItem.gameItem.weaponType ===
-    //       WeaponType.TWO_HAND) ||
-    //   (inventoryItem.gameItem.type === ItemType.SHIELD &&
-    //     findRightHand?.inventoryItem.gameItem.weaponType ===
-    //       WeaponType.TWO_HAND)
-    // ) {
-    //   dispatch(
-    //     setSysMessages({
-    //       success: false,
-    //       message:
-    //         'Your hands are occupied. Unequip your current gear to equip the new weapon',
-    //       createdAt: Date.now(),
-    //     }),
-    //   );
-    //   return;
-    // }
-    // if (
-    //   (inventoryItem.gameItem.type === ItemType.SHIELD &&
-    //     findLeftHand?.inventoryItem.gameItem.type === ItemType.SHIELD) ||
-    //   (inventoryItem.gameItem.type === ItemType.SHIELD &&
-    //     findLeftHand?.inventoryItem.gameItem.weaponType === WeaponType.ONE_HAND)
-    // ) {
-    //   dispatch(
-    //     unEquipItemNew({ inventoryItemId: findLeftHand.inventoryItemId }),
-    //   );
-    //   unEquipHero({ inventoryItemId: findLeftHand.inventoryItemId });
-
-    //   dispatch(
-    //     equipItemNew({
-    //       heroId: hero?.id,
-    //       inventoryItem,
-    //       inventoryItemId,
-    //       isEquipped: true,
-    //       slot: EquipmentSlot.LEFT_HAND,
-    //     }),
-    //   );
-    //   equipHero({
-    //     inventoryItemId,
-    //     slot: EquipmentSlot.LEFT_HAND,
-    //   }).unwrap();
-    //   dispatch(
-    //     setSysMessages({
-    //       success: true,
-    //       message:
-    //         'You have successfully equipped',
-    //       createdAt: Date.now(),
-    //       data: inventoryItem
-    //     }),
-    //   );
-    //   return;
-    // }
-    // if (inventoryItem.gameItem.type === ItemType.SHIELD) {
-    //   dispatch(
-    //     equipItemNew({
-    //       heroId: hero?.id,
-    //       inventoryItem,
-    //       inventoryItemId,
-    //       isEquipped: true,
-    //       slot: EquipmentSlot.LEFT_HAND,
-    //     }),
-    //   );
-    //   equipHero({
-    //     inventoryItemId,
-    //     slot: EquipmentSlot.LEFT_HAND,
-    //   }).unwrap();
-    //   dispatch(
-    //     setSysMessages({
-    //       success: true,
-    //       message:
-    //         'You have successfully equipped',
-    //       createdAt: Date.now(),
-    //       data: inventoryItem
-    //     }),
-    //   );
-    //   return;
-    // }
-
-    // if (inventoryItem.gameItem.type === ItemType.RING) {
-    //   if (findRightRing && findLeftRing) {
-    //     dispatch(
-    //       setSysMessages({
-    //         success: false,
-    //         message:
-    //           'Your ring slots occupied. Unequip your one ring to equip the new ',
-    //         createdAt: Date.now(),
-    //       }),
-    //     );
-    //     return;
-    //   }
-    //   if (findRightRing) {
-
-    //     dispatch(
-    //       equipItemNew({
-    //         heroId: hero?.id,
-    //         inventoryItem,
-    //         inventoryItemId,
-    //         isEquipped: true,
-    //         slot: EquipmentSlot.RING_LEFT,
-    //       }),
-    //     );
-    //     equipHero({
-    //       inventoryItemId,
-    //       slot: EquipmentSlot.RING_LEFT,
-    //     }).unwrap();
-    //     dispatch(
-    //       setSysMessages({
-    //         success: true,
-    //         message:
-    //           'You have successfully equipped',
-    //         createdAt: Date.now(),
-    //         data: inventoryItem
-    //       }),
-    //     );
-    //     return;
-    //   }
-    //   dispatch(
-    //     equipItemNew({
-    //       heroId: hero?.id,
-    //       inventoryItem,
-    //       inventoryItemId,
-    //       isEquipped: true,
-    //       slot: EquipmentSlot.RING_RIGHT,
-    //     }),
-    //   );
-    //   equipHero({
-    //     inventoryItemId,
-    //     slot: EquipmentSlot.RING_RIGHT,
-    //   }).unwrap();
-    //   dispatch(
-    //     setSysMessages({
-    //       success: true,
-    //       message:
-    //         'You have successfully equipped',
-    //       createdAt: Date.now(),
-    //       data: inventoryItem
-    //     }),
-    //   );
-    //   return;
-    // }
-
-    // if (inventoryItem.gameItem.weaponType === WeaponType.ONE_HAND) {
-    //   dispatch(
-    //     equipItemNew({
-    //       heroId: hero?.id,
-    //       inventoryItem,
-    //       inventoryItemId,
-    //       isEquipped: true,
-    //       slot: findRightHand
-    //         ? EquipmentSlot.LEFT_HAND
-    //         : EquipmentSlot.RIGHT_HAND,
-    //     }),
-    //   );
-    //   equipHero({
-    //     inventoryItemId,
-    //     slot: findRightHand
-    //       ? EquipmentSlot.LEFT_HAND
-    //       : EquipmentSlot.RIGHT_HAND,
-    //   }).unwrap();
-    //   dispatch(
-    //     setSysMessages({
-    //       success: true,
-    //       message:
-    //         'You have successfully equipped',
-    //       createdAt: Date.now(),
-    //       data: inventoryItem
-    //     }),
-    //   );
-    //   return;
-    // }
-
-    // dispatch(
-    //   equipItemNew({
-    //     heroId: hero?.id,
-    //     inventoryItem,
-    //     inventoryItemId,
-    //     isEquipped: true,
-    //     slot: inventoryItem.gameItem.type,
-    //   }),
-    // );
-    // equipHero({ inventoryItemId, slot: inventoryItem.gameItem.type }).unwrap();
-    // dispatch(
-    //   setSysMessages({
-    //     success: true,
-    //     message:
-    //       'You have successfully equipped',
-    //     createdAt: Date.now(),
-    //     data: inventoryItem
-    //   }),
-    // );
-  // };
 
   const onDrink = () => {
-    console.log('DRINKKKKKKKKKKKKKKKKK');
+    dispatch(drinkPotion(inventoryItem))
   };
 
   const onDoubleClick = async () => {
-    if (!isDoubleCLick) return;
+    if (!isDoubleCLick || !isCanEquipped ) return;
     setTimeout(() => {
       onEquip();
     }, 300);
