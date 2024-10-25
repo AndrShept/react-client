@@ -74,6 +74,17 @@ export const heroApi = api.injectEndpoints({
         body: itemData,
       }),
     }),
+
+    drinkPotionServer: builder.mutation<
+    ServerResponse<InventoryItem>,
+    { inventoryItemId: string; heroId?: string }
+  >({
+    query: (itemData) => ({
+      url: '/drink-potion',
+      method: 'POST',
+      body: itemData,
+    }),
+  }),
   }),
 });
 
@@ -86,6 +97,7 @@ export const {
   useUnEquipHeroItemMutation,
   useUpdateHeroMutation,
   useResetStatsMutation,
+  useDrinkPotionServerMutation
 } = heroApi;
 
 export const {} = heroApi.endpoints;

@@ -124,16 +124,18 @@ export interface Modifier {
   hero?: Hero[];
 }
 
-interface Buff {
+export interface Buff {
   id: string;
   name: string;
-  modifierId: string;
+  imageUrl: string;
+  duration: number
+  modifierId?: string;
   modifier: Modifier;
-  heroId: string;
-  hero: Hero;
+  heroId?: string;
+  hero?: Hero;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export enum EquipmentSlot {

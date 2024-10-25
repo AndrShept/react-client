@@ -18,6 +18,8 @@ import { useDispatch } from 'react-redux';
 
 import { ItemCardInfo } from './ItemCardInfo';
 import { drinkPotion } from '@/lib/redux/heroSlice';
+import { useDrinkPotionServerMutation } from '@/lib/services/game/heroApi';
+import { toast } from 'sonner';
 
 interface Props {
   inventoryItem: InventoryItem;
@@ -46,6 +48,7 @@ export const GameItemCard = ({
 }: Props) => {
   const dispatch = useDispatch();
   const hero = useAppSelector((state) => state.hero.hero);
+  const [drinkPotionServer] = useDrinkPotionServerMutation()
   const { onEquip } = useEquipItem({
     hero,
     inventoryItem,
@@ -63,6 +66,13 @@ export const GameItemCard = ({
 
   const onDrink = () => {
     dispatch(drinkPotion(inventoryItem))
+    try {
+      
+      drinkPotionServer({inventoryItemId})
+    } catch (error) {
+      toast('Something went wrong')
+    }
+
   };
 
   const onDoubleClick = async () => {

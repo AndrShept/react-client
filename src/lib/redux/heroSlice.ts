@@ -1,7 +1,14 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { nanoid } from 'nanoid';
 
 import { heroApi } from '../services/game/heroApi';
-import { Equipment, Hero, InventoryItem, Modifier } from '../types/game.types';
+import {
+  Buff,
+  Equipment,
+  Hero,
+  InventoryItem,
+  Modifier,
+} from '../types/game.types';
 import {
   addModifiers,
   calculateHpAndMana,
@@ -124,12 +131,16 @@ export const heroSlice = createSlice({
     },
     drinkPotion: (state, action: PayloadAction<InventoryItem>) => {
       if (state.hero) {
-        const { maxHealth, maxMana } = action.payload.gameItem.modifier;
+        const { maxHealth, maxMana, duration } =
+          action.payload.gameItem.modifier;
         const isHealthFull =
           state.hero.health === state.hero.modifier.maxHealth;
         const isManaFull = state.hero.mana === state.hero.modifier.maxMana;
-
-        if ((isHealthFull && !maxMana) || (isManaFull && !maxHealth)) {
+        console.log();
+        if (
+          (isHealthFull && !maxMana && !duration) ||
+          (isManaFull && !maxHealth && !duration)
+        ) {
           state.sysMessages = [
             ...state.sysMessages,
             {
@@ -148,6 +159,28 @@ export const heroSlice = createSlice({
           state.hero.mana = Math.min(
             state.hero.mana + (maxMana ?? 0),
             state.hero.modifier.maxMana!,
+          );
+        }
+        if (action.payload.gameItem.modifier.duration) {
+          state.hero.buffs = [
+            ...state.hero.buffs,
+            {
+              id: nanoid(),
+              name: action.payload.gameItem.name,
+              duration: action.payload.gameItem.modifier.duration,
+              imageUrl: action.payload.gameItem.imageUrl,
+              modifier: action.payload.gameItem.modifier,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            },
+          ];
+          const validHeroModifier = filterModifierFields(state.hero.modifier);
+          const validItemModifier = filterModifierFields(
+            action.payload.gameItem.modifier,
+          );
+          state.hero.modifier = addModifiers(
+            validHeroModifier,
+            validItemModifier,
           );
         }
 
@@ -174,6 +207,22 @@ export const heroSlice = createSlice({
         ];
       }
     },
+    removeBuff: (state, action: PayloadAction<{ buff: Buff }>) => {
+      if (state.hero) {
+        const validHeroModifier = filterModifierFields(state.hero.modifier);
+        const validBuffModifier = filterModifierFields(
+          action.payload.buff.modifier,
+        );
+
+        state.hero.buffs = state.hero.buffs.filter(
+          (buff) => buff.id !== action.payload.buff.id,
+        );
+        state.hero.modifier = subtractModifiers(
+          validHeroModifier,
+          validBuffModifier,
+        );
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(
@@ -192,6 +241,7 @@ export const {
   equipItemNew,
   unEquipItemNew,
   drinkPotion,
+  removeBuff,
 } = heroSlice.actions;
 
 export default heroSlice.reducer;
