@@ -128,11 +128,14 @@ export interface Buff {
   id: string;
   name: string;
   imageUrl: string;
-  duration: number
+  duration: number;
+  timeRemaining : number
   modifierId?: string;
   modifier: Modifier;
   heroId?: string;
   hero?: Hero;
+  gameItem?: GameItem;
+  gameItemId?: string;
 
   createdAt: string;
   updatedAt: string;

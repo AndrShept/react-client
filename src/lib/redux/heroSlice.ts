@@ -161,7 +161,12 @@ export const heroSlice = createSlice({
             state.hero.modifier.maxMana!,
           );
         }
-        if (action.payload.gameItem.modifier.duration) {
+        const findExistBuff = state.hero.buffs.find(
+          (buff) => buff.gameItemId === action.payload.gameItemId,
+        );
+        console.log(findExistBuff);
+
+        if (action.payload.gameItem.modifier.duration && !findExistBuff) {
           state.hero.buffs = [
             ...state.hero.buffs,
             {
@@ -172,6 +177,8 @@ export const heroSlice = createSlice({
               modifier: action.payload.gameItem.modifier,
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
+              gameItemId: action.payload.gameItemId,
+              timeRemaining: action.payload.gameItem.modifier.duration
             },
           ];
           const validHeroModifier = filterModifierFields(state.hero.modifier);
@@ -182,6 +189,26 @@ export const heroSlice = createSlice({
             validHeroModifier,
             validItemModifier,
           );
+        }
+
+        if (findExistBuff) {
+          state.hero.buffs = state.hero.buffs.filter(
+            (buff) => buff.gameItemId !== action.payload.gameItemId,
+          );
+          state.hero.buffs = [
+            ...state.hero.buffs,
+            {
+              id: nanoid(),
+              name: action.payload.gameItem.name,
+              duration: action.payload.gameItem.modifier.duration!,
+              imageUrl: action.payload.gameItem.imageUrl,
+              modifier: action.payload.gameItem.modifier,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              gameItemId: action.payload.gameItemId,
+              timeRemaining: action.payload.gameItem.modifier.duration!
+            },
+          ];
         }
 
         if (action.payload.quantity > 1) {
