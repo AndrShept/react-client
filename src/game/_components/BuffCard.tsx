@@ -4,6 +4,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppDispatch } from '@/hooks/store';
+import { useAltClick } from '@/hooks/useAltClick';
 import { removeBuff } from '@/lib/redux/heroSlice';
 import { useRemoveBuffServerMutation } from '@/lib/services/game/heroApi';
 import { Buff } from '@/lib/types/game.types';
@@ -21,6 +22,12 @@ export const BuffCard = ({ buff }: Props) => {
   const wholeMinutes = Math.floor(durationState / 60000);
   const dispatch = useAppDispatch();
   const [removeBuffServer] = useRemoveBuffServerMutation();
+  useAltClick(() => {
+    setTimeout(() => {
+      dispatch(removeBuff({ buff }));
+    }, 300);
+    removeBuffServer({ buffId: buff.gameItemId! });
+  });
 
   const modifier = useMemo(() => {
     return Object.entries(buff.modifier).map(([key, value]) => {
@@ -35,10 +42,11 @@ export const BuffCard = ({ buff }: Props) => {
       setDurationState((prev) => prev - 60000);
     }, 60000);
     if (durationState <= 0) {
+      console.log(buff)
       clearInterval(timer);
       setDurationState(0);
+      removeBuffServer({ buffId: buff.gameItemId! });
       dispatch(removeBuff({ buff }));
-      removeBuffServer({ buffId: buff.id });
     }
 
     return () => clearInterval(timer);
@@ -59,10 +67,10 @@ export const BuffCard = ({ buff }: Props) => {
       </HoverCardTrigger>
       <HoverCardContent className="mt-4 text-sm">
         {modifier.map((item) => (
-          <li key={item.name} >
+          <li key={item.name}>
             {!!item.value && (
               <p>
-               + {item.value} {item.name} 
+                + {item.value} {item.name}
               </p>
             )}
           </li>

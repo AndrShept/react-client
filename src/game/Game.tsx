@@ -6,9 +6,18 @@ import {
 } from '@/components/ui/resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { setHeroModifier, setRegenHealthMana } from '@/lib/redux/heroSlice';
-import { useGetMyHeroQuery } from '@/lib/services/game/heroApi';
-import { useEffect } from 'react';
+import { useHealthRegen } from '@/hooks/useHealthRegen';
+import { useManaRegen } from '@/hooks/useManaRegen';
+import {
+  incrementMana,
+  setHeroModifier,
+  setRegenHealthMana,
+} from '@/lib/redux/heroSlice';
+import {
+  useGetMyHeroQuery,
+  useUpdateHeroMutation,
+} from '@/lib/services/game/heroApi';
+import { useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Chat } from './_components/Chat';
@@ -20,24 +29,42 @@ import { SysMessage } from './_components/SysMessage';
 
 export const Game = () => {
   const navigate = useNavigate();
+  const [updateHero] = useUpdateHeroMutation();
   const { username } = useAuth();
   const { pathname } = useLocation();
   const { socket } = useSocket();
   const { data: hero, isLoading, isError } = useGetMyHeroQuery();
   const heroState = useAppSelector((state) => state.hero.hero);
+  const healthState = useAppSelector((state) => state.hero.hero?.health ?? 0);
+  const maxHealthState = useAppSelector(
+    (state) => state.hero.hero?.modifier.maxHealth ?? 0,
+  );
   const dispatch = useAppDispatch();
+  const health = useHealthRegen();
+  const mana = useManaRegen();
+  const healthRef = useRef(health);
+  const manaRef = useRef(mana);
 
   useEffect(() => {
-    console.log('GOGOGOGO')
-    const socketListener = (data: Record<string, number>) => {
-      console.log(data);
-      dispatch(setRegenHealthMana(data));
-    };
-    socket?.on(username!, socketListener);
+    healthRef.current = health;
+    manaRef.current = mana;
+  }, [health, mana]);
+
+  useEffect(() => {
+    console.log(healthState);
+    console.log(maxHealthState);
+    const serverInterval = setInterval(() => {
+
+      updateHero({ health: healthRef.current, mana: manaRef.current });
+
+    }, 10000);
+
+
+
     return () => {
-      socket?.off(username, socketListener);
+      clearInterval(serverInterval);
     };
-  }, [socket, username, heroState]);
+  }, []);
   if (isLoading) {
     return 'loading...';
   }

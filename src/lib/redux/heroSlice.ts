@@ -178,7 +178,7 @@ export const heroSlice = createSlice({
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               gameItemId: action.payload.gameItemId,
-              timeRemaining: action.payload.gameItem.modifier.duration
+              timeRemaining: action.payload.gameItem.modifier.duration,
             },
           ];
           const validHeroModifier = filterModifierFields(state.hero.modifier);
@@ -206,7 +206,7 @@ export const heroSlice = createSlice({
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
               gameItemId: action.payload.gameItemId,
-              timeRemaining: action.payload.gameItem.modifier.duration!
+              timeRemaining: action.payload.gameItem.modifier.duration!,
             },
           ];
         }
@@ -248,6 +248,30 @@ export const heroSlice = createSlice({
           validHeroModifier,
           validBuffModifier,
         );
+        state.hero.health = Math.min(
+          state.hero.health,
+          state.hero.modifier.maxHealth!,
+        );
+        state.hero.mana = Math.min(
+          state.hero.mana,
+          state.hero.modifier.maxMana!,
+        );
+      }
+    },
+    incrementHealth: (state) => {
+      if (state.hero) {
+        state.hero.health = Math.min(
+          state.hero.health + 1,
+          state.hero.modifier.maxHealth ?? 0,
+        );
+      }
+    },
+    incrementMana: (state) => {
+      if (state.hero) {
+        state.hero.mana = Math.min(
+          state.hero.mana + 1,
+          state.hero.modifier.maxMana ?? 0,
+        );
       }
     },
   },
@@ -269,6 +293,8 @@ export const {
   unEquipItemNew,
   drinkPotion,
   removeBuff,
+  incrementHealth,
+  incrementMana,
 } = heroSlice.actions;
 
 export default heroSlice.reducer;
