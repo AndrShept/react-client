@@ -99,11 +99,6 @@ export const CreateHeroPage = () => {
     }
   }, [errorMessage]);
 
-  // useEffect(() => {
-  //   if (hero) {
-  //     navigate('/game');
-  //   }
-  // }, [hero]);
   if (hero) {
     navigate('/game');
   }
@@ -153,7 +148,7 @@ export const CreateHeroPage = () => {
                 <Spinner /> loading...
               </p>
             )}
-            {!isLoading && (
+            {/* {!isLoading && (
               <div className="flex flex-col gap-4 ">
                 <div className="flex gap-2 flex-wrap">
                   <p className="w-16">Weapon</p>
@@ -180,7 +175,7 @@ export const CreateHeroPage = () => {
                       <GameItemCard
                         classname=" size-14 rounded "
                         setHeroItem={() => setHeroArmor(armor)}
-                        item={armor}
+                        inventoryItem={armor}
                         isSelected={armor.id === heroArmor?.id}
                         equipmentHeroId=""
                         inventoryItemId=""
@@ -192,7 +187,7 @@ export const CreateHeroPage = () => {
                   </ul>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
