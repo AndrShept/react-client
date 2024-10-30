@@ -57,7 +57,9 @@ export const ShopPage = () => {
         <ScrollArea className="h-[68%] pr-2.5">
           <ul className="grid xl:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4 sm:p-0 px-6 ">
             {shopItems?.map((item) => (
-              <ItemCardInfo isShowBuyButton={true} item={item} />
+           
+                <ItemCardInfo key={item.id} isShowBuyButton={true} item={item} />
+            
             ))}
           </ul>
         </ScrollArea>

@@ -35,7 +35,6 @@ export const useHealthManaRegen = () => {
   }, [mana, maxMana, isBattle, socket]);
   useEffect(() => {
     const socketListener = (data: Record<string, number>) => {
-      console.log(data);
       dispatch(setRegenHealthMana(data));
     };
     if (username && socket) {

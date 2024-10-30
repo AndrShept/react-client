@@ -99,9 +99,9 @@ export const heroSlice = createSlice({
         const findEquipItem = state.hero.equipments.find(
           (equip) => equip.inventoryItemId === action.payload.inventoryItemId,
         );
-        state.hero.equipments = state.hero.equipments.filter(
-          (equip) => equip.inventoryItemId !== findEquipItem?.inventoryItemId,
-        );
+        state.hero.equipments = state.hero.equipments.filter((equip) => {
+          return equip.inventoryItemId !== findEquipItem?.inventoryItemId;
+        });
         state.hero.inventorys = state.hero.inventorys.map((inventoryItem) => {
           if (inventoryItem.id === findEquipItem?.inventoryItemId) {
             return { ...inventoryItem, isEquipped: false };
