@@ -85,14 +85,20 @@ export const heroApi = api.injectEndpoints({
         body: itemData,
       }),
     }),
-    removeBuffServer: builder.mutation<
-      {message: string},
-      { buffId: string}
-    >({
-      query: (buffId) => ({
-        url: '/remove-buff',
+    removeBuffServer: builder.mutation<{ message: string }, { buffId: string }>(
+      {
+        query: (buffId) => ({
+          url: '/remove-buff',
+          method: 'DELETE',
+          body: buffId,
+        }),
+      },
+    ),
+    deleteItemServer: builder.mutation<{ message: string }, { id: string }>({
+      query: (id) => ({
+        url: '/delete-item',
         method: 'DELETE',
-        body: buffId,
+        body: id,
       }),
     }),
   }),
@@ -108,7 +114,8 @@ export const {
   useUpdateHeroMutation,
   useResetStatsMutation,
   useDrinkPotionServerMutation,
-  useRemoveBuffServerMutation
+  useRemoveBuffServerMutation,
+  useDeleteItemServerMutation
 } = heroApi;
 
 export const {} = heroApi.endpoints;

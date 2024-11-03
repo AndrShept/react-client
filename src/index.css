@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 html,
 body {
   height: 100%;
@@ -92,5 +91,20 @@ select::-webkit-scrollbar {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+.HoverCardContent {
+  transform-origin: var(--radix-hover-card-content-transform-origin);
+  animation: scaleIn 0.1s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

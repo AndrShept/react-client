@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -12,14 +13,20 @@ import {
 import { useAppSelector } from '@/hooks/store';
 import { useEquipItem } from '@/hooks/useEquipItem';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
+import { deleteItem, drinkPotion, setSysMessages } from '@/lib/redux/heroSlice';
+import {
+  useDeleteItemServerMutation,
+  useDrinkPotionServerMutation,
+} from '@/lib/services/game/heroApi';
 import { GameItem, InventoryItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import { ItemCardInfo } from './ItemCardInfo';
-import { drinkPotion } from '@/lib/redux/heroSlice';
-import { useDrinkPotionServerMutation } from '@/lib/services/game/heroApi';
 import { toast } from 'sonner';
+
+import { ConfirmPopover } from './ConfirmPopover';
+import { ItemCardInfo } from './ItemCardInfo';
 
 interface Props {
   inventoryItem: InventoryItem;
@@ -27,9 +34,7 @@ interface Props {
   setHeroItem?: (gameItem: GameItem) => void;
   isSelected?: boolean;
   classname?: string;
-
   isContextMenuShow?: boolean;
-
   isCanEquipped: boolean;
   isDoubleCLick: boolean;
   isCanDrink: boolean;
@@ -46,9 +51,11 @@ export const GameItemCard = ({
   inventoryItem,
   inventoryItemId,
 }: Props) => {
-  const dispatch = useDispatch();
+  const [isShow, setIsShow] = useState(false);
   const hero = useAppSelector((state) => state.hero.hero);
-  const [drinkPotionServer] = useDrinkPotionServerMutation()
+  const dispatch = useDispatch();
+  const [deleteItemServer] = useDeleteItemServerMutation();
+  const [drinkPotionServer] = useDrinkPotionServerMutation();
   const { onEquip } = useEquipItem({
     hero,
     inventoryItem,
@@ -65,27 +72,38 @@ export const GameItemCard = ({
   };
 
   const onDrink = () => {
-    dispatch(drinkPotion(inventoryItem))
+    dispatch(drinkPotion(inventoryItem));
     try {
-      
-      drinkPotionServer({inventoryItemId})
+      drinkPotionServer({ inventoryItemId });
     } catch (error) {
-      toast('Something went wrong')
+      toast('Something went wrong');
     }
-
+  };
+  const onDelete = async () => {
+    try {
+      await deleteItemServer({ id: inventoryItemId });
+      dispatch(deleteItem(inventoryItem));
+    } catch (error) {
+      dispatch(
+        setSysMessages({
+          success: false,
+          message: 'Delete item error',
+          createdAt: Date.now(),
+        }),
+      );
+    }
   };
 
   const onDoubleClick = async () => {
-    if (!isDoubleCLick || !isCanEquipped ) return;
+    if (!isDoubleCLick || !isCanEquipped) return;
     setTimeout(() => {
       onEquip();
     }, 300);
   };
-
   return (
     <>
       <HoverCard openDelay={0} closeDelay={0}>
-        <ContextMenu>
+        <ContextMenu modal={false} onOpenChange={(data) => setIsShow(data)}>
           <div className="relative">
             <ContextMenuTrigger>
               <HoverCardTrigger className="relative">
@@ -115,7 +133,7 @@ export const GameItemCard = ({
             </ContextMenuTrigger>
           </div>
 
-          {isContextMenuShow && isSelf && (
+          {isContextMenuShow && isSelf && isShow && (
             <ContextMenuContent>
               {!inventoryItem.isEquipped && isCanEquipped && (
                 <ContextMenuItem
@@ -143,11 +161,39 @@ export const GameItemCard = ({
                   <span>Drink</span>
                 </ContextMenuItem>
               )}
+
+              <ContextMenuItem asChild>
+                <ConfirmPopover setIsShow={setIsShow} onConfirm={onDelete}>
+                  <ConfirmPopover.Trigger className="w-full group">
+                    <Button
+                      className="w-full rounded-sm h-8 justify-start text-xs px-2 py-1.5 cursor-default space-x-1 group-hover:text-red-500"
+                      size={'icon'}
+                      variant={'ghost'}
+                    >
+                      <X className="size-5" />
+                      <span>Delete</span>
+                    </Button>
+                  </ConfirmPopover.Trigger>
+                  <ConfirmPopover.Content>
+                    <ConfirmPopover.Title>
+                      Are you sure you want to delete item?
+                    </ConfirmPopover.Title>
+                    <ConfirmPopover.Message className="text-red-500">
+                      {inventoryItem.gameItem.name}
+                      {inventoryItem.quantity > 1 && (
+                        <span className="ml-1 text-primary">
+                          [x{inventoryItem.quantity}]
+                        </span>
+                      )}
+                    </ConfirmPopover.Message>
+                  </ConfirmPopover.Content>
+                </ConfirmPopover>
+              </ContextMenuItem>
             </ContextMenuContent>
           )}
         </ContextMenu>
 
-        <HoverCardContent className="p-0 border-none">
+        <HoverCardContent sideOffset={10} className="p-0 border-none  ">
           <ItemCardInfo item={inventoryItem.gameItem} />
         </HoverCardContent>
       </HoverCard>

@@ -16,20 +16,23 @@ import {
 } from 'react';
 
 import { GoldIcon } from './game-icons/GoldIcon';
+import { CheckIcon, X } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
   onConfirm: () => void;
+  setIsShow?: Dispatch<SetStateAction<boolean>>;
 }
 interface ConfirmPopoverContextProps {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  setIsShow: Dispatch<SetStateAction<boolean>> | undefined;
   onConfirm: () => void;
 }
 
 interface ConfirmPopoverCompound {
   Content: React.FC<{ children: ReactNode }>;
-  Trigger: React.FC<{ children: ReactNode }>;
+  Trigger: React.FC<HTMLAttributes<HTMLButtonElement>>;
   Message: React.FC<HTMLAttributes<HTMLParagraphElement>>;
   Title: React.FC<HTMLAttributes<HTMLParagraphElement>>;
 }
@@ -47,10 +50,13 @@ const useConfirmPopover = () => {
 export const ConfirmPopover: React.FC<Props> & ConfirmPopoverCompound = ({
   children,
   onConfirm,
+  setIsShow,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <ConfirmPopoverContext.Provider value={{ isOpen, setIsOpen, onConfirm }}>
+    <ConfirmPopoverContext.Provider
+      value={{ isOpen, setIsOpen, onConfirm, setIsShow }}
+    >
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         {children}
       </Popover>
@@ -58,28 +64,34 @@ export const ConfirmPopover: React.FC<Props> & ConfirmPopoverCompound = ({
   );
 };
 ConfirmPopover.Content = ({ children }) => {
-  const { setIsOpen, onConfirm } = useConfirmPopover();
+  const { setIsOpen, onConfirm, setIsShow } = useConfirmPopover();
 
   return (
     <PopoverContent className="text-sm flex flex-col gap-4 ">
       {children}
       <section className="flex gap-1 ml-auto ">
         <Button
-          onClick={() => setIsOpen(false)}
-          size={'sm'}
+          onClick={() => {
+            setIsOpen(false);
+            setIsShow && setIsShow(false);
+          }}
+          size={'icon'}
           variant={'outline'}
+          className='size-10 hover:text-red-500'
         >
-          CANCEL
+          <X className='size-5 ' />
         </Button>
         <Button
           onClick={() => {
             onConfirm();
             setIsOpen(false);
+            setIsShow && setIsShow(false);
           }}
-          size={'sm'}
+          size={'icon'}
           variant={'secondary'}
+          className='size-10 hover:text-green-500'
         >
-          OK
+        <CheckIcon className='size-5' />
         </Button>
       </section>
     </PopoverContent>
@@ -92,6 +104,6 @@ ConfirmPopover.Title = ({ children, ...props }) => {
 ConfirmPopover.Message = ({ children, ...props }) => {
   return <p {...props}> {children}</p>;
 };
-ConfirmPopover.Trigger = ({ children }) => {
-  return <PopoverTrigger>{children}</PopoverTrigger>;
+ConfirmPopover.Trigger = ({ children, ...props }) => {
+  return <PopoverTrigger {...props}>{children}</PopoverTrigger>;
 };

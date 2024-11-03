@@ -141,6 +141,45 @@ export interface Buff {
   updatedAt: string;
 }
 
+export interface Dungeon {
+  id: string;
+  name: string;
+  imageUrl:  string
+  description: string;
+  difficulty: Difficulty;
+  duration: number
+  sessions: DungeonSession[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DungeonSession {
+  id: string;
+  status: Status;
+  difficulty: Difficulty;
+  duration: number
+  dungeonId: string;
+  heroes: Hero[];
+  monsters:Monster[]
+  startTime: Date;
+  endTime: Date;
+}
+
+export interface Monster {
+  id: string;
+  name: string;
+  imageUrl:  string
+  health: number;
+  mana: number;
+  modifier: Modifier;
+  modifierId: string;
+  dungeonSession  : DungeonSession
+  dungeonSessionId: string
+  rarity: RarityType;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export enum EquipmentSlot {
   RIGHT_HAND = 'RIGHT_HAND',
   LEFT_HAND = 'LEFT_HAND',
@@ -152,6 +191,18 @@ export enum EquipmentSlot {
   RING_LEFT = 'RING_LEFT',
   RING_RIGHT = 'RING_RIGHT',
   BELT = 'BELT',
+}
+
+export enum Status {
+  IN_PROGRESS = "IN_PROGRESS",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum Difficulty {
+  EASY = "EASY",
+  NORMAL = "NORMAL",
+  HARD = "HARD",
 }
 
 export enum RarityType {

@@ -33,17 +33,20 @@ export type StatsUnion =
 interface initialState {
   hero: Hero | null;
   sysMessages: ISysMessages[];
+  confirm : boolean
 }
 
 const initialState: initialState = {
   hero: null,
   sysMessages: [],
+  confirm : false 
 };
 
 export const heroSlice = createSlice({
   name: 'hero',
   initialState,
   reducers: {
+
     setHeroModifier: (state, action: PayloadAction<Partial<Modifier>>) => {
       if (state.hero) {
         state.hero.modifier = { ...state.hero.modifier, ...action.payload };
@@ -258,20 +261,21 @@ export const heroSlice = createSlice({
         );
       }
     },
-    incrementHealth: (state) => {
+
+    deleteItem: (state, action: PayloadAction<InventoryItem>) => {
       if (state.hero) {
-        state.hero.health = Math.min(
-          state.hero.health + 1,
-          state.hero.modifier.maxHealth ?? 0,
+        state.hero.inventorys = state.hero.inventorys.filter(
+          (item) => item.id !== action.payload.id,
         );
-      }
-    },
-    incrementMana: (state) => {
-      if (state.hero) {
-        state.hero.mana = Math.min(
-          state.hero.mana + 1,
-          state.hero.modifier.maxMana ?? 0,
-        );
+        state.sysMessages = [
+          ...state.sysMessages,
+          {
+            success: true,
+            message: 'Success deleted item',
+            createdAt: Date.now(),
+            data: action.payload,
+          },
+        ];
       }
     },
   },
@@ -293,8 +297,7 @@ export const {
   unEquipItemNew,
   drinkPotion,
   removeBuff,
-  incrementHealth,
-  incrementMana,
+  deleteItem,
 } = heroSlice.actions;
 
 export default heroSlice.reducer;

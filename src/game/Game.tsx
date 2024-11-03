@@ -6,8 +6,8 @@ import {
 } from '@/components/ui/resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
+import { useHealthManaRegen } from '@/hooks/useHealthManaRegen';
 import { useGetMyHeroQuery } from '@/lib/services/game/heroApi';
-import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Chat } from './_components/Chat';
@@ -16,7 +16,6 @@ import { HeroInventory } from './_components/HeroInventory';
 import { HeroModifiers } from './_components/HeroModifiers';
 import { Paperdoll } from './_components/Paperdoll';
 import { SysMessage } from './_components/SysMessage';
-import { useHealthManaRegen } from '@/hooks/useHealthManaRegen';
 
 export const Game = () => {
   const navigate = useNavigate();
@@ -25,7 +24,7 @@ export const Game = () => {
   const { socket } = useSocket();
   const { data: hero, isLoading, isError } = useGetMyHeroQuery();
   const heroState = useAppSelector((state) => state.hero.hero);
-  const {health,mana} = useHealthManaRegen()
+  const { health, mana } = useHealthManaRegen();
 
   if (isLoading) {
     return 'loading...';
@@ -60,7 +59,7 @@ export const Game = () => {
           )}
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={30} className="flex">
+        <ResizablePanel defaultSize={30} className="flex ">
           <Chat />
           <SysMessage />
         </ResizablePanel>

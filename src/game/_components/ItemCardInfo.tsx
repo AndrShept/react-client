@@ -2,6 +2,7 @@ import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import React from 'react';
 
+import '../../index.css';
 import { getRarity } from '../utils';
 import { ItemModifiers } from './ItemModifiers';
 import { BuyIcon } from './game-icons/BuyIcon';
@@ -15,9 +16,10 @@ interface Props {
 export const ItemCardInfo = ({ item, isShowBuyButton = false }: Props) => {
   return (
     <article
-      className={cn('flex flex-col p-4 border rounded gap-4 text-sm   ', {
-        ...getRarity(item),
-      })}
+      className={cn(
+        'flex   flex-col p-4 border rounded gap-4 text-sm bg-background     ',
+        {},
+      )}
     >
       <section className="flex gap-3">
         <img
