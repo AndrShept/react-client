@@ -19,6 +19,7 @@ import { SocketProvider } from '@/components/providers/SocketProvider';
 import { Game } from '@/game/Game';
 import { CreateHeroPage } from '@/game/_components/pages/CreateHeroPage';
 import { CreateItemPage } from '@/game/_components/pages/CreateItemPage';
+import { DungeonsPage } from '@/game/_components/pages/DungeonsPage';
 import { InventoryPage } from '@/game/_components/pages/InventoryPage';
 import { ShopPage } from '@/game/_components/pages/ShopPage';
 
@@ -85,6 +86,10 @@ export const appRoutes = [
           {
             path: 'inventory',
             element: <InventoryPage />,
+          },
+          {
+            path: 'dungeons',
+            element: <DungeonsPage />,
           },
         ],
       },

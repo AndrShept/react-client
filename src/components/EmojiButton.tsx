@@ -27,7 +27,7 @@ export const EmojiButton = ({
   classname,
 }: EmojiPickerProps) => {
   return (
-    <Popover>
+    <Popover modal={true}>
       <PopoverTrigger asChild>
         <Button
           type="button"

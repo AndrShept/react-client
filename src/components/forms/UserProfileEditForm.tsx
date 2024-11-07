@@ -233,7 +233,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
               <FormItem className="flex flex-col">
                 <FormLabel>Date of birth</FormLabel>
                 <div>
-                  <Popover>
+                  <Popover modal={true}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -252,7 +252,7 @@ export const UserProfileEditForm = ({ user }: UserProfileFormProps) => {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto  p-0" align="start">
+                    <PopoverContent  className="w-auto  p-0" align="start">
                       <Calendar
                         className="relative"
                         captionLayout="dropdown-buttons"

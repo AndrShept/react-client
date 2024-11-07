@@ -1,8 +1,5 @@
 import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
-import React from 'react';
-
-import '../../index.css';
 import { getRarity } from '../utils';
 import { ItemModifiers } from './ItemModifiers';
 import { BuyIcon } from './game-icons/BuyIcon';
@@ -14,6 +11,7 @@ interface Props {
 }
 
 export const ItemCardInfo = ({ item, isShowBuyButton = false }: Props) => {
+
   return (
     <article
       className={cn(

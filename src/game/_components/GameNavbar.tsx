@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { FillBar } from './FillBar';
 import { HeroAvatar } from './HeroAvatar';
+import { DungeonIcon } from './game-icons/DungeonIcon';
 import { GoldIcon } from './game-icons/GoldIcon';
 import { PremIcon } from './game-icons/PremIcon';
 import { ShopGameIcon } from './game-icons/ShopGameIcon';
@@ -49,6 +50,9 @@ export const GameNavbar = () => {
           </div>
         </div>
 
+        <Link to={'dungeons'}>
+          <DungeonIcon />
+        </Link>
         <Link to={'shop'}>
           <ShopGameIcon />
         </Link>
