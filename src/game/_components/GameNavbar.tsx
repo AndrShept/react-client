@@ -4,10 +4,17 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { FillBar } from './FillBar';
 import { HeroAvatar } from './HeroAvatar';
-import { DungeonIcon } from './game-icons/DungeonIcon';
+import { BackpackButton } from './game-button/BackpackButton';
+import { DungeonButton } from './game-button/DungeonButton';
+import { ShopButton } from './game-button/ShopButton';
 import { GoldIcon } from './game-icons/GoldIcon';
 import { PremIcon } from './game-icons/PremIcon';
-import { ShopGameIcon } from './game-icons/ShopGameIcon';
+
+export const gameUrls = {
+  dungeons: 'dungeons',
+  shop: 'shop',
+  inventory: 'inventory',
+};
 
 export const GameNavbar = () => {
   const hero = useAppSelector((state) => state.hero.hero);
@@ -50,11 +57,11 @@ export const GameNavbar = () => {
           </div>
         </div>
 
-        <Link to={'dungeons'}>
-          <DungeonIcon />
+        <Link to={gameUrls.dungeons}>
+          <DungeonButton />
         </Link>
-        <Link to={'shop'}>
-          <ShopGameIcon />
+        <Link to={gameUrls.shop}>
+          <ShopButton />
         </Link>
         <Button variant={'outline'} size={'icon'}>
           <img
@@ -63,13 +70,11 @@ export const GameNavbar = () => {
             alt="ability-image"
           />
         </Button>
-        <Link to={'inventory'}>
-          <Button className="relative" variant={'outline'} size={'icon'}>
-            <img src="/sprites/icons/backpack.png" alt="ShopGameIcon" />
-            <div className="absolute text-[10px] -bottom-1">
-              {hero?.inventorys.length}/{hero?.inventorySlots}
-            </div>
-          </Button>
+        <Link to={gameUrls.inventory}>
+          <BackpackButton
+            inventorySlots={hero?.inventorySlots}
+            inventorysLength={hero?.inventorys.length}
+          />
         </Link>
       </div>
     </section>

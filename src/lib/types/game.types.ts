@@ -158,11 +158,11 @@ export interface DungeonSession {
   status: Status;
   difficulty: Difficulty;
   duration: number
+  endTime?: Date;
   dungeonId: string;
   heroes: Hero[];
   monsters:Monster[]
-  startTime: Date;
-  endTime: Date;
+  createdAt: Date;
 }
 
 export interface Monster {

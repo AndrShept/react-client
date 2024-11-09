@@ -2,7 +2,7 @@ import { GameItem } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { getRarity } from '../utils';
 import { ItemModifiers } from './ItemModifiers';
-import { BuyIcon } from './game-icons/BuyIcon';
+import { BuyIcon } from './game-button/BuyButton';
 import { GoldIcon } from './game-icons/GoldIcon';
 
 interface Props {
