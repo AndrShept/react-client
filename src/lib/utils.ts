@@ -26,7 +26,13 @@ export const dateFnsLessTime = (timestamp: Date) => {
   });
 };
 export const getTimeFns = (timestamp: number) => {
-  return format(new Date(timestamp), 'HH:mm:ss');
+  const date = new Date(timestamp);
+  const hours = date.getUTCHours();
+  
+  // Якщо години є, показуємо 'HH:mm:ss', інакше 'mm:ss'
+  return hours > 0 
+    ? format(date, 'HH:mm:ss') 
+    : format(date, 'mm:ss');
 };
 
 export function hasErrorField(

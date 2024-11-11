@@ -5,6 +5,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+import { CheckIcon, X } from 'lucide-react';
 import {
   Dispatch,
   HTMLAttributes,
@@ -16,7 +17,6 @@ import {
 } from 'react';
 
 import { GoldIcon } from './game-icons/GoldIcon';
-import { CheckIcon, X } from 'lucide-react';
 
 interface Props {
   children: ReactNode;
@@ -31,7 +31,10 @@ interface ConfirmPopoverContextProps {
 }
 
 interface ConfirmPopoverCompound {
-  Content: React.FC<{ children: ReactNode }>;
+  Content: React.FC<{
+    children: ReactNode;
+    side?: 'top' | 'right' | 'bottom' | 'left' | undefined;
+  }>;
   Trigger: React.FC<HTMLAttributes<HTMLButtonElement>>;
   Message: React.FC<HTMLAttributes<HTMLParagraphElement>>;
   Title: React.FC<HTMLAttributes<HTMLParagraphElement>>;
@@ -63,11 +66,11 @@ export const ConfirmPopover: React.FC<Props> & ConfirmPopoverCompound = ({
     </ConfirmPopoverContext.Provider>
   );
 };
-ConfirmPopover.Content = ({ children }) => {
+ConfirmPopover.Content = ({ children, side }) => {
   const { setIsOpen, onConfirm, setIsShow } = useConfirmPopover();
 
   return (
-    <PopoverContent className="text-sm flex flex-col gap-4 ">
+    <PopoverContent side={side} className="text-sm flex flex-col gap-4 ">
       {children}
       <section className="flex gap-1 ml-auto ">
         <Button
@@ -77,9 +80,9 @@ ConfirmPopover.Content = ({ children }) => {
           }}
           size={'icon'}
           variant={'outline'}
-          className='size-10 hover:text-red-500'
+          className="size-10 hover:text-red-500"
         >
-          <X className='size-5 ' />
+          <X className="size-5 " />
         </Button>
         <Button
           onClick={() => {
@@ -89,9 +92,9 @@ ConfirmPopover.Content = ({ children }) => {
           }}
           size={'icon'}
           variant={'secondary'}
-          className='size-10 hover:text-green-500'
+          className="size-10 hover:text-green-500"
         >
-        <CheckIcon className='size-5' />
+          <CheckIcon className="size-5" />
         </Button>
       </section>
     </PopoverContent>

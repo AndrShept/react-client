@@ -94,6 +94,7 @@ export const GameItemCard = ({
     }
   };
 
+
   const onDoubleClick = async () => {
     if (!isDoubleCLick || !isCanEquipped) return;
     setTimeout(() => {

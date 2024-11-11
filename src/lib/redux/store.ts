@@ -8,6 +8,7 @@ import heroSlice from './heroSlice';
 import photoSlice from './photoSlice';
 import searchSlice from './searchSlice';
 import userSlice from './userSlice';
+import dungeonSessionSlice  from './dungeonSessionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
     photo: photoSlice,
     gameItem: gameItemSlice,
     hero: heroSlice,
+    dungeonSession: dungeonSessionSlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

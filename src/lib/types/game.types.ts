@@ -21,6 +21,8 @@ export interface Hero {
   user?: User;
   baseStats: BaseStats;
   baseStatsId: string;
+  dungeonSessions: DungeonSession[];
+  dungeonSessionId: string[];
   buffs: Buff[];
   inventorys: InventoryItem[];
   equipments: Equipment[];
@@ -129,7 +131,7 @@ export interface Buff {
   name: string;
   imageUrl: string;
   duration: number;
-  timeRemaining : number
+  timeRemaining: number;
   modifierId?: string;
   modifier: Modifier;
   heroId?: string;
@@ -144,10 +146,10 @@ export interface Buff {
 export interface Dungeon {
   id: string;
   name: string;
-  imageUrl:  string
+  imageUrl: string;
   description: string;
   difficulty: Difficulty;
-  duration: number
+  duration: number;
   sessions: DungeonSession[];
   createdAt: Date;
   updatedAt: Date;
@@ -157,24 +159,27 @@ export interface DungeonSession {
   id: string;
   status: Status;
   difficulty: Difficulty;
-  duration: number
+  duration: number;
+  timeRemaining: number;
   endTime?: Date;
+  dungeon: Dungeon;
   dungeonId: string;
   heroes: Hero[];
-  monsters:Monster[]
+  heroId: string[];
+  monsters: Monster[];
   createdAt: Date;
 }
 
 export interface Monster {
   id: string;
   name: string;
-  imageUrl:  string
+  imageUrl: string;
   health: number;
   mana: number;
   modifier: Modifier;
   modifierId: string;
-  dungeonSession  : DungeonSession
-  dungeonSessionId: string
+  dungeonSession: DungeonSession;
+  dungeonSessionId: string;
   rarity: RarityType;
   createdAt: Date;
   updatedAt: Date;
@@ -194,15 +199,15 @@ export enum EquipmentSlot {
 }
 
 export enum Status {
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
 }
 
 export enum Difficulty {
-  EASY = "EASY",
-  NORMAL = "NORMAL",
-  HARD = "HARD",
+  EASY = 'EASY',
+  NORMAL = 'NORMAL',
+  HARD = 'HARD',
 }
 
 export enum RarityType {
