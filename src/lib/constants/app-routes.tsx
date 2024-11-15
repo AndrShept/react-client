@@ -20,6 +20,7 @@ import { Game } from '@/game/Game';
 import { CreateHeroPage } from '@/game/_components/pages/CreateHeroPage';
 import { CreateItemPage } from '@/game/_components/pages/CreateItemPage';
 import { DungeonsPage } from '@/game/_components/pages/DungeonsPage';
+import { DungeonsSessionByIdPage } from '@/game/_components/pages/DungeonsSessionByIdPage';
 import { InventoryPage } from '@/game/_components/pages/InventoryPage';
 import { ShopPage } from '@/game/_components/pages/ShopPage';
 
@@ -50,7 +51,7 @@ export const appRoutes = [
         element: <ConversationsSidebar />,
         children: [
           {
-            path: '/conversations/:conversationId',
+            path: ':conversationId',
             element: <ConversationsPageById />,
           },
         ],
@@ -91,6 +92,11 @@ export const appRoutes = [
             path: 'dungeons',
             element: <DungeonsPage />,
           },
+          {
+            path: '/game/dungeons/:dungeonSessionId',
+            element: <DungeonsSessionByIdPage />,
+          },
+
         ],
       },
     ],

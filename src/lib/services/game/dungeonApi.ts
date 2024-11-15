@@ -11,8 +11,8 @@ export const dungeonApi = api.injectEndpoints({
       }),
     }),
     getDungeonsSessionById: builder.query<DungeonSession, string>({
-      query: (dungeonId) => ({
-        url: `/dungeons-session/${dungeonId}`,
+      query: (dungeonSessionId) => ({
+        url: `/dungeons-session/${dungeonSessionId}`,
         method: 'GET',
       }),
     }),

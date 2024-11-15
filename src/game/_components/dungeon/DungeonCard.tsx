@@ -6,9 +6,11 @@ import {
   useUpdateDungeonSessionStatusMutation,
 } from '@/lib/services/game/dungeonApi';
 import { useLazyGetMyHeroQuery } from '@/lib/services/game/heroApi';
-import { Dungeon, Status } from '@/lib/types/game.types';
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { Dungeon, DungeonSession, Status } from '@/lib/types/game.types';
+import { cn, getTimeFns } from '@/lib/utils';
+import { RefreshCwIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { ConfirmPopover } from '../ConfirmPopover';
@@ -20,9 +22,11 @@ interface Props {
 
 export const DungeonCard = ({ dungeon }: Props) => {
   const [isMore, setIsMore] = useState(false);
-  const [onCreateDungSession, { isLoading  }] = useCreateDungSessionMutation();
+  const navigate = useNavigate();
+  const [onCreateDungSession, { isLoading }] = useCreateDungSessionMutation();
   const [updateDungeonSessionStatus] = useUpdateDungeonSessionStatusMutation();
-  const [refetchHero, { isLoading: isLoadingHero ,isFetching }] = useLazyGetMyHeroQuery();
+  const [refetchHero, { isLoading: isLoadingHero, isFetching }] =
+    useLazyGetMyHeroQuery();
   const dungeonSession = useAppSelector((state) =>
     state.hero.hero?.dungeonSessions?.find(
       (findDung) => findDung.dungeonId === dungeon.id,
@@ -33,7 +37,9 @@ export const DungeonCard = ({ dungeon }: Props) => {
 
   const onEnterDung = async () => {
     try {
-      await onCreateDungSession({ dungeonId: dungeon.id }).unwrap();
+      const res = await onCreateDungSession({ dungeonId: dungeon.id }).unwrap();
+
+      navigate(`/game/dungeons/${res.id}`);
       await refetchHero().unwrap();
     } catch (error: any) {
       console.log(error);
@@ -97,18 +103,45 @@ export const DungeonCard = ({ dungeon }: Props) => {
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 ">
+        <div className="flex items-center gap-2 flex-wrap ">
           <div className="flex items-center">
             <TimeIcon />
 
-            <p className="text-sm text-green-500">{dungeon.duration}m</p>
+            {!isDungInprogress && (
+              <p className="text-sm text-green-500">{dungeon.duration}m</p>
+            )}
+            {isDungInprogress && (
+              <p className="text-red-500">
+                {getTimeFns(dungeonSession.timeRemaining)}
+              </p>
+            )}
+            {isDungInprogress && (
+              <Button
+                onClick={() => refetchHero()}
+                disabled={
+                  isLoading || isLoadingHero || isFetching || !isDungInprogress
+                }
+                variant={'ghost'}
+                size={'icon'}
+                className="size-8 ml-1"
+              >
+                <RefreshCwIcon
+                  className={cn('size-4', {
+                    'animate-spin': isLoadingHero || isFetching,
+                  })}
+                />
+              </Button>
+            )}
           </div>
 
           {!isDungInprogress && (
             <Button
-              disabled={isLoading || isDungInprogress || isLoadingHero || isFetching }
+              disabled={
+                isLoading || isDungInprogress || isLoadingHero || isFetching
+              }
               onClick={onEnterDung}
               variant={'secondary'}
+              size={'sm'}
               className="ml-auto"
             >
               Enter
@@ -120,8 +153,11 @@ export const DungeonCard = ({ dungeon }: Props) => {
               <ConfirmPopover onConfirm={onConfirm}>
                 <ConfirmPopover.Trigger>
                   <Button
-                  disabled={isLoading  || isLoadingHero || isFetching}
-                  className="ml-auto" variant={'destructive'}>
+                    disabled={isLoading || isLoadingHero || isFetching}
+                    className="ml-auto"
+                    variant={'destructive'}
+                    size={'sm'}
+                  >
                     Leave
                   </Button>
                 </ConfirmPopover.Trigger>
@@ -135,9 +171,13 @@ export const DungeonCard = ({ dungeon }: Props) => {
                 </ConfirmPopover.Content>
               </ConfirmPopover>
 
-              <Button 
-                  disabled={isLoading  || isLoadingHero || isFetching}
-              className="ml-auto text-green-500" variant={'secondary'}>
+              <Button
+                disabled={isLoading || isLoadingHero || isFetching}
+                className="ml-auto text-green-500"
+                variant={'secondary'}
+                size={'sm'}
+                onClick={() => navigate(`/game/dungeons/${dungeonSession.id}`)}
+              >
                 GO!
               </Button>
             </div>
