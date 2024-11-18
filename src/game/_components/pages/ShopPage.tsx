@@ -2,13 +2,14 @@ import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAppSelector } from '@/hooks/store';
-import { useGetAllItemsQuery } from '@/lib/services/game/ItemApi';
+import { useGetAllItemsQuery, useLazyGetAllItemsQuery } from '@/lib/services/game/ItemApi';
 import { useState } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { shopNavList } from '../../utils';
 import { HeroInventory } from '../HeroInventory';
 import { ItemCardInfo } from '../ItemCardInfo';
+import { ErrorLoadingData } from '@/components/ErrorLoadingData';
 
 export const ShopPage = () => {
   const [filterType, setFilterType] = useState('sword');
@@ -18,12 +19,13 @@ export const ShopPage = () => {
     ),
   );
   const { data: gameItems, isLoading, isError } = useGetAllItemsQuery();
+  const [refetchItems] = useLazyGetAllItemsQuery()
   const isMobile = useMediaQuery('(min-width: 768px)');
   if (isLoading) {
     return <Spinner />;
   }
   if (isError) {
-    return <p>Error loading data</p>;
+    return <ErrorLoadingData refetchData={() => refetchItems()}/>
   }
   return (
     <section className="flex  gap-4 mt-8 h-[calc(100vh-152px)]">

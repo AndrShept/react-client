@@ -6,8 +6,9 @@ import {
   useGetDungeonsSessionByIdQuery,
   useLazyGetDungeonsSessionByIdQuery,
 } from '@/lib/services/game/dungeonApi';
-import { Container, Sprite, Stage, Text } from '@pixi/react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+import { DungeonMap } from '../DungeonMap';
 
 export const DungeonsSessionByIdPage = () => {
   const { dungeonSessionId } = useParams();
@@ -38,6 +39,17 @@ export const DungeonsSessionByIdPage = () => {
       }),
     );
   }
+  if (dungeonSession?.endTime && !isLoading) {
+    navigate('/game/dungeons');
+    dispatch(
+      setSysMessages({
+        success: false,
+        message: 'Dungeon session is ended',
+        createdAt: Date.now(),
+      }),
+    );
+  }
+  console.log(dungeonSession);
 
   if (isError) {
     return (
@@ -52,11 +64,7 @@ export const DungeonsSessionByIdPage = () => {
 
   return (
     <section>
-      <Stage
-        width={800}
-        height={600}
-        options={{ background: 0x1099bb }}
-      ></Stage>
+      <DungeonMap />
     </section>
   );
 };
