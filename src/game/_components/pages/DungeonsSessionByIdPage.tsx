@@ -8,7 +8,7 @@ import {
 } from '@/lib/services/game/dungeonApi';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { DungeonMap } from '../DungeonMap';
+import { DungeonMap } from '../dungeon/DungeonMap';
 
 export const DungeonsSessionByIdPage = () => {
   const { dungeonSessionId } = useParams();
@@ -63,7 +63,7 @@ export const DungeonsSessionByIdPage = () => {
   }
 
   return (
-    <section>
+    <section className='size-full'>
       <DungeonMap />
     </section>
   );
