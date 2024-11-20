@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'lucide-react';
 import React from 'react';
 
 interface Props {
@@ -41,7 +41,7 @@ export const DungeonMovingButtons = ({ moveHero }: Props) => {
         variant={'outline'}
         size={'icon'}
       >
-        <ChevronRightIcon />
+        <ChevronDownIcon />
       </Button>
     </section>
   );
