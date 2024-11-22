@@ -4,7 +4,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppDispatch } from '@/hooks/store';
-import { useAltClick } from '@/hooks/useAltClick';
+import { useAltClick } from '@/hooks/game/useAltClick';
 import { removeBuff } from '@/lib/redux/heroSlice';
 import { useRemoveBuffServerMutation } from '@/lib/services/game/heroApi';
 import { Buff } from '@/lib/types/game.types';

@@ -15,6 +15,18 @@ export const rand = (num: number) => {
   return Math.floor(Math.random() * num);
 };
 
+export const isObjectNearHero  = (
+  heroX: number,
+  heroY: number,
+  objX: number,
+  objY: number,
+) => {
+  const dx = Math.abs(heroX - objX);
+  const dy = Math.abs(heroY - objY);
+
+  return (dx === 1 && dy === 0) || (dx === 0 && dy === 1);
+};
+
 
 
 export const getModifiers = (item: GameItem | null) => {

@@ -160,13 +160,27 @@ export interface DungeonSession {
   status: Status;
   difficulty: Difficulty;
   duration: number;
-  timeRemaining: number;
+  timeRemaining: number
   endTime?: Date;
   dungeon: Dungeon;
   dungeonId: string;
-  heroes: Hero[];
-  heroId: string[];
+  hero: Hero;
+  heroId: string;
   monsters: Monster[];
+  dungeonHeroes: DungeonHero[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DungeonHero {
+  id: string;
+  death: number; 
+  x: number; 
+  y: number; 
+  hero: Hero; 
+  heroId: string;
+  dungeonSession: DungeonSession; 
+  dungeonSessionId: string;
   createdAt: Date;
 }
 

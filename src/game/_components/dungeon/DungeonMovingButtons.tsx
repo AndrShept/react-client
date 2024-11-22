@@ -1,6 +1,10 @@
 import { Button } from '@/components/ui/button';
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'lucide-react';
-import React from 'react';
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+} from 'lucide-react';
 
 interface Props {
   moveHero: (dx: number, dy: number) => void;
@@ -8,7 +12,7 @@ interface Props {
 
 export const DungeonMovingButtons = ({ moveHero }: Props) => {
   return (
-    <section className="flex flex-col max-w-[120px] ">
+    <section className="flex flex-col w-[120px]   ">
       <Button
         className="mx-auto"
         onClick={() => moveHero(0, -1)}

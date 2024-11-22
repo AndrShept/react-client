@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { useAppDispatch } from '@/hooks/store';
-import { useHeroStats } from '@/hooks/useHeroStats';
+import { useHeroStats } from '@/hooks/game/useHeroStats';
 import { StatsUnion, setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useLazyGetMyHeroQuery,

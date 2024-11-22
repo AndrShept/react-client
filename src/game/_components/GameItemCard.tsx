@@ -11,7 +11,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { useAppSelector } from '@/hooks/store';
-import { useEquipItem } from '@/hooks/useEquipItem';
+import { useEquipItem } from '@/hooks/game/useEquipItem';
 import { setGameItem } from '@/lib/redux/gameItemSlice';
 import { deleteItem, drinkPotion, setSysMessages } from '@/lib/redux/heroSlice';
 import {

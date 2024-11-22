@@ -26,14 +26,12 @@ export const DungeonsSessionByIdPage = () => {
   } = useGetDungeonsSessionByIdQuery(dungeonSessionId);
   const [refetchDungeonSession] = useLazyGetDungeonsSessionByIdQuery();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const heroExistDungeon = dungeonSession?.heroes?.some(
-    (hero) => hero.id === heroId,
+  const heroExistDungeon = dungeonSession?.dungeonHeroes?.some(
+    (dungHero) => dungHero.heroId === heroId,
   );
 
   useEffect(() => {
     if (!isLoading) {
-
-
       if (!heroExistDungeon) {
         navigate('/game/dungeons');
         dispatch(

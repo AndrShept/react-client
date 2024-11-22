@@ -2,8 +2,8 @@ import { useSocket } from '@/components/providers/SocketProvider';
 import { setRegenHealthMana } from '@/lib/redux/heroSlice';
 import { useEffect } from 'react';
 
-import { useAppDispatch, useAppSelector } from './store';
-import { useAuth } from './useAuth';
+import { useAppDispatch, useAppSelector } from '../store';
+import { useAuth } from '../useAuth';
 
 export const useHealthManaRegen = () => {
   const { socket } = useSocket();

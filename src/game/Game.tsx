@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/resizable';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { useHealthManaRegen } from '@/hooks/useHealthManaRegen';
+import { useHealthManaRegen } from '@/hooks/game/useHealthManaRegen';
 import {
   useGetMyHeroQuery,
   useLazyGetMyHeroQuery,

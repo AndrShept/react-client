@@ -1,7 +1,7 @@
 import { Spinner } from '@/components/Spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useGetStats } from '@/hooks/useGetStats';
+import { useGetStats } from '@/hooks/game/useGetStats';
 import { useGetNoviceItemsQuery } from '@/lib/services/game/ItemApi';
 import {
   useCreateHeroMutation,
