@@ -8,6 +8,7 @@ export interface Hero {
   gold: number;
   premCoin: number;
   isBattle: boolean;
+  isDungeon: boolean;
   health: number;
   mana: number;
   currentExperience: number;
@@ -160,26 +161,55 @@ export interface DungeonSession {
   status: Status;
   difficulty: Difficulty;
   duration: number;
-  timeRemaining: number
+  tileSize: number;
+  mapWidth: number;
+  mapHeight: number;
   endTime?: Date;
-  dungeon: Dungeon;
+  dungeon?: Dungeon;
   dungeonId: string;
-  hero: Hero;
+  hero?: Hero;
   heroId: string;
-  monsters: Monster[];
+  tiles: Tile[];
   dungeonHeroes: DungeonHero[];
+
   createdAt: Date;
   updatedAt: Date;
 }
 
+export interface Tile {
+  id: string;
+  gid: number;
+  height: number;
+  width: number;
+  name: TileType;
+  rotation: number;
+  type: string;
+  visible: boolean;
+  x: number;
+  y: number;
+  hero?: Hero;
+  heroId?: string;
+  monster?: Monster;
+  monsterId?: string;
+  dungeonSession?: DungeonSession;
+  dungeonSessionId?: string;
+}
+
+export interface ISocketDungeonMapData {
+  dungeonMap: (Tile | null)[][];
+  height: number;
+  width: number;
+  tileSize: number;
+}
+
 export interface DungeonHero {
   id: string;
-  death: number; 
-  x: number; 
-  y: number; 
-  hero: Hero; 
+  death: number;
+  x: number;
+  y: number;
+  hero: Hero;
   heroId: string;
-  dungeonSession: DungeonSession; 
+  dungeonSession: DungeonSession;
   dungeonSessionId: string;
   createdAt: Date;
 }
@@ -192,9 +222,8 @@ export interface Monster {
   mana: number;
   modifier: Modifier;
   modifierId: string;
-  dungeonSession: DungeonSession;
-  dungeonSessionId: string;
   rarity: RarityType;
+  tiles: Tile[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -210,6 +239,13 @@ export enum EquipmentSlot {
   RING_LEFT = 'RING_LEFT',
   RING_RIGHT = 'RING_RIGHT',
   BELT = 'BELT',
+}
+export enum TileType {
+  wall = 'wall',
+  hero = 'hero',
+  monster = 'monster',
+  chest = 'chest',
+  loot = 'loot',
 }
 
 export enum Status {
@@ -259,3 +295,64 @@ export enum WeaponType {
   ONE_HAND = 'ONE_HAND',
   TWO_HAND = 'TWO_HAND',
 }
+
+// export interface TileMap {
+//   compressionlevel: number;
+//   height: number;
+//   infinite: boolean;
+//   layers: Layer[];
+//   nextlayerid: number;
+//   nextobjectid: number;
+//   orientation: string;
+//   renderorder: string;
+//   tiledversion: string;
+//   tileheight: number;
+//   tilesets: Tileset[];
+//   tilewidth: number;
+//   type: string;
+//   version: string;
+//   width: number;
+// }
+
+// export interface Layer {
+//   draworder?: string; // Присутній тільки для "objectgroup"
+//   id: number;
+//   name: string;
+//   objects?: TileObject[]; // Присутній тільки для "objectgroup"
+//   data?: number[]; // Присутній тільки для "tilelayer"
+//   height?: number; // Присутній тільки для "tilelayer"
+//   opacity: number;
+//   type: "objectgroup" | "tilelayer";
+//   visible: boolean;
+//   width?: number; // Присутній тільки для "tilelayer"
+//   x: number;
+//   y: number;
+// }
+
+// export interface TileObject {
+//   gid: number;
+//   height: number;
+//   id: number;
+//   name: string;
+//   rotation: number;
+//   type: string;
+//   visible: boolean;
+//   width: number;
+//   x: number;
+//   y: number;
+//   hero?: Hero | null
+// }
+
+// export interface Tileset {
+//   columns: number;
+//   firstgid: number;
+//   image: string;
+//   imageheight: number;
+//   imagewidth: number;
+//   margin: number;
+//   name: string;
+//   spacing: number;
+//   tilecount: number;
+//   tileheight: number;
+//   tilewidth: number;
+// }

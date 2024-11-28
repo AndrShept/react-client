@@ -1,63 +1,67 @@
 import { isObjectNearHero } from '@/game/utils';
-import { useHeroMove } from '@/hooks/game/useHeroMove';
-import { useEffect } from 'react';
+import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
+
 
 import { DungeonMovingButtons } from './DungeonMovingButtons';
-import { DungeonTiles } from './DungeonTiles';
+import { DungeonTile } from './DungeonTile';
+import { useEffect } from 'react';
+import { useAppSelector } from '@/hooks/store';
+import { useSocketHeroMove } from '@/hooks/game/useSocketHeroMove';
 
-const TILE_SIZE = 48;
-
-const initialMap = [
-  [3, 0, 1, 0, 0], // 0 - пустий тайл, 1 - скриня
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 2], // 2 - монстр
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0], // 3 - герой
-];
-
-export const DungeonMap = () => {
-  const { heroPosition, moveHero, map } = useHeroMove({
-    initialMap,
+interface Props {
+  dungeonSessionId: string;
+}
+export const DungeonMap = ({ dungeonSessionId }: Props) => {
+  const heroPosition = useAppSelector((state) => state.dungeonSession.heroPos);
+  const { mapData } = useSocketDungeonMap({
+    dungeonSessionId,
   });
-  useEffect(() => {
-    console.log(map);
-    console.log(heroPosition);
-  }, [map]);
+  // useSocketHeroMove()
+    
+  if (!mapData) {
+    return <p>Loading dungeon map...</p>;
+  }
+  const { dungeonMap, height, tileSize, width } = mapData;
+  console.log(dungeonMap)
+
 
   return (
     <section className="flex">
-      <div
-        style={{
-          position: 'relative',
-          width: `${TILE_SIZE * map[0].length}px`,
-          height: `${TILE_SIZE * map.length}px`,
-          display: 'grid',
-          gridTemplateColumns: `repeat(${map[0].length}, ${TILE_SIZE}px)`,
-        }}
-      >
-        {map.map((row, y) =>
-          row.map((tile, x) => {
-            const isNearby = isObjectNearHero(
-              heroPosition.x,
-              heroPosition.y,
-              x,
-              y,
-            );
+      <div className="relative">
+        <img src="/sprites/dungeons/testDung.png " alt="dung-image" />
+        <div
+          className="absolute left-0 top-0"
+          style={{
+            width: `${tileSize! * width!}px`,
+            height: `${tileSize! * height!}px`,
+            display: 'grid',
+            gridTemplateColumns: `repeat(${width}, ${tileSize}px)`,
+          }}
+        >
+          {dungeonMap?.map((row, y) =>
+            row.map((tile, x) => {
+              const isNearby = isObjectNearHero(
+                heroPosition.x,
+                heroPosition.y,
+                x,
+                y,
+              );
 
-            return (
-              <DungeonTiles
-                key={y - x}
-                isNearby={isNearby}
-                TILE_SIZE={TILE_SIZE}
-                tile={tile}
-              />
-            );
-          }),
-        )}
+              return (
+                <DungeonTile
+                  key={y - x}
+                  isNearby={isNearby}
+                  TILE_SIZE={tileSize ?? 0}
+                  tile={tile}
+                />
+              );
+            }),
+          )}
+        </div>
       </div>
 
       <div className="ml-4">
-        <DungeonMovingButtons moveHero={moveHero} />
+        <DungeonMovingButtons  />
       </div>
     </section>
   );

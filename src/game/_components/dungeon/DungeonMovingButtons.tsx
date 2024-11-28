@@ -1,4 +1,6 @@
 import { Button } from '@/components/ui/button';
+import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { moveHero } from '@/lib/redux/dungeonSessionSlice';
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -10,12 +12,18 @@ interface Props {
   moveHero: (dx: number, dy: number) => void;
 }
 
-export const DungeonMovingButtons = ({ moveHero }: Props) => {
+export const DungeonMovingButtons = () => {
+  const dispatch = useAppDispatch();
+  const heroId = useAppSelector((state) => state.hero.hero?.id);
+  const { x, y } = useAppSelector((state) => state.dungeonSession.heroPos);
+  if (!heroId) return;
+
+  console.log(x,y)
   return (
     <section className="flex flex-col w-[120px]   ">
       <Button
         className="mx-auto"
-        onClick={() => moveHero(0, -1)}
+        onClick={() => dispatch(moveHero({ dx: 0, dy: -1, heroId }))}
         variant={'outline'}
         size={'icon'}
       >
@@ -23,7 +31,7 @@ export const DungeonMovingButtons = ({ moveHero }: Props) => {
       </Button>
       <div className="flex justify-between">
         <Button
-          onClick={() => moveHero(-1, 0)}
+          onClick={() => dispatch(moveHero({ dx: -1, dy: 0, heroId }))}
           variant={'outline'}
           size={'icon'}
         >
@@ -31,7 +39,7 @@ export const DungeonMovingButtons = ({ moveHero }: Props) => {
         </Button>
 
         <Button
-          onClick={() => moveHero(1, 0)}
+          onClick={() => dispatch(moveHero({ dx: 1, dy: 0, heroId }))}
           variant={'outline'}
           size={'icon'}
         >
@@ -41,7 +49,7 @@ export const DungeonMovingButtons = ({ moveHero }: Props) => {
 
       <Button
         className="mx-auto"
-        onClick={() => moveHero(0, 1)}
+        onClick={() => dispatch(moveHero({ dx: 0, dy: 1, heroId }))}
         variant={'outline'}
         size={'icon'}
       >

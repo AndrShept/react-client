@@ -10,6 +10,7 @@ export const dungeonApi = api.injectEndpoints({
         method: 'GET',
       }),
     }),
+
     getDungeonsSessionById: builder.query<DungeonSession, string>({
       query: (dungeonSessionId) => ({
         url: `/dungeons-session/${dungeonSessionId}`,
@@ -25,7 +26,7 @@ export const dungeonApi = api.injectEndpoints({
     }),
     updateDungeonSessionStatus: builder.mutation<
       DungeonSession,
-      { status: Status, dungeonSessionId : string }
+      { status: Status; dungeonSessionId: string }
     >({
       query: (data) => ({
         url: '/dungeons-session-status',

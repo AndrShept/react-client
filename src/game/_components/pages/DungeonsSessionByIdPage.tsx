@@ -1,11 +1,13 @@
 import { ErrorLoadingData } from '@/components/ErrorLoadingData';
 import { Spinner } from '@/components/Spinner';
+import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useGetDungeonsSessionByIdQuery,
   useLazyGetDungeonsSessionByIdQuery,
 } from '@/lib/services/game/dungeonApi';
+import { useUpdateHeroMutation } from '@/lib/services/game/heroApi';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -25,11 +27,21 @@ export const DungeonsSessionByIdPage = () => {
     isError,
   } = useGetDungeonsSessionByIdQuery(dungeonSessionId);
   const [refetchDungeonSession] = useLazyGetDungeonsSessionByIdQuery();
+  const [updateHero] = useUpdateHeroMutation();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
   const heroExistDungeon = dungeonSession?.dungeonHeroes?.some(
     (dungHero) => dungHero.heroId === heroId,
   );
 
+  // useSocketDungeonMap({ dungeonSessionId });
+
+  useEffect(() => {
+    updateHero({ isDungeon: true });
+
+    return () => {
+      updateHero({ isDungeon: false });
+    };
+  }, []);
   useEffect(() => {
     if (!isLoading) {
       if (!heroExistDungeon) {
@@ -68,7 +80,7 @@ export const DungeonsSessionByIdPage = () => {
 
   return (
     <section className="size-full">
-      <DungeonMap />
+      <DungeonMap  dungeonSessionId={dungeonSessionId}/>
     </section>
   );
 };

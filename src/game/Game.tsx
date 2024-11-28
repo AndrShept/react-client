@@ -5,13 +5,15 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
+import { useHealthManaRegen } from '@/hooks/game/useHealthManaRegen';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
-import { useHealthManaRegen } from '@/hooks/game/useHealthManaRegen';
 import {
   useGetMyHeroQuery,
   useLazyGetMyHeroQuery,
+  useUpdateHeroMutation,
 } from '@/lib/services/game/heroApi';
+import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { Chat } from './_components/Chat';
@@ -27,9 +29,12 @@ export const Game = () => {
   const { socket } = useSocket();
   const { pathname } = useLocation();
   const { data, isLoading, isError, error } = useGetMyHeroQuery();
-  const [refetchData, {}] = useLazyGetMyHeroQuery();
-  const heroState = useAppSelector((state) => state.hero.hero);
+  const [refetchData] = useLazyGetMyHeroQuery();
   const { health, mana } = useHealthManaRegen();
+  const heroState = useAppSelector((state) => state.hero.hero);
+
+
+
   if (isLoading) {
     return 'loading...';
   }
