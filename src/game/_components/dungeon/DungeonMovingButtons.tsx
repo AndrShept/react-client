@@ -1,3 +1,4 @@
+import { useSocket } from '@/components/providers/SocketProvider';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { moveHero } from '@/lib/redux/dungeonSessionSlice';
@@ -7,18 +8,33 @@ import {
   ChevronRightIcon,
   ChevronUpIcon,
 } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface Props {
-  moveHero: (dx: number, dy: number) => void;
+  dungeonSessionId: string;
 }
 
-export const DungeonMovingButtons = () => {
+export const DungeonMovingButtons = ({dungeonSessionId}: Props) => {
   const dispatch = useAppDispatch();
+  const { socket } = useSocket();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const { x, y } = useAppSelector((state) => state.dungeonSession.heroPos);
+  const { x, y } = useAppSelector(
+    (state) => state.dungeonSession.heroPos ?? { x: 0, y: 0 },
+  );
   if (!heroId) return;
 
-  console.log(x,y)
+  useEffect(() => {
+    const socketListener = (data: any) => {
+      console.log(data);
+    };
+    socket?.emit(`move-hero-${heroId}`, { x, y, dungeonSessionId });
+    socket?.on(`move-hero-${heroId}`, socketListener);
+    console.log(x, y);
+    return () => {
+      socket?.off(`move-hero-${heroId}`, socketListener);
+    };
+  }, [dungeonSessionId, socket, heroId, x, y]);
+  console.log(x, y);
   return (
     <section className="flex flex-col w-[120px]   ">
       <Button

@@ -200,6 +200,7 @@ export interface ISocketDungeonMapData {
   height: number;
   width: number;
   tileSize: number;
+  heroPos : {x: number, y:number}
 }
 
 export interface DungeonHero {

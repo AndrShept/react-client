@@ -13,13 +13,13 @@ import {
 interface initialState {
   dungeonSession: DungeonSession | null;
   mapData: ISocketDungeonMapData | null;
-  heroPos: { x: number; y: number };
+  heroPos: null| { x: number; y: number };
 }
 
 const initialState: initialState = {
   dungeonSession: null,
   mapData: null,
-  heroPos: { x: 0, y: 0 },
+  heroPos: null,
 };
 
 export const dungeonSessionSlice = createSlice({
@@ -34,6 +34,13 @@ export const dungeonSessionSlice = createSlice({
 
     setDungeonMap: (state, action: PayloadAction<ISocketDungeonMapData>) => {
       state.mapData = action.payload;
+      state.heroPos = action.payload.heroPos
+    },
+    setHeroPos: (
+      state,
+      action: PayloadAction<{ x: number; y: number;}>,
+    ) => {
+      state.heroPos = action.payload
     },
     moveHero: (
       state,
@@ -84,7 +91,7 @@ export const dungeonSessionSlice = createSlice({
   },
 });
 
-export const { clearDungSession, setDungeonMap, moveHero } =
+export const { clearDungSession, setDungeonMap, moveHero, setHeroPos } =
   dungeonSessionSlice.actions;
 
 export default dungeonSessionSlice.reducer;

@@ -1,5 +1,5 @@
 import { useSocket } from '@/components/providers/SocketProvider';
-import { setDungeonMap } from '@/lib/redux/dungeonSessionSlice';
+import { setDungeonMap, setHeroPos } from '@/lib/redux/dungeonSessionSlice';
 import { ISocketDungeonMapData, Tile } from '@/lib/types/game.types';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +14,7 @@ export const useSocketDungeonMap = ({ dungeonSessionId }: Props) => {
   const dispatch = useAppDispatch();
 
   const mapData = useAppSelector((state) => state.dungeonSession.mapData);
+  const heroPos = useAppSelector((state) => state.dungeonSession.heroPos);
   useEffect(() => {
     const socketListener = (data: ISocketDungeonMapData) => {
       dispatch(setDungeonMap(data));
@@ -29,5 +30,6 @@ export const useSocketDungeonMap = ({ dungeonSessionId }: Props) => {
   }, [socket, dungeonSessionId]);
   return {
     mapData,
+    heroPos
   };
 };

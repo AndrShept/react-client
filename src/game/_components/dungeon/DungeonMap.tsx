@@ -12,18 +12,16 @@ interface Props {
   dungeonSessionId: string;
 }
 export const DungeonMap = ({ dungeonSessionId }: Props) => {
-  const heroPosition = useAppSelector((state) => state.dungeonSession.heroPos);
-  const { mapData } = useSocketDungeonMap({
+  const { mapData,heroPos } = useSocketDungeonMap({
     dungeonSessionId,
   });
-  // useSocketHeroMove()
-    
-  if (!mapData) {
+
+
+  if (!mapData || !heroPos ) {
     return <p>Loading dungeon map...</p>;
   }
   const { dungeonMap, height, tileSize, width } = mapData;
   console.log(dungeonMap)
-
 
   return (
     <section className="flex">
@@ -41,8 +39,8 @@ export const DungeonMap = ({ dungeonSessionId }: Props) => {
           {dungeonMap?.map((row, y) =>
             row.map((tile, x) => {
               const isNearby = isObjectNearHero(
-                heroPosition.x,
-                heroPosition.y,
+                heroPos.x,
+                heroPos.y,
                 x,
                 y,
               );
@@ -61,7 +59,7 @@ export const DungeonMap = ({ dungeonSessionId }: Props) => {
       </div>
 
       <div className="ml-4">
-        <DungeonMovingButtons  />
+        <DungeonMovingButtons dungeonSessionId={dungeonSessionId}  />
       </div>
     </section>
   );
