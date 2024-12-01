@@ -54,14 +54,14 @@ export const CreateHeroPage = () => {
       setErrorMessage('Select hero avatar');
       return;
     }
-    if (!heroWeapon) {
-      setErrorMessage('Select hero weapon');
-      return;
-    }
-    if (!heroArmor) {
-      setErrorMessage('Select hero armor');
-      return;
-    }
+    // if (!heroWeapon) {
+    //   setErrorMessage('Select hero weapon');
+    //   return;
+    // }
+    // if (!heroArmor) {
+    //   setErrorMessage('Select hero armor');
+    //   return;
+    // }
     const name = nickname;
     const statsPoints = statPoints.value;
     const newStat = stats.reduce((acc: any, item) => {

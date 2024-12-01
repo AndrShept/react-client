@@ -21,8 +21,8 @@ export const heroApi = api.injectEndpoints({
       Hero,
       Record<string, unknown> & {
         modifier: Modifier;
-        weapon: GameItem;
-        breastplate: GameItem;
+        weapon: GameItem | null;
+        breastplate: GameItem | null;
       }
     >({
       query: (dataHero) => ({

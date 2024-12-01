@@ -19,7 +19,7 @@ export const useSocketDungeonMap = ({ dungeonSessionId }: Props) => {
     const socketListener = (data: ISocketDungeonMapData) => {
       dispatch(setDungeonMap(data));
     };
-    // console.log(dungeonSessionId);
+  
     socket?.emit('dungeon-init', dungeonSessionId);
 
     socket?.on(dungeonSessionId, socketListener);

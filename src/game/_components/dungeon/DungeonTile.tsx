@@ -1,3 +1,5 @@
+import { useSocket } from '@/components/providers/SocketProvider';
+import { useAppSelector } from '@/hooks/store';
 import { Tile, TileType } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 
@@ -5,12 +7,34 @@ interface Props {
   isNearby?: boolean;
   tile: Tile | null;
   TILE_SIZE: number;
+  x: number;
+  y: number;
+  dungeonSessionId: string;
 }
 
-export const DungeonTile = ({ isNearby, TILE_SIZE, tile }: Props) => {
+export const DungeonTile = ({
+  isNearby,
+  TILE_SIZE,
+  tile,
+  x,
+  y,
+  dungeonSessionId,
+}: Props) => {
+  const { socket } = useSocket();
+  const heroId = useAppSelector((state) => state.hero.hero?.id);
+
   return (
     <>
       <div
+        onClick={() => {
+          if (isNearby && !tile) {
+            socket?.emit(`move-hero-${heroId}`, {
+              x,
+              y,
+              dungeonSessionId,
+            });
+          }
+        }}
         style={{
           width: TILE_SIZE,
           height: TILE_SIZE,
@@ -18,6 +42,7 @@ export const DungeonTile = ({ isNearby, TILE_SIZE, tile }: Props) => {
         }}
         className={cn('flex items-center justify-center', {
           'bg-red-300': isNearby && tile?.name !== TileType.wall && tile,
+          'bg-white cursor-pointer opacity-5': isNearby && !tile,
         })}
       >
         {tile && (

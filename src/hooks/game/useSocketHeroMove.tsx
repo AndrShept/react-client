@@ -1,38 +1,47 @@
-import { useSocket } from '@/components/providers/SocketProvider';
-import { useEffect } from 'react';
+// import { useSocket } from '@/components/providers/SocketProvider';
+// import { useEffect, useRef } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../store';
+// import { useAppDispatch, useAppSelector } from '../store';
 
-interface Props {
-  dungeonSessionId: string;
-}
+// interface Props {
+//   dungeonSessionId: string;
+//   heroId: string;
+//   heroPos: { x: number; y: number };
+// }
 
-export const useSocketHeroMove = ({ dungeonSessionId }: Props) => {
-  const { socket } = useSocket();
-  const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const { x, y } = useAppSelector(
-    (state) => state.dungeonSession.heroPos ?? { x: 0, y: 0 },
-  );
-  if (!heroId) return;
-  const socketMove = () => {
-    console.log(x , y)
-    socket?.emit(`move-hero-${heroId}`, { x, y, dungeonSessionId });
-  };
+// export const useSocketHeroMove = ({
+//   dungeonSessionId,
+//   heroId,
+//   heroPos,
+// }: Props) => {
+//   const { socket } = useSocket();
+//   const heroPosRef = useRef(heroPos);
+//   const socketMove = () => {
+//     console.log(heroPos.x, heroPos.y);
+//     socket?.emit(`move-hero-${heroId}`, {
+//       x: heroPosRef.current.x,
+//       y: heroPosRef.current.y,
+//       dungeonSessionId,
+//     });
+//   };
+//   useEffect(() => {
+//     heroPosRef.current = heroPos;
+//   }, [heroPos]);
 
-  useEffect(() => {
-    const socketListener = (data: any) => {
-      console.log(data);
-    };
+//   useEffect(() => {
+//     const socketListener = (data: any) => {
+//       console.log(data);
+//     };
 
-    socket?.on(`move-hero-${heroId}`, socketListener);
-    console.log(x , y)
-    return () => {
-      socket?.off(`move-hero-${heroId}`, socketListener);
-    };
-  }, [dungeonSessionId, socket, heroId, x, y]);
+//     socket?.on(`move-hero-${heroId}`, socketListener);
+//     console.log(heroPos);
+//     return () => {
+//       socket?.off(`move-hero-${heroId}`, socketListener);
+//     };
+//   }, [dungeonSessionId, socket, heroId]);
 
-  return {
-    heroId,
-    socketMove,
-  };
-};
+//   return {
+//     heroId,
+//     socketMove,
+//   };
+// };

@@ -1,28 +1,25 @@
 import { isObjectNearHero } from '@/game/utils';
 import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
 
-
-import { DungeonMovingButtons } from './DungeonMovingButtons';
 import { DungeonTile } from './DungeonTile';
-import { useEffect } from 'react';
-import { useAppSelector } from '@/hooks/store';
-import { useSocketHeroMove } from '@/hooks/game/useSocketHeroMove';
 
 interface Props {
   dungeonSessionId: string;
 }
 export const DungeonMap = ({ dungeonSessionId }: Props) => {
-  const { mapData,heroPos } = useSocketDungeonMap({
+  const { mapData, heroPos } = useSocketDungeonMap({
     dungeonSessionId,
   });
 
-
-  if (!mapData || !heroPos ) {
+  if (!mapData || !heroPos) {
     return <p>Loading dungeon map...</p>;
   }
   const { dungeonMap, height, tileSize, width } = mapData;
-  console.log(dungeonMap)
+  console.log(dungeonMap);
 
+
+
+  
   return (
     <section className="flex">
       <div className="relative">
@@ -38,12 +35,7 @@ export const DungeonMap = ({ dungeonSessionId }: Props) => {
         >
           {dungeonMap?.map((row, y) =>
             row.map((tile, x) => {
-              const isNearby = isObjectNearHero(
-                heroPos.x,
-                heroPos.y,
-                x,
-                y,
-              );
+              const isNearby = isObjectNearHero(heroPos.x, heroPos.y, x, y);
 
               return (
                 <DungeonTile
@@ -51,15 +43,14 @@ export const DungeonMap = ({ dungeonSessionId }: Props) => {
                   isNearby={isNearby}
                   TILE_SIZE={tileSize ?? 0}
                   tile={tile}
+                  dungeonSessionId={dungeonSessionId}
+                  x={x}
+                  y={y}
                 />
               );
             }),
           )}
         </div>
-      </div>
-
-      <div className="ml-4">
-        <DungeonMovingButtons dungeonSessionId={dungeonSessionId}  />
       </div>
     </section>
   );
