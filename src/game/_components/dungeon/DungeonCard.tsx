@@ -166,7 +166,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
                     Are you sure you want to leave dungeon?
                   </ConfirmPopover.Title>
                   <ConfirmPopover.Message className="text-purple-500">
-                    {dungeonSession.dungeon.name}
+                    {dungeonSession.dungeon?.name}
                   </ConfirmPopover.Message>
                 </ConfirmPopover.Content>
               </ConfirmPopover>

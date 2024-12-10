@@ -1,8 +1,5 @@
 import { isObjectNearHero } from '@/game/utils';
-import { useCameraPos } from '@/hooks/game/useCameraPos';
 import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
-import { useAppSelector } from '@/hooks/store';
-import { useEffect } from 'react';
 
 import { DungeonTile } from './DungeonTile';
 

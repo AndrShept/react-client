@@ -1,8 +1,6 @@
 import { ErrorLoadingData } from '@/components/ErrorLoadingData';
 import { Spinner } from '@/components/Spinner';
-import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import { clearDungSession } from '@/lib/redux/dungeonSessionSlice';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useGetDungeonsSessionByIdQuery,
@@ -34,7 +32,6 @@ export const DungeonsSessionByIdPage = () => {
     (dungHero) => dungHero.heroId === heroId,
   );
 
-  // useSocketDungeonMap({ dungeonSessionId });
 
   useEffect(() => {
     updateHero({ isDungeon: true });

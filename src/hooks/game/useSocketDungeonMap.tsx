@@ -1,8 +1,6 @@
 import { useSocket } from '@/components/providers/SocketProvider';
 import {
-  clearDungSession,
   setDungeonMap,
-  setHeroPos,
 } from '@/lib/redux/dungeonSessionSlice';
 import { ISocketDungeonMapData, Tile } from '@/lib/types/game.types';
 import { useEffect, useState } from 'react';

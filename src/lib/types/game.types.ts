@@ -164,11 +164,13 @@ export interface DungeonSession {
   tileSize: number;
   mapWidth: number;
   mapHeight: number;
+  timeRemaining: number
   endTime?: Date;
   dungeon?: Dungeon;
   dungeonId: string;
   hero?: Hero;
   heroId: string;
+  
   tiles: Tile[];
   dungeonHeroes: DungeonHero[];
 
