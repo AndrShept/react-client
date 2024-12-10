@@ -14,12 +14,14 @@ interface initialState {
   dungeonSession: DungeonSession | null;
   mapData: ISocketDungeonMapData | null;
   heroPos: null | { x: number; y: number };
+  cameraPos: null | { x: number; y: number };
 }
 
 const initialState: initialState = {
   dungeonSession: null,
   mapData: null,
   heroPos: null,
+  cameraPos: null,
 };
 
 export const dungeonSessionSlice = createSlice({
@@ -28,13 +30,32 @@ export const dungeonSessionSlice = createSlice({
   reducers: {
     clearDungSession: (state) => {
       if (state.dungeonSession) {
-        state.dungeonSession = null;
+        state = initialState;
       }
     },
 
     setDungeonMap: (state, action: PayloadAction<ISocketDungeonMapData>) => {
       state.mapData = action.payload;
       state.heroPos = action.payload.heroPos;
+
+      state.cameraPos = { x: 0, y: 0 };
+
+      const tileSize = state.mapData.tileSize;
+      const CAMERA_TILE_LEFT = 5;
+
+      if (state.heroPos.x >= CAMERA_TILE_LEFT) {
+        state.cameraPos = {
+          ...state.cameraPos,
+          x: (CAMERA_TILE_LEFT - state.heroPos.x) * tileSize,
+        };
+      }
+
+      if (state.heroPos.y >= CAMERA_TILE_LEFT) {
+        state.cameraPos = {
+          ...state.cameraPos,
+          y: (CAMERA_TILE_LEFT - state.heroPos.y) * tileSize,
+        };
+      }
     },
     setHeroPos: (state, action: PayloadAction<{ x: number; y: number }>) => {
       state.heroPos = action.payload;
@@ -51,6 +72,7 @@ export const dungeonSessionSlice = createSlice({
           x: newPosX,
           y: newPosY,
         };
+        console.log(action.payload.dx, action.payload.dy);
       }
     },
   },

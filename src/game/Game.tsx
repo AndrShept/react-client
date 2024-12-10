@@ -33,8 +33,6 @@ export const Game = () => {
   const { health, mana } = useHealthManaRegen();
   const heroState = useAppSelector((state) => state.hero.hero);
 
-
-
   if (isLoading) {
     return 'loading...';
   }
@@ -64,7 +62,9 @@ export const Game = () => {
               </div>
             </section>
           ) : (
-            <Outlet />
+            <div className='min-h-full'>
+              <Outlet />
+            </div>
           )}
         </ResizablePanel>
         <ResizableHandle withHandle />

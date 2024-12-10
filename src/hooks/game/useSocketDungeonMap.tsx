@@ -1,5 +1,9 @@
 import { useSocket } from '@/components/providers/SocketProvider';
-import { setDungeonMap, setHeroPos } from '@/lib/redux/dungeonSessionSlice';
+import {
+  clearDungSession,
+  setDungeonMap,
+  setHeroPos,
+} from '@/lib/redux/dungeonSessionSlice';
 import { ISocketDungeonMapData, Tile } from '@/lib/types/game.types';
 import { useEffect, useState } from 'react';
 
@@ -15,21 +19,27 @@ export const useSocketDungeonMap = ({ dungeonSessionId }: Props) => {
 
   const mapData = useAppSelector((state) => state.dungeonSession.mapData);
   const heroPos = useAppSelector((state) => state.dungeonSession.heroPos);
+  const cameraPos = useAppSelector((state) => state.dungeonSession.cameraPos);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
+    if (!socket) return;
     const socketListener = (data: ISocketDungeonMapData) => {
       dispatch(setDungeonMap(data));
+      setIsLoading(false);
     };
-  
-    socket?.emit('dungeon-init', dungeonSessionId);
 
-    socket?.on(dungeonSessionId, socketListener);
+    socket.emit('dungeon-init', dungeonSessionId);
+
+    socket.on(dungeonSessionId, socketListener);
 
     return () => {
-      socket?.off(dungeonSessionId, socketListener);
+      socket.off(dungeonSessionId, socketListener);
     };
-  }, [socket, dungeonSessionId]);
+  }, [socket, dungeonSessionId, dispatch]);
   return {
     mapData,
-    heroPos
+    heroPos,
+    cameraPos,
+    isLoading,
   };
 };

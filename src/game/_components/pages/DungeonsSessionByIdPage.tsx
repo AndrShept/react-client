@@ -2,13 +2,14 @@ import { ErrorLoadingData } from '@/components/ErrorLoadingData';
 import { Spinner } from '@/components/Spinner';
 import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import { clearDungSession } from '@/lib/redux/dungeonSessionSlice';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useGetDungeonsSessionByIdQuery,
   useLazyGetDungeonsSessionByIdQuery,
 } from '@/lib/services/game/dungeonApi';
 import { useUpdateHeroMutation } from '@/lib/services/game/heroApi';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { DungeonMap } from '../dungeon/DungeonMap';
@@ -42,7 +43,7 @@ export const DungeonsSessionByIdPage = () => {
       updateHero({ isDungeon: false });
     };
   }, []);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isLoading) {
       if (!heroExistDungeon) {
         navigate('/game/dungeons');
@@ -78,9 +79,11 @@ export const DungeonsSessionByIdPage = () => {
     return <Spinner />;
   }
 
+
+
   return (
     <section className="size-full">
-      <DungeonMap  dungeonSessionId={dungeonSessionId}/>
+      <DungeonMap dungeonSessionId={dungeonSessionId} />
     </section>
   );
 };
