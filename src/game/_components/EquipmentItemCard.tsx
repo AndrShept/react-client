@@ -79,6 +79,7 @@ export const EquipmentItemCard = ({
                   )}
                   src={equipment.inventoryItem.gameItem.imageUrl}
                   alt="weapon-image"
+                
                 />
               </HoverCardTrigger>
             </ContextMenuTrigger>

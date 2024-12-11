@@ -30,7 +30,7 @@ export const GameNavbar = () => {
                 <HeroAvatar src={hero?.avatarUrl} />
               </Link>
             </div>
-            <div className="md:w-[200px] w-[100px]">
+            <div className="md:w-[200px] w-[100px] space-y-0.5 ">
               <FillBar
                 color="green"
                 value={hero?.health ?? 0}
