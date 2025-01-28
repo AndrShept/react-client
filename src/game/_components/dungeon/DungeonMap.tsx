@@ -4,7 +4,7 @@ import { useSocketDungeonMap } from '@/hooks/game/useSocketDungeonMap';
 import { DungeonTile } from './DungeonTile';
 
 interface Props {
-  dungeonSessionId: string;
+  dungeonSessionId: string ;
 }
 export const DungeonMap = ({ dungeonSessionId }: Props) => {
   const { mapData, heroPos, cameraPos, isLoading } = useSocketDungeonMap({
