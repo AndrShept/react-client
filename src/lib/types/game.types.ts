@@ -158,7 +158,7 @@ export interface Dungeon {
 
 export interface DungeonSession {
   id: string;
-  status: Status;
+  status: SessionStatus;
   difficulty: Difficulty;
   duration: number;
   tileSize: number;
@@ -251,8 +251,8 @@ export enum TileType {
   loot = 'loot',
 }
 
-export enum Status {
-  IN_PROGRESS = 'IN_PROGRESS',
+export enum SessionStatus {
+  INPROGRESS = 'INPROGRESS',
   COMPLETED = 'COMPLETED',
   FAILED = 'FAILED',
 }

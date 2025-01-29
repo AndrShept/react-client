@@ -1,4 +1,4 @@
-import { Dungeon, DungeonSession, Status } from '@/lib/types/game.types';
+import { Dungeon, DungeonSession, SessionStatus } from '@/lib/types/game.types';
 
 import { api } from '../api';
 
@@ -7,6 +7,12 @@ export const dungeonApi = api.injectEndpoints({
     getDungeons: builder.query<Dungeon[], void>({
       query: () => ({
         url: '/dungeons',
+        method: 'GET',
+      }),
+    }),
+    getAllDungeonsSessionInStatus: builder.query<DungeonSession[], SessionStatus>({
+      query: (status) => ({
+        url: `/dungeons-session-status/${status}`,
         method: 'GET',
       }),
     }),
@@ -26,7 +32,7 @@ export const dungeonApi = api.injectEndpoints({
     }),
     updateDungeonSessionStatus: builder.mutation<
       DungeonSession,
-      { status: Status; dungeonSessionId: string }
+      { status: SessionStatus; dungeonSessionId: string }
     >({
       query: (data) => ({
         url: '/dungeons-session-status',
@@ -44,6 +50,7 @@ export const {
   useGetDungeonsSessionByIdQuery,
   useLazyGetDungeonsSessionByIdQuery,
   useUpdateDungeonSessionStatusMutation,
+  useGetAllDungeonsSessionInStatusQuery
 } = dungeonApi;
 
 export const { getDungeonsSessionById } = dungeonApi.endpoints;

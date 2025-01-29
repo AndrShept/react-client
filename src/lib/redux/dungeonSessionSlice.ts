@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { stat } from 'fs';
 import { nanoid } from 'nanoid';
 
 import { dungeonApi } from '../services/game/dungeonApi';
@@ -12,6 +11,7 @@ import {
 
 interface initialState {
   dungeonSession: DungeonSession | null;
+  dungeonSessionsForStatus: DungeonSession[] | null;
   mapData: ISocketDungeonMapData | null;
   heroPos: null | { x: number; y: number };
   cameraPos: null | { x: number; y: number };
@@ -19,6 +19,7 @@ interface initialState {
 
 const initialState: initialState = {
   dungeonSession: null,
+  dungeonSessionsForStatus: null,
   mapData: null,
   heroPos: null,
   cameraPos: null,
@@ -29,9 +30,8 @@ export const dungeonSessionSlice = createSlice({
   initialState,
   reducers: {
     clearDungSession: (state) => {
-      if (state.dungeonSession) {
-        state = initialState;
-      }
+        state.dungeonSessionsForStatus = null
+      
     },
 
     setDungeonMap: (state, action: PayloadAction<ISocketDungeonMapData>) => {
@@ -75,18 +75,32 @@ export const dungeonSessionSlice = createSlice({
         console.log(action.payload.dx, action.payload.dy);
       }
     },
+
   },
+
   extraReducers: (builder) => {
-    builder.addMatcher(
-      dungeonApi.endpoints.getDungeonsSessionById.matchFulfilled,
-      (state, action) => {
-        state.dungeonSession = action.payload;
-      },
-    );
+    builder
+      .addMatcher(
+        dungeonApi.endpoints.getDungeonsSessionById.matchFulfilled,
+        (state, action) => {
+          state.dungeonSession = action.payload;
+        },
+      )
+      .addMatcher(
+        dungeonApi.endpoints.getAllDungeonsSessionInStatus.matchFulfilled,
+        (state, action) => {
+          state.dungeonSessionsForStatus = action.payload;
+        },
+      );
   },
 });
 
-export const { clearDungSession, setDungeonMap, moveHero, setHeroPos } =
-  dungeonSessionSlice.actions;
+export const {
+  clearDungSession,
+  setDungeonMap,
+  moveHero,
+  setHeroPos,
+
+} = dungeonSessionSlice.actions;
 
 export default dungeonSessionSlice.reducer;

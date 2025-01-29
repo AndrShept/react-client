@@ -1,16 +1,21 @@
+
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
+import {
+  clearDungSession,
+} from '@/lib/redux/dungeonSessionSlice';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useCreateDungSessionMutation,
+  useGetAllDungeonsSessionInStatusQuery,
   useUpdateDungeonSessionStatusMutation,
 } from '@/lib/services/game/dungeonApi';
-import { useLazyGetMyHeroQuery } from '@/lib/services/game/heroApi';
-import { Dungeon, DungeonSession, Status } from '@/lib/types/game.types';
+
+import { Dungeon,  SessionStatus } from '@/lib/types/game.types';
 import { cn, getTimeFns } from '@/lib/utils';
-import { RefreshCwIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import {useState } from 'react';
+import {  useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { ConfirmPopover } from '../ConfirmPopover';
@@ -24,23 +29,24 @@ export const DungeonCard = ({ dungeon }: Props) => {
   const [isMore, setIsMore] = useState(false);
   const navigate = useNavigate();
   const [onCreateDungSession, { isLoading }] = useCreateDungSessionMutation();
-  const [updateDungeonSessionStatus] = useUpdateDungeonSessionStatusMutation();
-  const [refetchHero, { isLoading: isLoadingHero, isFetching }] =
-    useLazyGetMyHeroQuery();
+  const [ updateDungeonSessionStatus , {isLoading:isLoadingUpdateStatus }] = useUpdateDungeonSessionStatusMutation();
+  const { isLoading: isLoadingDungInProgress } =
+    useGetAllDungeonsSessionInStatusQuery(SessionStatus.INPROGRESS);
+
   const dungeonSession = useAppSelector((state) =>
-    state.hero.hero?.dungeonSessions?.find(
-      (findDung) => findDung.dungeonId === dungeon.id,
+    state.dungeonSession.dungeonSessionsForStatus?.find(
+      (session) => session.dungeonId === dungeon.id,
     ),
   );
-  const dispatch = useAppDispatch();
+  console.log(dungeonSession?.endTime)
   const isDungInprogress = dungeonSession?.dungeonId === dungeon.id;
+
+  const dispatch = useAppDispatch();
 
   const onEnterDung = async () => {
     try {
       const res = await onCreateDungSession({ dungeonId: dungeon.id }).unwrap();
-
       navigate(`/game/dungeons/${res.id}`);
-      await refetchHero().unwrap();
     } catch (error: any) {
       console.log(error);
       if (error.status === 409) {
@@ -61,16 +67,17 @@ export const DungeonCard = ({ dungeon }: Props) => {
     if (!dungeonSession) return;
     try {
       await updateDungeonSessionStatus({
-        status: Status.FAILED,
+        status: SessionStatus.FAILED,
         dungeonSessionId: dungeonSession.id,
-      });
-      await refetchHero().unwrap();
+      }).unwrap()
+      dispatch(clearDungSession());
     } catch (error) {
       console.log(error);
       toast.error('Something went wrong');
     }
   };
 
+  if (isLoadingDungInProgress) return null;
   return (
     <article className="flex flex-col border  opacity-85 group h-full  hover:opacity-100 transition max-w-[330px] ">
       <div className="overflow-hidden  ">
@@ -93,7 +100,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
             {dungeon.description}
           </p>
           <Button
-            disabled={isLoading}
+            disabled={isLoading || isLoadingUpdateStatus}
             onClick={() => setIsMore((prev) => !prev)}
             className="p-0 text-blue-400"
             variant={'link'}
@@ -107,38 +114,12 @@ export const DungeonCard = ({ dungeon }: Props) => {
           <div className="flex items-center">
             <TimeIcon />
 
-            {!isDungInprogress && (
-              <p className="text-sm text-green-500">{dungeon.duration}m</p>
-            )}
-            {isDungInprogress && (
-              <p className="text-red-500">
-                {getTimeFns(dungeonSession.timeRemaining)}
-              </p>
-            )}
-            {isDungInprogress && (
-              <Button
-                onClick={() => refetchHero()}
-                disabled={
-                  isLoading || isLoadingHero || isFetching || !isDungInprogress
-                }
-                variant={'ghost'}
-                size={'icon'}
-                className="size-8 ml-1"
-              >
-                <RefreshCwIcon
-                  className={cn('size-4', {
-                    'animate-spin': isLoadingHero || isFetching,
-                  })}
-                />
-              </Button>
-            )}
+       
           </div>
 
           {!isDungInprogress && (
             <Button
-              disabled={
-                isLoading || isDungInprogress || isLoadingHero || isFetching
-              }
+              disabled={isLoading || isDungInprogress || isLoadingUpdateStatus}
               onClick={onEnterDung}
               variant={'secondary'}
               size={'sm'}
@@ -153,7 +134,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
               <ConfirmPopover onConfirm={onConfirm}>
                 <ConfirmPopover.Trigger>
                   <Button
-                    disabled={isLoading || isLoadingHero || isFetching}
+                    disabled={isLoading || isLoadingUpdateStatus}
                     className="ml-auto"
                     variant={'destructive'}
                     size={'sm'}
@@ -172,7 +153,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
               </ConfirmPopover>
 
               <Button
-                disabled={isLoading || isLoadingHero || isFetching}
+                disabled={isLoading || isLoadingUpdateStatus}
                 className="ml-auto text-green-500"
                 variant={'secondary'}
                 size={'sm'}
