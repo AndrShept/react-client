@@ -7,7 +7,6 @@ import {
 
 import { DungeonCard } from '../dungeon/DungeonCard';
 
-
 export const DungeonsPage = () => {
   const { data: dungeons, isLoading, isError } = useGetDungeonsQuery();
   const [refetchDungeons] = useLazyGetDungeonsQuery();
@@ -26,9 +25,7 @@ export const DungeonsPage = () => {
           <DungeonCard key={dungeon.id} dungeon={dungeon} />
         ))}
       </ul>
+
     </div>
   );
 };
-
-
-

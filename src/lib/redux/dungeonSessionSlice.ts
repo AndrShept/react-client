@@ -30,8 +30,18 @@ export const dungeonSessionSlice = createSlice({
   initialState,
   reducers: {
     clearDungSession: (state) => {
-        state.dungeonSessionsForStatus = null
-      
+      state.dungeonSessionsForStatus = null;
+    },
+
+    updateTile: (state, action: PayloadAction<Tile[]>) => {
+      if (!state.mapData) return;
+
+      state.mapData.dungeonMap = state.mapData.dungeonMap.map((dungTile) => {
+        const updatedTile = action.payload.find(
+          (tile) => tile.id === dungTile.id,
+        );
+        return updatedTile ? updatedTile : dungTile;
+      });
     },
 
     setDungeonMap: (state, action: PayloadAction<ISocketDungeonMapData>) => {
@@ -40,42 +50,25 @@ export const dungeonSessionSlice = createSlice({
 
       state.cameraPos = { x: 0, y: 0 };
 
+      
+    },
+    updateCameraPos: (state) => {
+      if (!state.mapData || !state.heroPos) return;
       const tileSize = state.mapData.tileSize;
-      const CAMERA_TILE_LEFT = 5;
+      const CAMERA_TILE_LEFT_X = 9;
+      const CAMERA_TILE_LEFT_Y = 5;
 
-      if (state.heroPos.x >= CAMERA_TILE_LEFT) {
-        state.cameraPos = {
-          ...state.cameraPos,
-          x: (CAMERA_TILE_LEFT - state.heroPos.x) * tileSize,
-        };
+      if (state.heroPos.x >= CAMERA_TILE_LEFT_X && state.cameraPos) {
+        state.cameraPos.x = (CAMERA_TILE_LEFT_X - state.heroPos.x) * tileSize;
       }
 
-      if (state.heroPos.y >= CAMERA_TILE_LEFT) {
-        state.cameraPos = {
-          ...state.cameraPos,
-          y: (CAMERA_TILE_LEFT - state.heroPos.y) * tileSize,
-        };
+      if (state.heroPos.y >= CAMERA_TILE_LEFT_Y && state.cameraPos) {
+        state.cameraPos.y = (CAMERA_TILE_LEFT_Y - state.heroPos.y) * tileSize;
       }
     },
     setHeroPos: (state, action: PayloadAction<{ x: number; y: number }>) => {
       state.heroPos = action.payload;
     },
-    moveHero: (
-      state,
-      action: PayloadAction<{ dx: number; dy: number; heroId: string }>,
-    ) => {
-      if (state.heroPos) {
-        const newPosX = state.heroPos.x + action.payload.dx;
-        const newPosY = state.heroPos.y + action.payload.dy;
-        state.heroPos = {
-          ...state.heroPos,
-          x: newPosX,
-          y: newPosY,
-        };
-        console.log(action.payload.dx, action.payload.dy);
-      }
-    },
-
   },
 
   extraReducers: (builder) => {
@@ -98,9 +91,9 @@ export const dungeonSessionSlice = createSlice({
 export const {
   clearDungSession,
   setDungeonMap,
-  moveHero,
   setHeroPos,
-
+  updateTile,
+  updateCameraPos,
 } = dungeonSessionSlice.actions;
 
 export default dungeonSessionSlice.reducer;

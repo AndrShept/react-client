@@ -164,13 +164,13 @@ export interface DungeonSession {
   tileSize: number;
   mapWidth: number;
   mapHeight: number;
-  timeRemaining: number
+  timeRemaining: number;
   endTime?: Date;
   dungeon?: Dungeon;
   dungeonId: string;
   hero?: Hero;
   heroId: string;
-  
+
   tiles: Tile[];
   dungeonHeroes: DungeonHero[];
 
@@ -189,6 +189,8 @@ export interface Tile {
   visible: boolean;
   x: number;
   y: number;
+  object?: Tile,
+  objectId?:string
   hero?: Hero;
   heroId?: string;
   monster?: Monster;
@@ -198,11 +200,15 @@ export interface Tile {
 }
 
 export interface ISocketDungeonMapData {
-  dungeonMap: (Tile | null)[][];
+  dungeonMap: Tile[];
   height: number;
   width: number;
   tileSize: number;
-  heroPos : {x: number, y:number}
+  heroPos: { x: number; y: number };
+}
+export interface ISocketDungeonMoveHero {
+  newTiles: Tile[];
+  heroPos: { x: number; y: number };
 }
 
 export interface DungeonHero {
@@ -249,6 +255,9 @@ export enum TileType {
   monster = 'monster',
   chest = 'chest',
   loot = 'loot',
+  decor = 'decor',
+  object = 'object',
+  ground = 'ground',
 }
 
 export enum SessionStatus {

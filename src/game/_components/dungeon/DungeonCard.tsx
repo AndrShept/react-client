@@ -63,7 +63,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
     }
   };
 
-  const onConfirm = async () => {
+  const onLeave = async () => {
     if (!dungeonSession) return;
     try {
       await updateDungeonSessionStatus({
@@ -131,7 +131,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
 
           {isDungInprogress && (
             <div className="ml-auto flex gap-2">
-              <ConfirmPopover onConfirm={onConfirm}>
+              <ConfirmPopover onConfirm={onLeave}>
                 <ConfirmPopover.Trigger>
                   <Button
                     disabled={isLoading || isLoadingUpdateStatus}

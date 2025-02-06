@@ -17,7 +17,7 @@ import {
   sumModifiers,
 } from '../utils';
 
-interface ISysMessages {
+export interface ISysMessages {
   message: string;
   data?: InventoryItem | null;
   success: boolean;
@@ -66,7 +66,7 @@ export const heroSlice = createSlice({
 
     equipItemNew: (state, action: PayloadAction<Equipment>) => {
       if (state.hero) {
-        state.hero.equipments = [...state.hero?.equipments, action.payload];
+        state.hero.equipments = [...state.hero.equipments, action.payload];
         state.hero.inventorys = state.hero.inventorys.map((item) => {
           if (item.id === action.payload.inventoryItemId) {
             return { ...item, isEquipped: true };

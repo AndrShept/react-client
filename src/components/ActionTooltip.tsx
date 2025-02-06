@@ -13,10 +13,10 @@ interface ActionTooltipProps {
 
 export const ActionTooltip = ({ children, label }: ActionTooltipProps) => {
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={100}>
-        <TooltipTrigger>{children}</TooltipTrigger>
-        <TooltipContent>
+    <TooltipProvider >
+      <Tooltip   delayDuration={100}>
+        <TooltipTrigger >{children}</TooltipTrigger>
+        <TooltipContent   >
           <p>{label}</p>
         </TooltipContent>
       </Tooltip>
