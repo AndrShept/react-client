@@ -6,8 +6,7 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 import { isObjectNearHero } from '@/game/utils';
-import {  useAppSelector } from '@/hooks/store';
-
+import { useAppSelector } from '@/hooks/store';
 import { Tile, TileType } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 
@@ -20,17 +19,22 @@ interface Props {
 export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
   const { socket } = useSocket();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
+  const heroName = useAppSelector((state) => state.hero.hero?.name ?? '');
+  console.log(heroName);
   const heroPos = useAppSelector((state) => state.dungeonSession.heroPos);
   const tileUrl = `/sprites/dungeons/dung/${tile.gid < 10 ? '00' : tile.gid >= 100 ? '' : '0'}${tile.gid}.png`;
   const onClickTile = () => {
-    if (isNearby && tile?.name === TileType.ground && !tile.objectId) {
-      console.log(tile?.x, tile?.y);
+    if (
+      isNearby &&
+      tile?.name === TileType.ground &&
+      !tile.objectId &&
+      !tile.monsterId
+    ) {
       socket?.emit(`move-hero-${heroId}`, {
         x: tile.x,
         y: tile.y,
         dungeonSessionId,
       });
-   
     }
   };
 
@@ -51,7 +55,7 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
         left: `${tile.x * 48}px`,
         top: `${tile.y * 48}px`,
       }}
-      className={cn('flex   ', {})}
+      className={cn('flex ', {})}
     >
       {tile?.name === TileType.ground && (
         <img
@@ -67,18 +71,21 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
           className={cn('absolute z-[4] size-full ', {})}
         />
       )}
-      {/* {tile?.name === TileType.wall && (
+      {tile?.object?.name === TileType.wall && (
         <img
-          src={`/sprites/dungeons/dung/${tile.gid < 10 ? '00' : '0'}${tile?.gid}.png`}
+          src={`/sprites/dungeons/dung/${tile.object && tile.object.gid < 10 ? '00' : tile.object.gid >= 100 ? '' : '0'}${tile.object?.gid}.png`}
           alt="tile-image"
           className={cn('z-[2]', {})}
         />
-      )} */}
+      )}
       {tile?.name === TileType.object && (
         <img
           src={tileUrl}
           alt="tile-image"
-          className={cn('absolute z-[4]  ', {})}
+          className={cn(
+            'absolute z-[4] drop-shadow-[2px_3px_3px_rgba(0,0,0,0.7)]  ',
+            {},
+          )}
         />
       )}
 
@@ -121,10 +128,27 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
         />
       )}
 
+      {tile?.monsterId && (
+        <img
+          src={tile.monster?.imageUrl}
+          alt="tile-image"
+          style={{ imageRendering: 'pixelated' }}
+          className={cn(
+            ' absolute z-[5]  scale-90 will-change-contents self-center drop-shadow-[4px_3px_0px_rgba(0,0,0,0.7)]   ',
+            {
+              'hover:scale-100 animate-pulse transition': isNearby,
+              'hover:drop-shadow-[0px_0px_3px_rgba(255,0,0,0.8)]': isNearby,
+            },
+          )}
+        />
+      )}
+
       {tile?.name === TileType.ground &&
         isNearby &&
         !tile.objectId &&
-        !tile.heroId && (
+        !tile.heroId &&
+        !tile.monsterId &&
+       (
           <div className="bg-black opacity-50 cursor-pointer z-[5] absolute size-full" />
         )}
     </div>

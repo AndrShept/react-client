@@ -169,10 +169,10 @@ export interface DungeonSession {
   dungeon?: Dungeon;
   dungeonId: string;
   hero?: Hero;
-  heroId: string;
+  ownerId: string;
 
   tiles: Tile[];
-  dungeonHeroes: DungeonHero[];
+  dungeonParty: DungeonParty[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -189,8 +189,8 @@ export interface Tile {
   visible: boolean;
   x: number;
   y: number;
-  object?: Tile,
-  objectId?:string
+  object?: Tile;
+  objectId?: string;
   hero?: Hero;
   heroId?: string;
   monster?: Monster;
@@ -211,13 +211,13 @@ export interface ISocketDungeonMoveHero {
   heroPos: { x: number; y: number };
 }
 
-export interface DungeonHero {
+export interface DungeonParty {
   id: string;
   death: number;
   x: number;
   y: number;
-  hero: Hero;
-  heroId: string;
+  member: Hero;
+  memberId: string;
   dungeonSession: DungeonSession;
   dungeonSessionId: string;
   createdAt: Date;
@@ -307,64 +307,3 @@ export enum WeaponType {
   ONE_HAND = 'ONE_HAND',
   TWO_HAND = 'TWO_HAND',
 }
-
-// export interface TileMap {
-//   compressionlevel: number;
-//   height: number;
-//   infinite: boolean;
-//   layers: Layer[];
-//   nextlayerid: number;
-//   nextobjectid: number;
-//   orientation: string;
-//   renderorder: string;
-//   tiledversion: string;
-//   tileheight: number;
-//   tilesets: Tileset[];
-//   tilewidth: number;
-//   type: string;
-//   version: string;
-//   width: number;
-// }
-
-// export interface Layer {
-//   draworder?: string; // Присутній тільки для "objectgroup"
-//   id: number;
-//   name: string;
-//   objects?: TileObject[]; // Присутній тільки для "objectgroup"
-//   data?: number[]; // Присутній тільки для "tilelayer"
-//   height?: number; // Присутній тільки для "tilelayer"
-//   opacity: number;
-//   type: "objectgroup" | "tilelayer";
-//   visible: boolean;
-//   width?: number; // Присутній тільки для "tilelayer"
-//   x: number;
-//   y: number;
-// }
-
-// export interface TileObject {
-//   gid: number;
-//   height: number;
-//   id: number;
-//   name: string;
-//   rotation: number;
-//   type: string;
-//   visible: boolean;
-//   width: number;
-//   x: number;
-//   y: number;
-//   hero?: Hero | null
-// }
-
-// export interface Tileset {
-//   columns: number;
-//   firstgid: number;
-//   image: string;
-//   imageheight: number;
-//   imagewidth: number;
-//   margin: number;
-//   name: string;
-//   spacing: number;
-//   tilecount: number;
-//   tileheight: number;
-//   tilewidth: number;
-// }

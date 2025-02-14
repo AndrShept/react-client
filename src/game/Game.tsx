@@ -25,8 +25,6 @@ import { SysMessage } from './_components/SysMessage';
 
 export const Game = () => {
   const navigate = useNavigate();
-  const { username } = useAuth();
-  const { socket } = useSocket();
   const { pathname } = useLocation();
   const { data, isLoading, isError, error } = useGetMyHeroQuery();
   const [refetchData] = useLazyGetMyHeroQuery();
@@ -62,7 +60,7 @@ export const Game = () => {
               </div>
             </section>
           ) : (
-            <div className='min-h-full'>
+            <div className='size-full flex '>
               <Outlet />
             </div>
           )}

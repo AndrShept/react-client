@@ -19,7 +19,7 @@ export const DungeonsPage = () => {
   }
 
   return (
-    <div className=" size-full flex flex-col p-4 ">
+    <div className=" flex-1 flex flex-col p-4 ">
       <ul className="grid  xl:grid-cols-4 md:grid-cols-3  grid-cols-2 mx-auto gap-4 ">
         {dungeons?.map((dungeon) => (
           <DungeonCard key={dungeon.id} dungeon={dungeon} />

@@ -211,7 +211,7 @@ export interface LocationState {
   mode: 'post';
 }
 
-export interface ServerResponse<T> {
+export interface ServerResponse<T = undefined> {
   success: boolean;
   message: string;
   data: T;

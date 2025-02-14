@@ -17,9 +17,9 @@ import {
   sumModifiers,
 } from '../utils';
 
-export interface ISysMessages {
+export interface ISysMessages<T = any> {
   message: string;
-  data?: InventoryItem | null;
+  data?: T | null;
   success: boolean;
   createdAt: number;
 }
@@ -33,20 +33,19 @@ export type StatsUnion =
 interface initialState {
   hero: Hero | null;
   sysMessages: ISysMessages[];
-  confirm : boolean
+  confirm: boolean;
 }
 
 const initialState: initialState = {
   hero: null,
   sysMessages: [],
-  confirm : false 
+  confirm: false,
 };
 
 export const heroSlice = createSlice({
   name: 'hero',
   initialState,
   reducers: {
-
     setHeroModifier: (state, action: PayloadAction<Partial<Modifier>>) => {
       if (state.hero) {
         state.hero.modifier = { ...state.hero.modifier, ...action.payload };
@@ -115,7 +114,7 @@ export const heroSlice = createSlice({
 
         const validHeroModifier = filterModifierFields(state.hero.modifier);
         const validEquipModifier = filterModifierFields(
-          findEquipItem?.inventoryItem.gameItem.modifier!,
+          findEquipItem.inventoryItem.gameItem.modifier,
         );
         state.hero.modifier = subtractModifiers(
           validHeroModifier,

@@ -35,9 +35,12 @@ export const useSocketDungeonMap = ({ dungeonSessionId }: Props) => {
       setIsLoading(false);
     };
     const updateTileListener = (data: ISocketDungeonMoveHero) => {
+      console.log(data);
+      if (data.newTiles.some((tile) => tile.heroId === heroId)) {
+        dispatch(setHeroPos(data.heroPos));
+        dispatch(updateCameraPos());
+      }
       dispatch(updateTile(data.newTiles));
-      dispatch(setHeroPos(data.heroPos));
-      dispatch(updateCameraPos());
     };
     const heroListener = (data: ISysMessages) => {
       dispatch(

@@ -3,12 +3,13 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { api } from '../services/api';
 import conversationSlice from './conversationSlice';
+import dungeonPartySlice from './dungeonPartySlice';
+import dungeonSessionSlice from './dungeonSessionSlice';
 import gameItemSlice from './gameItemSlice';
 import heroSlice from './heroSlice';
 import photoSlice from './photoSlice';
 import searchSlice from './searchSlice';
 import userSlice from './userSlice';
-import dungeonSessionSlice  from './dungeonSessionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
     gameItem: gameItemSlice,
     hero: heroSlice,
     dungeonSession: dungeonSessionSlice,
+    dungeonParty: dungeonPartySlice,
     [api.reducerPath]: api.reducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -35,7 +35,6 @@ export const dungeonSessionSlice = createSlice({
 
     updateTile: (state, action: PayloadAction<Tile[]>) => {
       if (!state.mapData) return;
-
       state.mapData.dungeonMap = state.mapData.dungeonMap.map((dungTile) => {
         const updatedTile = action.payload.find(
           (tile) => tile.id === dungTile.id,
@@ -77,6 +76,12 @@ export const dungeonSessionSlice = createSlice({
         dungeonApi.endpoints.getDungeonsSessionById.matchFulfilled,
         (state, action) => {
           state.dungeonSession = action.payload;
+        },
+      )
+      .addMatcher(
+        dungeonApi.endpoints.getAllDungeonsSessionInStatus.matchFulfilled,
+        (state, action) => {
+          state.dungeonSession = action.payload[0];
         },
       )
       .addMatcher(

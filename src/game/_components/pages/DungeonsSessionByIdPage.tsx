@@ -13,13 +13,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { DungeonMap } from '../dungeon/DungeonMap';
 
 export const DungeonsSessionByIdPage = () => {
-  const { dungeonSessionId } = useParams() ;
+  const { dungeonSessionId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // if (!dungeonSessionId) {
-  //   navigate('/game/dungeons');
-  //   return null
-  // }
+
   const {
     data: dungeonSession,
     isLoading,
@@ -28,10 +25,9 @@ export const DungeonsSessionByIdPage = () => {
   const [refetchDungeonSession] = useLazyGetDungeonsSessionByIdQuery();
   const [updateHero] = useUpdateHeroMutation();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
-  const heroExistDungeon = dungeonSession?.dungeonHeroes?.some(
-    (dungHero) => dungHero.heroId === heroId,
+  const heroExistDungeon = dungeonSession?.dungeonParty?.some(
+    (dungHero) => dungHero.memberId === heroId,
   );
-
 
   useEffect(() => {
     updateHero({ isDungeon: true });
@@ -76,11 +72,5 @@ export const DungeonsSessionByIdPage = () => {
     return <Spinner />;
   }
 
-
-
-  return (
-    <section className="size-full">
-      <DungeonMap dungeonSessionId={dungeonSessionId!} />
-    </section>
-  );
+  return <DungeonMap dungeonSessionId={dungeonSessionId!} />;
 };

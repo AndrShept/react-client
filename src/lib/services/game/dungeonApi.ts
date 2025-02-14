@@ -53,4 +53,4 @@ export const {
   useGetAllDungeonsSessionInStatusQuery
 } = dungeonApi;
 
-export const { getDungeonsSessionById } = dungeonApi.endpoints;
+export const { getDungeonsSessionById,getAllDungeonsSessionInStatus } = dungeonApi.endpoints;

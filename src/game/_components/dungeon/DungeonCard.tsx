@@ -1,25 +1,21 @@
-
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
-import {
-  clearDungSession,
-} from '@/lib/redux/dungeonSessionSlice';
+import { clearDungSession } from '@/lib/redux/dungeonSessionSlice';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   useCreateDungSessionMutation,
   useGetAllDungeonsSessionInStatusQuery,
   useUpdateDungeonSessionStatusMutation,
 } from '@/lib/services/game/dungeonApi';
-
-import { Dungeon,  SessionStatus } from '@/lib/types/game.types';
-import { cn, getTimeFns } from '@/lib/utils';
-
-import {useState } from 'react';
-import {  useNavigate } from 'react-router-dom';
+import { Dungeon, SessionStatus } from '@/lib/types/game.types';
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { ConfirmPopover } from '../ConfirmPopover';
 import { TimeIcon } from '../game-icons/TimeIcon';
+import { InvitePartyButton } from './InvitePartyButton';
 
 interface Props {
   dungeon: Dungeon;
@@ -29,7 +25,8 @@ export const DungeonCard = ({ dungeon }: Props) => {
   const [isMore, setIsMore] = useState(false);
   const navigate = useNavigate();
   const [onCreateDungSession, { isLoading }] = useCreateDungSessionMutation();
-  const [ updateDungeonSessionStatus , {isLoading:isLoadingUpdateStatus }] = useUpdateDungeonSessionStatusMutation();
+  const [updateDungeonSessionStatus, { isLoading: isLoadingUpdateStatus }] =
+    useUpdateDungeonSessionStatusMutation();
   const { isLoading: isLoadingDungInProgress } =
     useGetAllDungeonsSessionInStatusQuery(SessionStatus.INPROGRESS);
 
@@ -38,7 +35,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
       (session) => session.dungeonId === dungeon.id,
     ),
   );
-  console.log(dungeonSession?.endTime)
+
   const isDungInprogress = dungeonSession?.dungeonId === dungeon.id;
 
   const dispatch = useAppDispatch();
@@ -69,7 +66,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
       await updateDungeonSessionStatus({
         status: SessionStatus.FAILED,
         dungeonSessionId: dungeonSession.id,
-      }).unwrap()
+      }).unwrap();
       dispatch(clearDungSession());
     } catch (error) {
       console.log(error);
@@ -113,8 +110,6 @@ export const DungeonCard = ({ dungeon }: Props) => {
         <div className="flex items-center gap-2 flex-wrap ">
           <div className="flex items-center">
             <TimeIcon />
-
-       
           </div>
 
           {!isDungInprogress && (
@@ -130,14 +125,14 @@ export const DungeonCard = ({ dungeon }: Props) => {
           )}
 
           {isDungInprogress && (
-            <div className="ml-auto flex gap-2">
+            <div className="ml-auto flex gap-2 ">
               <ConfirmPopover onConfirm={onLeave}>
                 <ConfirmPopover.Trigger>
                   <Button
                     disabled={isLoading || isLoadingUpdateStatus}
                     className="ml-auto"
                     variant={'destructive'}
-                    size={'sm'}
+                
                   >
                     Leave
                   </Button>
@@ -156,11 +151,12 @@ export const DungeonCard = ({ dungeon }: Props) => {
                 disabled={isLoading || isLoadingUpdateStatus}
                 className="ml-auto text-green-500"
                 variant={'secondary'}
-                size={'sm'}
+           
                 onClick={() => navigate(`/game/dungeons/${dungeonSession.id}`)}
               >
-                GO!
+                Enter
               </Button>
+              <InvitePartyButton />
             </div>
           )}
         </div>

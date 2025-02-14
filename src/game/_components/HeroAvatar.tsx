@@ -15,12 +15,12 @@ export const HeroAvatar = ({
   onClick,
 }: HeroAvatarProps) => {
   return (
-    <article onClick={onClick} className="relative size-12  ">
+    <article onClick={onClick} className={cn("relative size-12  ", classname)}>
       <img
       draggable={false}
         className={cn(
           'size-full object-cover border rounded-full    ',
-          classname,
+        
           {
             'border-primary opacity-100': isSelected,
           },
