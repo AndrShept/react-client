@@ -9,6 +9,7 @@ import { isObjectNearHero } from '@/game/utils';
 import { useAppSelector } from '@/hooks/store';
 import { Tile, TileType } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 interface Props {
   tile: Tile;
@@ -20,15 +21,16 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
   const { socket } = useSocket();
   const heroId = useAppSelector((state) => state.hero.hero?.id);
   const heroName = useAppSelector((state) => state.hero.hero?.name ?? '');
-  console.log(heroName);
   const heroPos = useAppSelector((state) => state.dungeonSession.heroPos);
+  const [canMove, setCanMove] = useState(true);
+ 
   const tileUrl = `/sprites/dungeons/dung/${tile.gid < 10 ? '00' : tile.gid >= 100 ? '' : '0'}${tile.gid}.png`;
   const onClickTile = () => {
     if (
       isNearby &&
       tile?.name === TileType.ground &&
       !tile.objectId &&
-      !tile.monsterId
+      !tile.monsterId 
     ) {
       socket?.emit(`move-hero-${heroId}`, {
         x: tile.x,
@@ -36,6 +38,7 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
         dungeonSessionId,
       });
     }
+
   };
 
   const isNearby = isObjectNearHero(
@@ -147,8 +150,7 @@ export const DungeonTile = ({ TILE_SIZE, tile, dungeonSessionId }: Props) => {
         isNearby &&
         !tile.objectId &&
         !tile.heroId &&
-        !tile.monsterId &&
-       (
+        !tile.monsterId && (
           <div className="bg-black opacity-50 cursor-pointer z-[5] absolute size-full" />
         )}
     </div>

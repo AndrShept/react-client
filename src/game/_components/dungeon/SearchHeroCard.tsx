@@ -1,4 +1,5 @@
 import { BorderBeam } from '@/components/magicui/border-beam';
+import { useSocket } from '@/components/providers/SocketProvider';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { addPartyMember } from '@/lib/redux/dungeonPartySlice';
@@ -7,7 +8,7 @@ import {
   useCreateDungeonPartyHeroMutation,
   useLazyGetDungeonPartyHeroByTermQuery,
 } from '@/lib/services/game/dungeonPartyApi';
-import { Hero } from '@/lib/types/game.types';
+import { Hero, SysMessageType } from '@/lib/types/game.types';
 import { CheckIcon, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import { toast } from 'sonner';
@@ -27,9 +28,13 @@ export const SearchHeroCard = ({ hero, searchTerm }: SearchHeroCardProps) => {
   const dungeonSessionId = useAppSelector(
     (state) => state.dungeonSession.dungeonSession?.id ?? '',
   );
+  const { socket } = useSocket();
 
   const addDungeonPartyHero = async () => {
     try {
+      // socket?.emit(`invite-party`, hero.id, (resonce:any) => {
+      //   console.log(resonce)
+      // });
       const response = await createDungeonPartyHero({
         dungeonSessionId,
         heroId: hero.id,
@@ -38,6 +43,7 @@ export const SearchHeroCard = ({ hero, searchTerm }: SearchHeroCardProps) => {
         dispatch(
           setSysMessages({
             createdAt: Date.now(),
+            type: SysMessageType.ERROR,
             ...response,
           }),
         );

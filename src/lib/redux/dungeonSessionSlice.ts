@@ -48,8 +48,6 @@ export const dungeonSessionSlice = createSlice({
       state.heroPos = action.payload.heroPos;
 
       state.cameraPos = { x: 0, y: 0 };
-
-      
     },
     updateCameraPos: (state) => {
       if (!state.mapData || !state.heroPos) return;
@@ -88,6 +86,29 @@ export const dungeonSessionSlice = createSlice({
         dungeonApi.endpoints.getAllDungeonsSessionInStatus.matchFulfilled,
         (state, action) => {
           state.dungeonSessionsForStatus = action.payload;
+        },
+      )
+      .addMatcher(
+        dungeonApi.endpoints.getDungeonMap.matchFulfilled,
+        (state, action) => {
+          state.mapData = action.payload;
+          state.heroPos = action.payload.heroPos;
+
+          state.cameraPos = { x: 0, y: 0 };
+          if (!state.mapData || !state.heroPos) return;
+          const tileSize = state.mapData.tileSize;
+          const CAMERA_TILE_LEFT_X = 9;
+          const CAMERA_TILE_LEFT_Y = 5;
+
+          if (state.heroPos.x >= CAMERA_TILE_LEFT_X && state.cameraPos) {
+            state.cameraPos.x =
+              (CAMERA_TILE_LEFT_X - state.heroPos.x) * tileSize;
+          }
+
+          if (state.heroPos.y >= CAMERA_TILE_LEFT_Y && state.cameraPos) {
+            state.cameraPos.y =
+              (CAMERA_TILE_LEFT_Y - state.heroPos.y) * tileSize;
+          }
         },
       );
   },

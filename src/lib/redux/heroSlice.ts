@@ -6,8 +6,10 @@ import {
   Buff,
   Equipment,
   Hero,
+  ISysMessages,
   InventoryItem,
   Modifier,
+  SysMessageType,
 } from '../types/game.types';
 import {
   addModifiers,
@@ -17,12 +19,6 @@ import {
   sumModifiers,
 } from '../utils';
 
-export interface ISysMessages<T = any> {
-  message: string;
-  data?: T | null;
-  success: boolean;
-  createdAt: number;
-}
 export type StatsUnion =
   | 'strength'
   | 'dexterity'
@@ -146,7 +142,7 @@ export const heroSlice = createSlice({
           state.sysMessages = [
             ...state.sysMessages,
             {
-              success: false,
+              type: SysMessageType.ERROR,
               message: `Your ${maxMana ? 'mana' : 'health'} is already full. Nothing to restore.`,
               createdAt: Date.now(),
             },
@@ -228,7 +224,7 @@ export const heroSlice = createSlice({
         state.sysMessages = [
           ...state.sysMessages,
           {
-            success: true,
+            type: SysMessageType.SUCCESS,
             message: `You successfully drank `,
             createdAt: Date.now(),
             data: action.payload,
@@ -269,7 +265,7 @@ export const heroSlice = createSlice({
         state.sysMessages = [
           ...state.sysMessages,
           {
-            success: true,
+            type: SysMessageType.SUCCESS,
             message: 'Success deleted item',
             createdAt: Date.now(),
             data: action.payload,

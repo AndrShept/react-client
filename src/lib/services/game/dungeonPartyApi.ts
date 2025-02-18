@@ -1,3 +1,4 @@
+import { dungeonSessionSlice } from '@/lib/redux/dungeonSessionSlice';
 import { ServerResponse } from '@/lib/types';
 import { DungeonParty, Hero } from '@/lib/types/game.types';
 
@@ -29,10 +30,10 @@ export const dungeonPartyApi = api.injectEndpoints({
     }),
     deleteDungeonPartyHero: builder.mutation<
       ServerResponse<DungeonParty>,
-      string
+      { memberId: string; dungeonSessionId: string }
     >({
-      query: (memberId) => ({
-        url: `/dungeons-party/${memberId}`,
+      query: ({ memberId, dungeonSessionId }) => ({
+        url: `/dungeons-party/${memberId}/${dungeonSessionId}`,
         method: 'DELETE',
       }),
     }),

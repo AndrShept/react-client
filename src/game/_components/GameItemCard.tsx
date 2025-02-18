@@ -18,7 +18,7 @@ import {
   useDeleteItemServerMutation,
   useDrinkPotionServerMutation,
 } from '@/lib/services/game/heroApi';
-import { GameItem, InventoryItem } from '@/lib/types/game.types';
+import { GameItem, InventoryItem, SysMessageType } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useState } from 'react';
@@ -86,7 +86,7 @@ export const GameItemCard = ({
     } catch (error) {
       dispatch(
         setSysMessages({
-          success: false,
+            type: SysMessageType.ERROR,
           message: 'Delete item error',
           createdAt: Date.now(),
         }),

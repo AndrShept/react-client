@@ -1,6 +1,5 @@
 import { useAppSelector } from '@/hooks/store';
 import { useGetDungeonPartyQuery } from '@/lib/services/game/dungeonPartyApi';
-
 import { DungeonPartyMemberCard } from './DungeonPartyMemberCard';
 
 interface DungeonPartyListProps {
@@ -13,12 +12,15 @@ export const DungeonPartyList = ({ searchTerm }: DungeonPartyListProps) => {
   );
   const dungeonParty = useAppSelector((state) => state.dungeonParty.party);
   const { isLoading, isError } = useGetDungeonPartyQuery(dungeonSessionId);
-  const arr = Array.from(
+  const partySlots = Array.from(
     { length: 3 },
     (_, idx) => dungeonParty && dungeonParty[idx],
   );
+
+ 
   if (isLoading) return 'wait';
   if (isError) return 'Data fetching error';
+
   return (
     <>
       {!!dungeonParty?.length && (
@@ -27,11 +29,13 @@ export const DungeonPartyList = ({ searchTerm }: DungeonPartyListProps) => {
         </h3>
       )}
       <ul className="flex gap-2 mx-auto">
-        {arr?.map((party) => (
+        {partySlots?.map((slot, idx) => (
           <DungeonPartyMemberCard
+            key={slot?.id ?? idx}
             searchTerm={searchTerm}
-            party={party}
+            party={slot}
             isLoading={isLoading}
+            dungeonSessionId={dungeonSessionId}
           />
         ))}
       </ul>

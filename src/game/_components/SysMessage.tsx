@@ -1,5 +1,6 @@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAppSelector } from '@/hooks/store';
+import { SysMessageType } from '@/lib/types/game.types';
 import { cn, getTimeFns } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
 
@@ -19,8 +20,14 @@ export const SysMessage = () => {
           {sysMessages.map((sysMessage) => (
             <li
               key={sysMessage.createdAt.toString()}
-              className={cn('text-sm space-x-1 text-green-400', {
-                'text-red-400': !sysMessage.success,
+              className={cn('text-sm space-x-1 text-green-400 ', {
+                'text-red-400':
+                  sysMessage.type === SysMessageType.ERROR ||
+                  !sysMessage.success,
+                'text-green-400': sysMessage.type === SysMessageType.SUCCESS,
+                'text-muted-foreground':
+                  sysMessage.type === SysMessageType.INFO,
+                'text-yellow-400': sysMessage.type === SysMessageType.WARNING,
               })}
             >
               <time className="text-muted-foreground">

@@ -1,5 +1,6 @@
 import { ErrorLoadingData } from '@/components/ErrorLoadingData';
 import { Spinner } from '@/components/Spinner';
+import { useSocket } from '@/components/providers/SocketProvider';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
@@ -7,6 +8,7 @@ import {
   useLazyGetDungeonsSessionByIdQuery,
 } from '@/lib/services/game/dungeonApi';
 import { useUpdateHeroMutation } from '@/lib/services/game/heroApi';
+import { ISysMessages, SysMessageType } from '@/lib/types/game.types';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -16,7 +18,7 @@ export const DungeonsSessionByIdPage = () => {
   const { dungeonSessionId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
+  const { socket } = useSocket();
   const {
     data: dungeonSession,
     isLoading,
@@ -30,19 +32,35 @@ export const DungeonsSessionByIdPage = () => {
   );
 
   useEffect(() => {
+    const sysMessageListener = (data: ISysMessages) => {
+      console.log(data);
+      dispatch(setSysMessages(data));
+    };
+    const partyKickListener = async (data: string) => {
+      if (data) {
+        await refetchDungeonSession(dungeonSessionId ?? '');
+      }
+    };
+
     updateHero({ isDungeon: true });
+    socket?.on(`sys-msg-${dungeonSessionId}`, sysMessageListener);
+    socket?.on(`sys-msg-${heroId}`, sysMessageListener);
+    socket?.on(`party-kick-${heroId}`, partyKickListener);
 
     return () => {
       updateHero({ isDungeon: false });
+      socket?.off(`sys-msg-${dungeonSessionId}`, sysMessageListener);
+      socket?.off(`sys-msg-${heroId}`, sysMessageListener);
+      socket?.off(`party-kick-${heroId}`, partyKickListener);
     };
-  }, []);
+  }, [dispatch, dungeonSessionId, heroId, socket]);
   useLayoutEffect(() => {
     if (!isLoading) {
       if (!heroExistDungeon) {
         navigate('/game/dungeons');
         dispatch(
           setSysMessages({
-            success: false,
+            type: SysMessageType.ERROR,
             message: 'Access to the dungeon session is denied',
             createdAt: Date.now(),
           }),
@@ -53,7 +71,7 @@ export const DungeonsSessionByIdPage = () => {
         navigate('/game/dungeons');
         dispatch(
           setSysMessages({
-            success: false,
+            type: SysMessageType.ERROR,
             message: 'Dungeon session is ended',
             createdAt: Date.now(),
           }),

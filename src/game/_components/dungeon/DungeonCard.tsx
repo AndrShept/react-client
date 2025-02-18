@@ -7,7 +7,7 @@ import {
   useGetAllDungeonsSessionInStatusQuery,
   useUpdateDungeonSessionStatusMutation,
 } from '@/lib/services/game/dungeonApi';
-import { Dungeon, SessionStatus } from '@/lib/types/game.types';
+import { Dungeon, SessionStatus, SysMessageType } from '@/lib/types/game.types';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -52,6 +52,7 @@ export const DungeonCard = ({ dungeon }: Props) => {
             success: false,
             createdAt: Date.now(),
             message: error.data,
+            type: SysMessageType.ERROR,
           }),
         );
       } else {
@@ -132,7 +133,6 @@ export const DungeonCard = ({ dungeon }: Props) => {
                     disabled={isLoading || isLoadingUpdateStatus}
                     className="ml-auto"
                     variant={'destructive'}
-                
                   >
                     Leave
                   </Button>
@@ -151,7 +151,6 @@ export const DungeonCard = ({ dungeon }: Props) => {
                 disabled={isLoading || isLoadingUpdateStatus}
                 className="ml-auto text-green-500"
                 variant={'secondary'}
-           
                 onClick={() => navigate(`/game/dungeons/${dungeonSession.id}`)}
               >
                 Enter

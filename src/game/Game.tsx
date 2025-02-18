@@ -8,28 +8,70 @@ import {
 import { useHealthManaRegen } from '@/hooks/game/useHealthManaRegen';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { useAuth } from '@/hooks/useAuth';
+import { useLazyGetAllDungeonsSessionInStatusQuery } from '@/lib/services/game/dungeonApi';
 import {
   useGetMyHeroQuery,
   useLazyGetMyHeroQuery,
   useUpdateHeroMutation,
 } from '@/lib/services/game/heroApi';
+import { Hero, SessionStatus } from '@/lib/types/game.types';
 import { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { Chat } from './_components/Chat';
 import { GameNavbar } from './_components/GameNavbar';
 import { HeroInventory } from './_components/HeroInventory';
 import { HeroModifiers } from './_components/HeroModifiers';
+import { showInviteToPartyToast } from './_components/InviteToPartyToast';
 import { Paperdoll } from './_components/Paperdoll';
 import { SysMessage } from './_components/SysMessage';
 
 export const Game = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { data, isLoading, isError, error } = useGetMyHeroQuery();
+  const { socket } = useSocket();
+  const { isLoading, isError, error } = useGetMyHeroQuery();
   const [refetchData] = useLazyGetMyHeroQuery();
   const { health, mana } = useHealthManaRegen();
   const heroState = useAppSelector((state) => state.hero.hero);
+  const heroId = useAppSelector((state) => state.hero.hero?.id);
+  const [refetchDungeonSessionStatus, { isLoading: isLoadingDungeonStatus }] =
+    useLazyGetAllDungeonsSessionInStatusQuery();
+  useEffect(() => {
+    if (!socket) return;
+    const socketLister = (partyLeader: Hero, cb: any) => {
+      showInviteToPartyToast(partyLeader, heroId, cb);
+
+      // setTimeout(() => {
+      //   cb({
+      //     accepted: false,
+      //     message: 'asdadsa',
+      //   });
+      // }, 10000);
+    };
+
+    socket.on(`invite-party-${heroId}`, socketLister);
+    socket.on(`sys-msg-${heroId}`, async (data) => {
+      console.log(data)
+      if (data) {
+        try {
+          const res = await refetchDungeonSessionStatus(
+            SessionStatus.INPROGRESS,
+          ).unwrap();
+          console.log(res);
+        } catch (error) {
+          console.error(error);
+          toast.error('Something went wrong');
+        }
+      }
+    });
+
+    return () => {
+      socket.off(`invite-party-${heroId}`, socketLister);
+    };
+  }, [heroId, socket]);
 
   if (isLoading) {
     return 'loading...';
@@ -43,6 +85,7 @@ export const Game = () => {
   }
   return (
     <section className="flex flex-col h-full font-roboto  ">
+      <Toaster />
       <GameNavbar />
 
       <ResizablePanelGroup direction="vertical" className="   ">
@@ -60,7 +103,7 @@ export const Game = () => {
               </div>
             </section>
           ) : (
-            <div className='size-full flex '>
+            <div className="size-full flex ">
               <Outlet />
             </div>
           )}

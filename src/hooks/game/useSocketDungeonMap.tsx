@@ -5,10 +5,11 @@ import {
   updateCameraPos,
   updateTile,
 } from '@/lib/redux/dungeonSessionSlice';
-import { ISysMessages, setSysMessages } from '@/lib/redux/heroSlice';
+import { setSysMessages } from '@/lib/redux/heroSlice';
 import {
   ISocketDungeonMapData,
   ISocketDungeonMoveHero,
+  ISysMessages,
 } from '@/lib/types/game.types';
 import { useEffect, useState } from 'react';
 

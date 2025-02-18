@@ -307,3 +307,17 @@ export enum WeaponType {
   ONE_HAND = 'ONE_HAND',
   TWO_HAND = 'TWO_HAND',
 }
+
+export interface ISysMessages<T = any> {
+  message: string;
+  data?: T | null;
+  type: SysMessageType;
+  success?: boolean;
+  createdAt: number;
+}
+export enum SysMessageType {
+  'INFO' = 'INFO',
+  'WARNING' = 'WARNING',
+  'ERROR' = 'ERROR',
+  'SUCCESS' = 'SUCCESS',
+}

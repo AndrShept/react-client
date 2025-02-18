@@ -8,11 +8,13 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import { Socket, io } from 'socket.io-client';
 
 import { useAuth } from '../../hooks/useAuth';
+import { socket } from '@/socket';
 
 interface SocketContextProps {
   socket: null | Socket;
@@ -29,12 +31,12 @@ export const useSocket = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [socket, setSocket] = useState<null | Socket>(null);
+  const socketRef = useRef<null | Socket>(null);
   const { username, userId } = useAuth();
   // const [userOnline] = useUserOnlineMutation();
 
   const sendMessage = (dataMsg: Message) => {
-    socket?.emit('msg', dataMsg);
+    socketRef.current?.emit('msg', dataMsg);
   };
   useEffect(() => {
     if (!userId) return;
@@ -50,7 +52,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
 
     const onConnect = async () => {
       setIsConnected(true);
-      setSocket(socketInstance);
+      socketRef.current = socketInstance;
       // await userOnline();
     };
     const onDisconnect = async () => {
@@ -63,10 +65,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       socketInstance.off('connect', onConnect);
       socketInstance.off('disconnect', onDisconnect);
     };
-  }, [userId]);
+  }, [userId, username]);
 
   return (
-    <SocketContext.Provider value={{ isConnected, socket, sendMessage }}>
+    <SocketContext.Provider value={{ isConnected, socket: socketRef.current, sendMessage }}>
       {children}
     </SocketContext.Provider>
   );

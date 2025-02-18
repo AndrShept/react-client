@@ -1,4 +1,4 @@
-import { Dungeon, DungeonSession, SessionStatus } from '@/lib/types/game.types';
+import { Dungeon, DungeonSession, ISocketDungeonMapData, SessionStatus } from '@/lib/types/game.types';
 
 import { api } from '../api';
 
@@ -20,6 +20,12 @@ export const dungeonApi = api.injectEndpoints({
     getDungeonsSessionById: builder.query<DungeonSession, string>({
       query: (dungeonSessionId) => ({
         url: `/dungeons-session/${dungeonSessionId}`,
+        method: 'GET',
+      }),
+    }),
+    getDungeonMap: builder.query<ISocketDungeonMapData, string>({
+      query: (dungeonSessionId) => ({
+        url: `/dungeon-map/${dungeonSessionId}`,
         method: 'GET',
       }),
     }),
@@ -50,7 +56,10 @@ export const {
   useGetDungeonsSessionByIdQuery,
   useLazyGetDungeonsSessionByIdQuery,
   useUpdateDungeonSessionStatusMutation,
-  useGetAllDungeonsSessionInStatusQuery
+  useGetAllDungeonsSessionInStatusQuery,
+  useLazyGetAllDungeonsSessionInStatusQuery,
+  useGetDungeonMapQuery
+
 } = dungeonApi;
 
-export const { getDungeonsSessionById,getAllDungeonsSessionInStatus } = dungeonApi.endpoints;
+export const { getDungeonsSessionById,getAllDungeonsSessionInStatus,getDungeonMap } = dungeonApi.endpoints;

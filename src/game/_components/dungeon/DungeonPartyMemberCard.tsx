@@ -16,12 +16,14 @@ interface DungeonPartyMemberCardProps {
   party: DungeonParty | null;
   isLoading: boolean;
   searchTerm?: string | undefined;
+  dungeonSessionId: string;
 }
 
 export const DungeonPartyMemberCard = ({
   party,
   isLoading,
   searchTerm,
+  dungeonSessionId,
 }: DungeonPartyMemberCardProps) => {
   const [deleteDungeonPartyHero, { isLoading: isLoadingDelete }] =
     useDeleteDungeonPartyHeroMutation();
@@ -29,11 +31,11 @@ export const DungeonPartyMemberCard = ({
   const dispatch = useAppDispatch();
   const onRemovePartyMember = async () => {
     try {
-      const response = await deleteDungeonPartyHero(
-        party?.memberId ?? '',
-      ).unwrap();
+      await deleteDungeonPartyHero({
+        memberId: party?.memberId ?? '',
+        dungeonSessionId,
+      }).unwrap();
       dispatch(removePartyMember({ memberId: party?.memberId ?? '' }));
-      dispatch(setSysMessages({ ...response, createdAt: Date.now() }));
       await refetchSearchHero(searchTerm).unwrap();
     } catch (error) {
       console.error(error);
@@ -46,7 +48,7 @@ export const DungeonPartyMemberCard = ({
         <li key={party.id} className="flex gap-1 items-center">
           <div className=" flex flex-col items-center group">
             <div className="relative group">
-              <HeroAvatar classname="size-10" src={party.member.avatarUrl} />
+              <HeroAvatar classname="size-10" src={party.member?.avatarUrl} />
               <Button
                 disabled={isLoading || isLoadingDelete}
                 onClick={onRemovePartyMember}
