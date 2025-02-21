@@ -1,9 +1,4 @@
-import { useSocket } from '@/components/providers/SocketProvider';
-import {
-  useGetAllDungeonsSessionInStatusQuery,
-  useLazyGetAllDungeonsSessionInStatusQuery,
-} from '@/lib/services/game/dungeonApi';
-import { Hero, SessionStatus } from '@/lib/types/game.types';
+import { GroupInviteResponse, Hero } from '@/lib/types/game.types';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -14,11 +9,20 @@ const InviteToPartyToast = ({
 }: {
   partyLeader: Hero;
   heroId: string | undefined;
-  cb: (data: any) => void;
+  cb: (data:GroupInviteResponse) => void
 }) => {
-  const [refetchDungeonSessionStatus, { isLoading }] =
-    useLazyGetAllDungeonsSessionInStatusQuery();
   const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   if (!isVisible) return null;
 
   return (
@@ -41,9 +45,8 @@ const InviteToPartyToast = ({
       <div className="flex border-l border-gray-200">
         <button
           onClick={async () => {
-            cb({ accepted: true });
+            cb('accepted');
             setIsVisible(false);
-
           }}
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
@@ -51,7 +54,7 @@ const InviteToPartyToast = ({
         </button>
         <button
           onClick={() => {
-            cb({ accepted: false });
+            cb('declined');
             setIsVisible(false);
           }}
           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -66,7 +69,7 @@ const InviteToPartyToast = ({
 export const showInviteToPartyToast = (
   partyLeader: Hero,
   heroId: string | undefined,
-  cb: (data: any) => void,
+  cb: (data:GroupInviteResponse) => void
 ) => {
   toast.custom(
     (t) => (

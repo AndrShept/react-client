@@ -8,7 +8,7 @@ import {
   useLazyGetDungeonsSessionByIdQuery,
 } from '@/lib/services/game/dungeonApi';
 import { useUpdateHeroMutation } from '@/lib/services/game/heroApi';
-import { ISysMessages, SysMessageType } from '@/lib/types/game.types';
+import { SysMessageType } from '@/lib/types/game.types';
 import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -32,25 +32,18 @@ export const DungeonsSessionByIdPage = () => {
   );
 
   useEffect(() => {
-    const sysMessageListener = (data: ISysMessages) => {
-      console.log(data);
-      dispatch(setSysMessages(data));
-    };
+
     const partyKickListener = async (data: string) => {
       if (data) {
         await refetchDungeonSession(dungeonSessionId ?? '');
       }
     };
-
     updateHero({ isDungeon: true });
-    socket?.on(`sys-msg-${dungeonSessionId}`, sysMessageListener);
-    socket?.on(`sys-msg-${heroId}`, sysMessageListener);
+
     socket?.on(`party-kick-${heroId}`, partyKickListener);
 
     return () => {
       updateHero({ isDungeon: false });
-      socket?.off(`sys-msg-${dungeonSessionId}`, sysMessageListener);
-      socket?.off(`sys-msg-${heroId}`, sysMessageListener);
       socket?.off(`party-kick-${heroId}`, partyKickListener);
     };
   }, [dispatch, dungeonSessionId, heroId, socket]);

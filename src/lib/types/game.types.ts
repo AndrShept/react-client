@@ -321,3 +321,5 @@ export enum SysMessageType {
   'ERROR' = 'ERROR',
   'SUCCESS' = 'SUCCESS',
 }
+
+export type GroupInviteResponse = "accepted" | "declined" | "timeout";

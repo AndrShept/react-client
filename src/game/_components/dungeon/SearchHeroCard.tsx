@@ -1,5 +1,4 @@
 import { BorderBeam } from '@/components/magicui/border-beam';
-import { useSocket } from '@/components/providers/SocketProvider';
 import { Button } from '@/components/ui/button';
 import { useAppDispatch, useAppSelector } from '@/hooks/store';
 import { addPartyMember } from '@/lib/redux/dungeonPartySlice';
@@ -28,13 +27,8 @@ export const SearchHeroCard = ({ hero, searchTerm }: SearchHeroCardProps) => {
   const dungeonSessionId = useAppSelector(
     (state) => state.dungeonSession.dungeonSession?.id ?? '',
   );
-  const { socket } = useSocket();
-
   const addDungeonPartyHero = async () => {
     try {
-      // socket?.emit(`invite-party`, hero.id, (resonce:any) => {
-      //   console.log(resonce)
-      // });
       const response = await createDungeonPartyHero({
         dungeonSessionId,
         heroId: hero.id,

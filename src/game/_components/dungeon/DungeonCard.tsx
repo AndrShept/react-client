@@ -27,8 +27,6 @@ export const DungeonCard = ({ dungeon }: Props) => {
   const [onCreateDungSession, { isLoading }] = useCreateDungSessionMutation();
   const [updateDungeonSessionStatus, { isLoading: isLoadingUpdateStatus }] =
     useUpdateDungeonSessionStatusMutation();
-  const { isLoading: isLoadingDungInProgress } =
-    useGetAllDungeonsSessionInStatusQuery(SessionStatus.INPROGRESS);
 
   const dungeonSession = useAppSelector((state) =>
     state.dungeonSession.dungeonSessionsForStatus?.find(
@@ -75,7 +73,6 @@ export const DungeonCard = ({ dungeon }: Props) => {
     }
   };
 
-  if (isLoadingDungInProgress) return null;
   return (
     <article className="flex flex-col border  opacity-85 group h-full  hover:opacity-100 transition max-w-[330px] ">
       <div className="overflow-hidden  ">
